@@ -93,6 +93,23 @@ Radius 28 (extra-large), padding 24, headline 24/32, Surface Container High.
 Plain: Inverse Surface container, Inverse On Surface label, body-small (12/16),
 radius 4.
 
+## Snackbar
+
+The current kit uses a 344dp-wide Inverse Surface container with Inverse On
+Surface body-medium text (14/20 Regular), 4dp corners, and elevation 3. The
+same semantic inverse roles swap automatically in dark mode.
+
+| Layout | Height | Horizontal padding | Vertical padding |
+| ------ | ------ | ------------------ | ---------------- |
+| One line | 48 | 16 | 14 |
+| Two lines | 68 | 16 | 14 |
+| Two lines + longer action | 112 | 16 message / 8 action row | 14 message |
+
+The inline action is a 40dp inverse text button with 12dp horizontal padding
+and label-large text. The optional close affordance occupies a 48dp touch
+target. Inline controls follow the message without a separate gap between the
+action and close control; longer actions move into a trailing row.
+
 ## Slider
 
 Total heights: XS 44 · S 44 · M 52 · L 68. Active/inactive track radius 2,

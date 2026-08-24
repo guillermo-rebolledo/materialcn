@@ -61,10 +61,10 @@ Foundation: shadcn `dropdown-menu`.
 
 ### Snackbar
 
-- [ ] Add the Material snackbar surface and imperative toast API.
-- [ ] Support plain text, an optional action, and an optional close control.
-- [ ] Support single-line and two-line layouts.
-- [ ] Add appropriate entrance, exit, duration, and stacking behavior.
+- [x] Add the Material snackbar surface and imperative toast API.
+- [x] Support plain text, an optional action, and an optional close control.
+- [x] Support single-line and two-line layouts.
+- [x] Add appropriate entrance, exit, duration, and stacking behavior.
 
 Foundation: shadcn `toast` for this Base UI project.
 

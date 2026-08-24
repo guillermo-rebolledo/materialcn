@@ -215,6 +215,46 @@ Font loading is kept out of `styles.css` on purpose — bundling six woff2 subse
 into the library stylesheet would force them on every consumer and defeat
 `unicode-range` subsetting.
 
+### Snackbars
+
+Mount one `Toaster` near the application root, then use the exported imperative
+manager from anywhere in the app. The message belongs in `description` because
+a Material snackbar is one text block rather than a heading and supporting-text
+pair.
+
+```tsx
+import { Toaster, toast } from "materialcn"
+
+function App() {
+  return (
+    <>
+      <button
+        onClick={() => {
+          const id = toast.add({
+            description: "Message archived",
+            actionProps: {
+              children: "Undo",
+              onClick: () => toast.close(id),
+            },
+            data: { dismissible: true },
+          })
+        }}
+      >
+        Archive
+      </button>
+      <Toaster />
+    </>
+  )
+}
+```
+
+`data.dismissible` adds the trailing close control. Use
+`data.layout: "stacked"` for a longer action that belongs below the message,
+`timeout: 0` for persistent feedback, and `priority: "high"` only when the
+message warrants an urgent announcement. Timeouts pause while the snackbar
+stack is hovered or keyboard-focused; `F6` moves focus to the notification
+region without stealing it when a snackbar first appears.
+
 ## Where the specs come from
 
 The token values and component geometry are not hand-copied from the docs site —
@@ -238,5 +278,5 @@ Tokens, theming, the shadcn bridge, Storybook, tests, and the library build are
 in place, and every primitive listed above is drawn to the Material spec.
 
 Not yet built: the components Material has and shadcn does not — FAB and FAB
-menu, navigation bar and rail, app bars, snackbar, and the connected button
-group. The `m3-` token layer is what those would be built on.
+menu, navigation bar and rail, app bars, and the connected button group. The
+`m3-` token layer is what those would be built on.
