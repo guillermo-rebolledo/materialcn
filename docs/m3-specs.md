@@ -144,9 +144,26 @@ Implemented as a repeating CSS mask rather than an inline path: the tile runs
 on the tile edge and the repeat is seamless at any width. The inactive rule has
 to start after the indicator — a full-width rule shows through the troughs.
 
-## Menu / Select
+## Menu
 
-Surface Container, radius 4, item height 48, padding 12, label body-large.
+The current Expressive menu set is separate from Select and has two themes:
+
+| Theme | Menu container | Selected item | Selected content |
+| ----- | -------------- | ------------- | ---------------- |
+| Standard | Surface Container Low | Tertiary Container | On Tertiary Container |
+| Vibrant | Tertiary Container | Tertiary | On Tertiary |
+
+The menu is 208dp wide with an 8dp outer radius when it contains multiple
+groups (4dp for the single-group example). Each item occupies a 48dp row: its
+44dp state-layer container is inset 4dp horizontally and 2dp vertically, with
+12dp horizontal content padding, an 8dp gap, 20dp leading/trailing elements,
+and label-large text (14/20 Medium). Selected items use a 12dp radius.
+
+## Select
+
+The baseline value-selection popup uses Surface Container, radius 4, item
+height 48, 12dp horizontal padding, and body-large text. It remains distinct
+from the action-menu composition above.
 
 ## List item
 
