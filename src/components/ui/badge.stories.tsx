@@ -8,6 +8,14 @@ const meta = {
   component: Badge,
   tags: ["autodocs"],
   args: { children: "Badge" },
+  parameters: {
+    docs: {
+      description: {
+        component:
+          "Compatibility API for the Material chip visuals. New Material-specific code should import `Chip`; `Badge` remains available without rendering changes.",
+      },
+    },
+  },
 } satisfies Meta<typeof Badge>
 
 export default meta

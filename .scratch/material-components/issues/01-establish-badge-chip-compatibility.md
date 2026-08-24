@@ -4,10 +4,10 @@
 
 **Blocked by:** None — can start immediately.
 
-**Status:** ready-for-agent
+**Status:** complete
 
-- [ ] Consumers can import and render `Chip` with every visual variant currently exposed by `Badge`.
-- [ ] Existing `Badge` imports continue to compile and render unchanged.
-- [ ] The compatibility/deprecation policy is documented in generated component documentation or Storybook.
-- [ ] Public exports, type declarations, stories, and tests cover both names.
-- [ ] Typecheck, lint, browser tests, and the library build pass.
+- [x] Consumers can import and render `Chip` with every visual variant currently exposed by `Badge`.
+- [x] Existing `Badge` imports continue to compile and render unchanged.
+- [x] The compatibility/deprecation policy is documented in generated component documentation or Storybook.
+- [x] Public exports, type declarations, stories, and tests cover both names.
+- [x] Typecheck, lint, browser tests, and the library build pass.
