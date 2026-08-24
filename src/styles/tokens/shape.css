@@ -1,0 +1,27 @@
+/*
+ * Material 3 shape scale.
+ *
+ * Expressive leans on shape far harder than earlier Material: corners are
+ * larger, and the jump between adjacent steps is wide enough to read as a
+ * deliberate choice. The `-increased` steps are Expressive additions.
+ */
+
+:root {
+  --m3-shape-none: 0px;
+  --m3-shape-xs: 4px;
+  --m3-shape-sm: 8px;
+  --m3-shape-md: 12px;
+  --m3-shape-lg: 16px;
+  --m3-shape-lg-increased: 20px;
+  --m3-shape-xl: 28px;
+  --m3-shape-xl-increased: 32px;
+  --m3-shape-2xl: 48px;
+  --m3-shape-full: 9999px;
+
+  /*
+   * shadcn's components size their corners off `--radius`. Pointing it at the
+   * M3 medium step means stock shadcn markup picks up Material shape for free;
+   * components that want the Expressive extremes reach for `rounded-m3-*`.
+   */
+  --radius: var(--m3-shape-md);
+}

@@ -1,0 +1,13 @@
+/*
+ * Self-hosted Roboto Flex, the Material 3 brand typeface.
+ *
+ * Kept out of index.css on purpose: bundling six woff2 subsets into the
+ * library stylesheet would force every consumer to ship them, even the ones
+ * loading the font from a CDN or substituting their own. Import this file only
+ * if you want the self-hosted default.
+ *
+ *   import "materialcn/styles.css"
+ *   import "materialcn/fonts.css"   // optional
+ */
+
+@import "@fontsource-variable/roboto-flex";

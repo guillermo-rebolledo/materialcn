@@ -1,0 +1,76 @@
+/*
+ * Material 3 type scale.
+ *
+ * Five roles (display / headline / title / body / label) at three sizes each.
+ * Expressive adds an "emphasized" weight for every role — on Roboto Flex that
+ * is a variable-weight axis shift, which is why the font is loaded variable.
+ *
+ * Each role is stored as a `font`-shorthand-compatible size/line-height pair
+ * plus its own tracking and weight, so theme.css can expose all three to
+ * Tailwind's `--text-*` namespace in one go.
+ */
+
+:root {
+  --m3-font-brand: "Roboto Flex Variable", "Roboto", ui-sans-serif, system-ui, sans-serif;
+  --m3-font-plain: var(--m3-font-brand);
+
+  /* Display — reserved for the largest, shortest strings on a screen. */
+  --m3-display-lg-size: 3.5625rem;   /* 57px */
+  --m3-display-lg-line: 4rem;        /* 64px */
+  --m3-display-lg-tracking: -0.015625rem;
+  --m3-display-md-size: 2.8125rem;   /* 45px */
+  --m3-display-md-line: 3.25rem;     /* 52px */
+  --m3-display-md-tracking: 0rem;
+  --m3-display-sm-size: 2.25rem;     /* 36px */
+  --m3-display-sm-line: 2.75rem;     /* 44px */
+  --m3-display-sm-tracking: 0rem;
+
+  /* Headline — high-emphasis text, shorter than display. */
+  --m3-headline-lg-size: 2rem;       /* 32px */
+  --m3-headline-lg-line: 2.5rem;     /* 40px */
+  --m3-headline-lg-tracking: 0rem;
+  --m3-headline-md-size: 1.75rem;    /* 28px */
+  --m3-headline-md-line: 2.25rem;    /* 36px */
+  --m3-headline-md-tracking: 0rem;
+  --m3-headline-sm-size: 1.5rem;     /* 24px */
+  --m3-headline-sm-line: 2rem;       /* 32px */
+  --m3-headline-sm-tracking: 0rem;
+
+  /* Title — medium-emphasis text, typically a section or card heading. */
+  --m3-title-lg-size: 1.375rem;      /* 22px */
+  --m3-title-lg-line: 1.75rem;       /* 28px */
+  --m3-title-lg-tracking: 0rem;
+  --m3-title-md-size: 1rem;          /* 16px */
+  --m3-title-md-line: 1.5rem;        /* 24px */
+  --m3-title-md-tracking: 0.009375rem;
+  --m3-title-sm-size: 0.875rem;      /* 14px */
+  --m3-title-sm-line: 1.25rem;       /* 20px */
+  --m3-title-sm-tracking: 0.00625rem;
+
+  /* Body — long-form reading text. */
+  --m3-body-lg-size: 1rem;           /* 16px */
+  --m3-body-lg-line: 1.5rem;         /* 24px */
+  --m3-body-lg-tracking: 0.03125rem;
+  --m3-body-md-size: 0.875rem;       /* 14px */
+  --m3-body-md-line: 1.25rem;        /* 20px */
+  --m3-body-md-tracking: 0.015625rem;
+  --m3-body-sm-size: 0.75rem;        /* 12px */
+  --m3-body-sm-line: 1rem;           /* 16px */
+  --m3-body-sm-tracking: 0.025rem;
+
+  /* Label — the text inside components: buttons, chips, tabs. */
+  --m3-label-lg-size: 0.875rem;      /* 14px */
+  --m3-label-lg-line: 1.25rem;       /* 20px */
+  --m3-label-lg-tracking: 0.00625rem;
+  --m3-label-md-size: 0.75rem;       /* 12px */
+  --m3-label-md-line: 1rem;          /* 16px */
+  --m3-label-md-tracking: 0.03125rem;
+  --m3-label-sm-size: 0.6875rem;     /* 11px */
+  --m3-label-sm-line: 1rem;          /* 16px */
+  --m3-label-sm-tracking: 0.03125rem;
+
+  /* Weights. `emphasized` is the Expressive addition. */
+  --m3-weight-regular: 400;
+  --m3-weight-medium: 500;
+  --m3-weight-emphasized: 700;
+}

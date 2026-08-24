@@ -1,0 +1,116 @@
+/*
+ * Exposes the M3 tokens to Tailwind as utilities.
+ *
+ * Colors are not here — they are emitted into tokens/color.css by the token
+ * generator, alongside the roles themselves, so the two cannot drift.
+ *
+ * `inline` matters here: it makes Tailwind emit `var(--m3-primary)` rather than
+ * copying the value, so a runtime theme swap (adding `.dark`, or overriding a
+ * role on a subtree) is picked up by every generated class.
+ *
+ * shadcn's own `--color-*` mappings live in index.css and are unchanged —
+ * `bg-primary` still works, it just resolves to an M3 role now.
+ */
+
+@theme inline {
+  /* -------------------------------------------------------------- shape */
+  --radius-m3-none: var(--m3-shape-none);
+  --radius-m3-xs: var(--m3-shape-xs);
+  --radius-m3-sm: var(--m3-shape-sm);
+  --radius-m3-md: var(--m3-shape-md);
+  --radius-m3-lg: var(--m3-shape-lg);
+  --radius-m3-lg-increased: var(--m3-shape-lg-increased);
+  --radius-m3-xl: var(--m3-shape-xl);
+  --radius-m3-xl-increased: var(--m3-shape-xl-increased);
+  --radius-m3-2xl: var(--m3-shape-2xl);
+  --radius-m3-full: var(--m3-shape-full);
+
+  /* ---------------------------------------------------------- elevation */
+  --shadow-m3-0: var(--m3-elevation-0);
+  --shadow-m3-1: var(--m3-elevation-1);
+  --shadow-m3-2: var(--m3-elevation-2);
+  --shadow-m3-3: var(--m3-elevation-3);
+  --shadow-m3-4: var(--m3-elevation-4);
+  --shadow-m3-5: var(--m3-elevation-5);
+
+  /* ------------------------------------------------------------ motion */
+  /* Pair each easing with its matching `duration-m3-*`. */
+  --ease-m3-spatial-fast: var(--m3-spring-spatial-fast);
+  --ease-m3-spatial: var(--m3-spring-spatial-default);
+  --ease-m3-spatial-slow: var(--m3-spring-spatial-slow);
+  --ease-m3-effects-fast: var(--m3-spring-effects-fast);
+  --ease-m3-effects: var(--m3-spring-effects-default);
+  --ease-m3-effects-slow: var(--m3-spring-effects-slow);
+  --ease-m3-emphasized: var(--m3-ease-emphasized);
+  --ease-m3-emphasized-decelerate: var(--m3-ease-emphasized-decelerate);
+  --ease-m3-emphasized-accelerate: var(--m3-ease-emphasized-accelerate);
+  --ease-m3-standard: var(--m3-ease-standard);
+
+  --animate-duration-m3-spatial-fast: var(--m3-spring-spatial-fast-duration);
+  --animate-duration-m3-spatial: var(--m3-spring-spatial-default-duration);
+  --animate-duration-m3-spatial-slow: var(--m3-spring-spatial-slow-duration);
+
+  /* -------------------------------------------------------- typography */
+  --font-sans: var(--m3-font-plain);
+  --font-m3-brand: var(--m3-font-brand);
+  --font-m3-plain: var(--m3-font-plain);
+
+  --text-m3-display-lg: var(--m3-display-lg-size);
+  --text-m3-display-lg--line-height: var(--m3-display-lg-line);
+  --text-m3-display-lg--letter-spacing: var(--m3-display-lg-tracking);
+  --text-m3-display-md: var(--m3-display-md-size);
+  --text-m3-display-md--line-height: var(--m3-display-md-line);
+  --text-m3-display-md--letter-spacing: var(--m3-display-md-tracking);
+  --text-m3-display-sm: var(--m3-display-sm-size);
+  --text-m3-display-sm--line-height: var(--m3-display-sm-line);
+  --text-m3-display-sm--letter-spacing: var(--m3-display-sm-tracking);
+
+  --text-m3-headline-lg: var(--m3-headline-lg-size);
+  --text-m3-headline-lg--line-height: var(--m3-headline-lg-line);
+  --text-m3-headline-lg--letter-spacing: var(--m3-headline-lg-tracking);
+  --text-m3-headline-md: var(--m3-headline-md-size);
+  --text-m3-headline-md--line-height: var(--m3-headline-md-line);
+  --text-m3-headline-md--letter-spacing: var(--m3-headline-md-tracking);
+  --text-m3-headline-sm: var(--m3-headline-sm-size);
+  --text-m3-headline-sm--line-height: var(--m3-headline-sm-line);
+  --text-m3-headline-sm--letter-spacing: var(--m3-headline-sm-tracking);
+
+  --text-m3-title-lg: var(--m3-title-lg-size);
+  --text-m3-title-lg--line-height: var(--m3-title-lg-line);
+  --text-m3-title-lg--letter-spacing: var(--m3-title-lg-tracking);
+  --text-m3-title-md: var(--m3-title-md-size);
+  --text-m3-title-md--line-height: var(--m3-title-md-line);
+  --text-m3-title-md--letter-spacing: var(--m3-title-md-tracking);
+  --text-m3-title-md--font-weight: var(--m3-weight-medium);
+  --text-m3-title-sm: var(--m3-title-sm-size);
+  --text-m3-title-sm--line-height: var(--m3-title-sm-line);
+  --text-m3-title-sm--letter-spacing: var(--m3-title-sm-tracking);
+  --text-m3-title-sm--font-weight: var(--m3-weight-medium);
+
+  --text-m3-body-lg: var(--m3-body-lg-size);
+  --text-m3-body-lg--line-height: var(--m3-body-lg-line);
+  --text-m3-body-lg--letter-spacing: var(--m3-body-lg-tracking);
+  --text-m3-body-md: var(--m3-body-md-size);
+  --text-m3-body-md--line-height: var(--m3-body-md-line);
+  --text-m3-body-md--letter-spacing: var(--m3-body-md-tracking);
+  --text-m3-body-sm: var(--m3-body-sm-size);
+  --text-m3-body-sm--line-height: var(--m3-body-sm-line);
+  --text-m3-body-sm--letter-spacing: var(--m3-body-sm-tracking);
+
+  --text-m3-label-lg: var(--m3-label-lg-size);
+  --text-m3-label-lg--line-height: var(--m3-label-lg-line);
+  --text-m3-label-lg--letter-spacing: var(--m3-label-lg-tracking);
+  --text-m3-label-lg--font-weight: var(--m3-weight-medium);
+  --text-m3-label-md: var(--m3-label-md-size);
+  --text-m3-label-md--line-height: var(--m3-label-md-line);
+  --text-m3-label-md--letter-spacing: var(--m3-label-md-tracking);
+  --text-m3-label-md--font-weight: var(--m3-weight-medium);
+  --text-m3-label-sm: var(--m3-label-sm-size);
+  --text-m3-label-sm--line-height: var(--m3-label-sm-line);
+  --text-m3-label-sm--letter-spacing: var(--m3-label-sm-tracking);
+  --text-m3-label-sm--font-weight: var(--m3-weight-medium);
+
+  --font-weight-m3-regular: var(--m3-weight-regular);
+  --font-weight-m3-medium: var(--m3-weight-medium);
+  --font-weight-m3-emphasized: var(--m3-weight-emphasized);
+}

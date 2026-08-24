@@ -1,0 +1,19 @@
+/*
+ * Material 3 state layer opacities.
+ *
+ * Material expresses hover/focus/press as a translucent overlay of the
+ * *content* color over the container, rather than as a separate background
+ * color per state. Keeping the opacities as tokens lets components express
+ * every interactive state with one `color-mix`.
+ */
+
+:root {
+  --m3-state-hover: 0.08;
+  --m3-state-focus: 0.1;
+  --m3-state-pressed: 0.1;
+  --m3-state-dragged: 0.16;
+
+  /* Disabled is expressed as opacity on content and on the container. */
+  --m3-state-disabled-content: 0.38;
+  --m3-state-disabled-container: 0.12;
+}

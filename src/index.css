@@ -1,0 +1,179 @@
+/*
+ * materialcn — stylesheet entry point.
+ *
+ * Consumers import this one file (plus, optionally, styles/fonts.css to
+ * self-host Roboto Flex). It layers, in order:
+ *   1. Tailwind v4 + the shadcn base stylesheet
+ *   2. the M3 token set (color, shape, type, elevation, state, motion)
+ *   3. the @theme mapping that turns those tokens into Tailwind utilities
+ */
+
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@import "./styles/tokens/color.css";
+@import "./styles/tokens/shape.css";
+@import "./styles/tokens/typography.css";
+@import "./styles/tokens/elevation.css";
+@import "./styles/tokens/state.css";
+@import "./styles/tokens/motion.css";
+@import "./styles/theme.css";
+
+/*
+ * `dark:` follows an explicit `.dark` class first, and falls back to the OS
+ * preference when the page has not opted into either class. Matches how
+ * tokens/color.css resolves the color roles.
+ */
+@custom-variant dark {
+  &:where(.dark, .dark *) {
+    @slot;
+  }
+  @media (prefers-color-scheme: dark) {
+    &:where(:root:not(.light):not(.dark), :root:not(.light):not(.dark) *) {
+      @slot;
+    }
+  }
+}
+
+/*
+ * shadcn's semantic color names, kept exactly as shadcn expects them. The
+ * values behind them are M3 roles (see tokens/color.css), so unmodified shadcn
+ * components render as Material without being patched.
+ */
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+
+  --font-heading: var(--m3-font-brand);
+}
+
+/*
+ * Material expresses hover/focus/press as a translucent layer of the content
+ * color over the container, not as a different background per state. One
+ * utility covers every interactive surface in the library.
+ */
+@utility m3-state-layer {
+  position: relative;
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background-color: currentColor;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--m3-spring-effects-fast-duration)
+      var(--m3-spring-effects-fast);
+  }
+
+  &:hover:not(:disabled)::after {
+    opacity: var(--m3-state-hover);
+  }
+
+  &:focus-visible::after {
+    opacity: var(--m3-state-focus);
+  }
+
+  &:active:not(:disabled)::after {
+    opacity: var(--m3-state-pressed);
+  }
+}
+
+
+/*
+ * Material 3 Expressive wavy progress.
+ *
+ * The active indicator is a travelling sine wave. Rather than emit a long
+ * inline path, one wavelength is masked and tiled: the tile runs peak-to-peak,
+ * so the tangent is horizontal where tiles meet and a butt cap lands exactly on
+ * the seam. Colour comes from `background-color`, so the wave themes normally.
+ *
+ * Geometry is the kit's: 40dp wavelength, 6dp peak-to-peak centreline
+ * (±3 amplitude) inside a 12dp box, 4dp stroke.
+ */
+@utility m3-wave {
+  mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2240%22%20height%3D%2212%22%20viewBox%3D%220%200%2040%2012%22%3E%3Cpath%20d%3D%22M0%2C3%20C3.333%2C3%206.667%2C4.429%2010%2C6%20C13.333%2C7.571%2016.667%2C9%2020%2C9%20C23.333%2C9%2026.667%2C7.571%2030%2C6%20C33.333%2C4.429%2036.667%2C3%2040%2C3%22%20fill%3D%22none%22%20stroke%3D%22%23000%22%20stroke-width%3D%224%22%20stroke-linecap%3D%22butt%22%2F%3E%3C%2Fsvg%3E");
+  mask-size: 40px 12px;
+  mask-repeat: repeat-x;
+  mask-position: 0 center;
+  animation: m3-wave-travel 1.2s linear infinite;
+}
+
+@utility m3-wave-thick {
+  mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2240%22%20height%3D%2212%22%20viewBox%3D%220%200%2040%2012%22%3E%3Cpath%20d%3D%22M0%2C3%20C3.333%2C3%206.667%2C4.429%2010%2C6%20C13.333%2C7.571%2016.667%2C9%2020%2C9%20C23.333%2C9%2026.667%2C7.571%2030%2C6%20C33.333%2C4.429%2036.667%2C3%2040%2C3%22%20fill%3D%22none%22%20stroke%3D%22%23000%22%20stroke-width%3D%228%22%20stroke-linecap%3D%22butt%22%2F%3E%3C%2Fsvg%3E");
+  mask-size: 40px 12px;
+  mask-repeat: repeat-x;
+  mask-position: 0 center;
+  animation: m3-wave-travel 1.2s linear infinite;
+}
+
+@keyframes m3-wave-travel {
+  to {
+    mask-position: -40px center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .m3-wave,
+  .m3-wave-thick {
+    animation: none;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  html {
+    @apply font-sans;
+    /* Roboto Flex ships a grade axis; a touch of extra grade keeps text from
+       thinning out against dark surfaces. */
+    font-variation-settings: "GRAD" 0;
+    color-scheme: light dark;
+  }
+
+  body {
+    @apply bg-background text-foreground text-m3-body-lg;
+  }
+}

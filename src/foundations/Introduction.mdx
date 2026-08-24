@@ -1,0 +1,65 @@
+import { Meta } from "@storybook/addon-docs/blocks"
+
+<Meta title="Introduction" />
+
+# materialcn
+
+A React component library with **Material 3 Expressive** design, built on
+**shadcn/ui** primitives and **Tailwind v4**.
+
+## How the pieces fit
+
+shadcn/ui is the backbone: every component is Base UI behaviour plus Tailwind
+classes, living as source in `src/components/ui`. Material sits underneath as a
+token layer, so shadcn's semantic variables resolve to M3 roles:
+
+```
+--primary  →  var(--m3-primary)  →  oklch(0.4955 0.1305 293.71)
+```
+
+That indirection is the whole design. An unmodified shadcn component renders as
+Material without being patched, and re-theming means editing tokens rather than
+components.
+
+## Tokens
+
+| Layer      | File                          | Utilities                          |
+| ---------- | ----------------------------- | ---------------------------------- |
+| Color      | `styles/tokens/color.css`     | `bg-m3-*`, `text-m3-*`             |
+| Shape      | `styles/tokens/shape.css`     | `rounded-m3-*`                     |
+| Typography | `styles/tokens/typography.css`| `text-m3-{role}-{size}`            |
+| Elevation  | `styles/tokens/elevation.css` | `shadow-m3-0` … `shadow-m3-5`      |
+| Motion     | `styles/tokens/motion.css`    | `ease-m3-*`, `--m3-spring-*`       |
+| State      | `styles/tokens/state.css`     | `m3-state-layer`                   |
+
+`color.css` and `motion.css` are generated — edit `scripts/generate-tokens.mjs`
+and run `pnpm tokens`.
+
+## Light and dark
+
+Dark mode swaps the values behind the same variable names, so no component
+needs a `dark:` utility to change color. Three strategies are supported at once:
+
+- `:root` — light, the default
+- `.dark` — explicit, and **not** root-scoped, so a subtree can carry its own
+  scheme
+- `prefers-color-scheme` — followed when neither class is present
+
+Stories with `parameters: { sideBySide: true }` render both schemes at once.
+
+## Motion
+
+Expressive replaced fixed bezier curves with spring physics. CSS has no
+`spring()`, so the build samples a damped harmonic oscillator and emits the
+result as `linear()` — a real spring, usable on any animatable property.
+
+```css
+transition-property: transform;
+transition-timing-function: var(--m3-spring-spatial-default);
+transition-duration: var(--m3-spring-spatial-default-duration);
+```
+
+Always pair an easing with its matching `-duration`, or the curve will be cut
+off mid-flight. Spatial springs overshoot by ~9%; effects springs (color,
+opacity) never overshoot. Under `prefers-reduced-motion` every spring collapses
+to a 1ms linear step.
