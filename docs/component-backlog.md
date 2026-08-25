@@ -2,7 +2,7 @@
 
 Backlog derived from the local `Material 3 Design Kit (Community).fig`, the
 current exports in `src/index.ts`, and the shadcn registry available to this
-Base UI project. Last audited: 2026-08-24.
+Base UI project. Last audited: 2026-08-25.
 
 This document lists missing component APIs. It intentionally excludes
 components that the repository already implements or that should remain simple
@@ -207,8 +207,8 @@ primitives.
 - [x] Refine the existing bottom Sheet with Material shape, sizing, and drag
   handle presentation; do not introduce another modal state primitive unless
   drag physics require shadcn `drawer`.
-- [ ] Add Storybook coverage for Field, Label, Separator, Sheet, Skeleton, and
-  Toggle, which are exported but currently have no dedicated stories.
+- [ ] Add Storybook coverage for Field, Label, Skeleton, and Toggle, which are
+  exported but currently have no dedicated stories.
 
 ## Already covered — do not duplicate
 
