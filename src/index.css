@@ -246,6 +246,75 @@
   }
 }
 
+/*
+ * Connected action groups keep independent Button semantics while coordinating
+ * the kit's 2dp separation and first/middle/last corner geometry.
+ */
+@utility m3-connected-button-group {
+  &[data-size="xs"] {
+    --m3-button-group-inner-radius: 4px;
+    --m3-button-group-state-radius: 12px;
+    --m3-button-group-outer-radius: 16px;
+  }
+
+  &[data-size="sm"],
+  &[data-size="default"] {
+    --m3-button-group-inner-radius: 8px;
+    --m3-button-group-state-radius: 12px;
+    --m3-button-group-outer-radius: 20px;
+  }
+
+  &[data-size="lg"] {
+    --m3-button-group-inner-radius: 8px;
+    --m3-button-group-state-radius: 16px;
+    --m3-button-group-outer-radius: 28px;
+  }
+
+  &[data-size="xl"] {
+    --m3-button-group-inner-radius: 16px;
+    --m3-button-group-state-radius: 28px;
+    --m3-button-group-outer-radius: 48px;
+  }
+
+  &[data-size="2xl"] {
+    --m3-button-group-inner-radius: 20px;
+    --m3-button-group-state-radius: 32px;
+    --m3-button-group-outer-radius: 68px;
+  }
+
+  & > [data-slot="button"] {
+    border-radius: var(--m3-button-group-inner-radius);
+  }
+
+  & > [data-slot="button"]:is(:hover, :focus-visible, :active):not(:disabled) {
+    border-radius: var(--m3-button-group-state-radius);
+  }
+
+  &[data-shape="round"][data-orientation="horizontal"]
+    > [data-slot="button"]:first-child {
+    border-top-left-radius: var(--m3-button-group-outer-radius);
+    border-bottom-left-radius: var(--m3-button-group-outer-radius);
+  }
+
+  &[data-shape="round"][data-orientation="horizontal"]
+    > [data-slot="button"]:last-child {
+    border-top-right-radius: var(--m3-button-group-outer-radius);
+    border-bottom-right-radius: var(--m3-button-group-outer-radius);
+  }
+
+  &[data-shape="round"][data-orientation="vertical"]
+    > [data-slot="button"]:first-child {
+    border-top-left-radius: var(--m3-button-group-outer-radius);
+    border-top-right-radius: var(--m3-button-group-outer-radius);
+  }
+
+  &[data-shape="round"][data-orientation="vertical"]
+    > [data-slot="button"]:last-child {
+    border-bottom-left-radius: var(--m3-button-group-outer-radius);
+    border-bottom-right-radius: var(--m3-button-group-outer-radius);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .m3-wave,
   .m3-wave-thick {

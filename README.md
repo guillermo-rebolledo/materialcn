@@ -215,6 +215,43 @@ Font loading is kept out of `styles.css` on purpose — bundling six woff2 subse
 into the library stylesheet would force them on every consumer and defeat
 `unicode-range` subsetting.
 
+### Button groups
+
+Use `ButtonGroup` for related actions that do not represent a selection.
+`standard` groups keep their buttons separate, while `connected` groups share
+edges and coordinate their first, middle, and last shapes.
+
+```tsx
+import { Button, ButtonGroup } from "materialcn"
+
+<ButtonGroup
+  aria-label="Document actions"
+  variant="standard"
+  size="sm"
+  shape="round"
+  buttonVariant="outline"
+>
+  <Button>Share</Button>
+  <Button>Archive</Button>
+</ButtonGroup>
+
+<ButtonGroup
+  aria-label="View actions"
+  variant="connected"
+  size="lg"
+  shape="square"
+  orientation="vertical"
+>
+  <Button>List</Button>
+  <Button>Grid</Button>
+</ButtonGroup>
+```
+
+The group provides `size`, `shape`, and `buttonVariant` defaults to its child
+buttons; an explicit prop on a child wins. Connected groups default to the
+tonal (`secondary`) button variant. Use `ToggleGroup` instead when one or more
+items can be selected.
+
 ### Snackbars
 
 Mount one `Toaster` near the application root, then use the exported imperative

@@ -5,5 +5,7 @@ export {}
 declare module "vitest/browser" {
   interface BrowserCommands {
     emulateReducedMotion(reduced: boolean): Promise<void>
+    holdPointer(selector: string): Promise<void>
+    releasePointer(): Promise<void>
   }
 }

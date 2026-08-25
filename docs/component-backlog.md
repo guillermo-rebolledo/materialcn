@@ -92,10 +92,10 @@ CSS geometry for the Material indicators.
 
 ### Button groups and split button
 
-- [ ] Add non-toggle standard and connected button groups.
+- [x] Add non-toggle standard and connected button groups.
 - [ ] Add `SplitButton` with a primary action and menu trigger.
-- [ ] Support the Material size and shape combinations shown in the kit.
-- [ ] Keep selectable segmented controls on the existing `ToggleGroup` rather
+- [x] Support the Material size and shape combinations shown in the kit.
+- [x] Keep selectable segmented controls on the existing `ToggleGroup` rather
   than creating a duplicate state model.
 
 Foundation: shadcn `button-group`, existing Button and ToggleGroup, and future

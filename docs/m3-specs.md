@@ -51,6 +51,38 @@ Expressive size scale (heights): XS 32 · S 40 · M 56 · L 96 · XL 136.
 Type follows: XS/S label-large, M title-medium (16/24), L headline-small
 (24/32), XL headline-large (32/40).
 
+## Button group
+
+Button groups contain related actions without adding selection state. Standard
+groups preserve each button's complete shape; connected groups use a 2dp gap
+and coordinate the outer and shared corners. Selection remains the
+responsibility of `ToggleGroup`.
+
+Standard-group spacing follows the kit:
+
+| API size | Button height | Group minimum | Gap | Axis padding |
+| -------- | ------------- | ------------- | --- | ------------ |
+| `xs` | 32 | 48 | 18 | 9 |
+| `sm` / `default` | 40 | 48 | 12 | 6 |
+| `lg` | 56 | 56 | 8 | 0 |
+| `xl` | 96 | 96 | 8 | 0 |
+| `2xl` | 136 | 136 | 8 | 0 |
+
+Connected-group corner geometry is:
+
+| API size | Rest / disabled inner | Hover / focus / pressed inner | Round outer |
+| -------- | --------------------- | ----------------------------- | ----------- |
+| `xs` | 4 | 12 | 16 |
+| `sm` / `default` | 8 | 12 | 20 |
+| `lg` | 8 | 16 | 28 |
+| `xl` | 16 | 28 | 48 |
+| `2xl` | 20 | 32 | 68 |
+
+Square connected groups use the inner radius on their outer ends. Horizontal
+groups apply the outer shape to the first and last inline edges; the vertical
+orientation mirrors that rule on the block axis. XS and S connected horizontal
+groups retain a 48dp minimum touch-target height.
+
 ## Switch
 
 Track 52×32, radius full.

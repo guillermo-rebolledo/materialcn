@@ -4,12 +4,12 @@
 
 **Blocked by:** None — can start immediately.
 
-**Status:** ready-for-agent
+**Status:** completed
 
-- [ ] Standard and connected group presentations compose the existing Button API.
-- [ ] Groups support the Material size and round/square shape combinations from the kit.
-- [ ] Connected groups correctly handle first, middle, last, disabled, focus, and pressed geometry.
-- [ ] Group layout supports horizontal and vertical orientations where defined.
-- [ ] Selectable segmented controls remain the responsibility of ToggleGroup.
-- [ ] Stories cover sizes, orientations, item counts, states, and light/dark presentation.
-- [ ] Typecheck, lint, browser tests, and the library build pass.
+- [x] Standard and connected group presentations compose the existing Button API.
+- [x] Groups support the Material size and round/square shape combinations from the kit.
+- [x] Connected groups correctly handle first, middle, last, disabled, focus, and pressed geometry.
+- [x] Group layout supports horizontal and vertical orientations where defined.
+- [x] Selectable segmented controls remain the responsibility of ToggleGroup.
+- [x] Stories cover sizes, orientations, item counts, states, and light/dark presentation.
+- [x] Typecheck, lint, browser tests, and the library build pass.

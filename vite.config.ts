@@ -37,6 +37,13 @@ export default defineConfig({
                   reducedMotion: reduced ? "reduce" : "no-preference",
                 })
               },
+              holdPointer: async ({ iframe, page }, selector: string) => {
+                await iframe.locator(selector).hover()
+                await page.mouse.down()
+              },
+              releasePointer: async ({ page }) => {
+                await page.mouse.up()
+              },
             },
           },
         },
