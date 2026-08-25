@@ -4,11 +4,11 @@
 
 **Blocked by:** None — can start immediately.
 
-**Status:** ready-for-agent
+**Status:** completed
 
-- [ ] Full-width, inset, middle-inset, and vertical divider variants match the design kit.
-- [ ] A divider-with-subhead composition provides correct text semantics and spacing.
-- [ ] Decorative and semantic separator behavior is documented and accessible.
-- [ ] Variants use semantic tokens and component props rather than consumer color or typography overrides.
-- [ ] Stories cover every presentation in representative list and layout contexts and in light/dark themes.
-- [ ] Typecheck, lint, browser tests, and the library build pass.
+- [x] Full-width, inset, middle-inset, and vertical divider variants match the design kit.
+- [x] A divider-with-subhead composition provides correct text semantics and spacing.
+- [x] Decorative and semantic separator behavior is documented and accessible.
+- [x] Variants use semantic tokens and component props rather than consumer color or typography overrides.
+- [x] Stories cover every presentation in representative list and layout contexts and in light/dark themes.
+- [x] Typecheck, lint, browser tests, and the library build pass.

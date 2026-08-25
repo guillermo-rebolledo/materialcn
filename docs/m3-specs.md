@@ -422,6 +422,14 @@ a collision-aware Popover foundation, a maximum 320dp width, 12dp corners,
 title, body, and actions and therefore expose dialog rather than tooltip
 semantics.
 
+## Dividers
+
+Material dividers are 1dp Outline Variant rules. Full width uses the entire
+container, inset begins 16dp from the leading edge, and middle-inset leaves
+16dp at both edges. Vertical dividers keep the same 1dp measure. The subhead
+composition uses a title-small heading in a 48dp row followed by a decorative
+rule.
+
 ## Button shape morph on press
 
 Expressive buttons tighten their corners while pressed. The *classic* M3 set

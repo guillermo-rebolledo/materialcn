@@ -586,6 +586,10 @@ Use `Tooltip` only for non-interactive hints. `RichTooltip` uses the Popover
 foundation for a title, supporting description, and action region, with hover,
 focus, Escape/outside dismissal, collision placement, and focus restoration.
 
+`Separator` supports `full`, `inset`, and `middle-inset` horizontal variants
+plus vertical orientation. Use `decorative` for purely visual rules and
+`SeparatorSubhead` for a semantic heading-and-divider composition.
+
 ## Where the specs come from
 
 The token values and component geometry are not hand-copied from the docs site —
