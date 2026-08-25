@@ -558,6 +558,8 @@ inset without fixing the bar to an application shell.
 compose link or button `NavigationBarItem`s with icons, labels, and optional
 NotificationBadges. Horizontal and vertical modes share arrow, Home, and End
 keyboard navigation and selected links expose `aria-current="page"`.
+`NavigationRail` reuses that controlled destination model in a compact 80dp
+rail, with stable menu, FAB, destination, and notification regions.
 
 ## Where the specs come from
 

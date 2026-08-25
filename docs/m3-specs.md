@@ -387,6 +387,9 @@ The reference navigation bar is 412 × 80dp and accepts three to five equal
 destinations. Each item keeps a 64 × 32dp selected indicator around the 24dp
 icon and a label-small destination name. The vertical presentation reuses the
 same 80dp measure and selection model rather than introducing separate items.
+The compact navigation rail is 80dp wide with 4dp inline padding. Its menu and
+FAB regions precede a flexible vertical destination list; compact destinations
+hide labels visually and expose them through focus/hover tooltips.
 
 ## Button shape morph on press
 

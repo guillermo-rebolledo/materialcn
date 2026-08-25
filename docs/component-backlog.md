@@ -176,7 +176,7 @@ Badge.
 ### Navigation rail
 
 - [ ] Add compact and expanded navigation rails.
-- [ ] Support optional menu and FAB regions.
+- [x] Support optional menu and FAB regions.
 - [ ] Support active indicators, labels, notification badges, and responsive
   expansion.
 

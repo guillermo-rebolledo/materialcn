@@ -46,6 +46,7 @@ function TooltipContent({
         className="isolate z-50"
       >
         <TooltipPrimitive.Popup
+          role="tooltip"
           data-slot="tooltip-content"
           className={cn(
             "w-fit max-w-56 rounded-m3-xs bg-m3-inverse-surface px-2 py-1 text-m3-body-sm text-m3-inverse-on-surface",
