@@ -278,6 +278,27 @@ active arc uses Primary, the track uses Secondary Container, and `disabled`
 switches both strokes to disabled On Surface roles. Indeterminate motion
 becomes a static partial arc when reduced motion is requested.
 
+### Loading indicator
+
+Use the expressive loading indicator for an indeterminate wait where the
+shape-morphing Material treatment is more appropriate than progress. It is a
+named `status` and defaults to the accessible label `"Loading"`.
+
+```tsx
+import { LoadingIndicator } from "materialcn"
+
+<LoadingIndicator aria-label="Loading results" />
+<LoadingIndicator aria-label="Refreshing" contained />
+<LoadingIndicator aria-label="Saving" size="inline" />
+```
+
+The standalone size uses the kit's 48dp container and 38dp active shape. The
+inline size scales those to 24dp and 19dp for text-adjacent contexts.
+`contained` paints a Primary Container circle with an On Primary Container
+shape; otherwise the shape uses Primary. Reduced motion freezes the first,
+recognizable shape. If nearby visible copy already communicates the loading
+state, set `aria-hidden="true"` to avoid a duplicate status announcement.
+
 ### Lists
 
 `ListItem` keeps a semantic list-item wrapper and uses Base UI's `render` prop

@@ -136,6 +136,19 @@ radial amplitude. Under reduced motion, an
 indeterminate indicator keeps a static partial arc so it still communicates
 ongoing work without continuous rotation.
 
+## Loading indicator
+
+The expressive loading indicator occupies a 48 × 48dp standalone container
+with a 38 × 38dp active shape. The library also provides a proportional 24dp
+inline container with a 19dp active shape for text-adjacent waiting states.
+
+The uncontained active shape uses Primary. The contained treatment fills the
+48dp circular container with Primary Container and paints the shape with On
+Primary Container. Both treatments morph through the kit's seven authored
+shapes in the prototype order: Step 1 → 2 → 3 → 4 → 5 → 7 → 6. Each transition
+lasts 400ms and uses `cubic-bezier(0.2, 0, 0, 1)`. Reduced motion freezes the
+recognizable first shape rather than removing the loading affordance.
+
 ## Text field (outlined)
 
 56dp tall, radius 4, 16dp horizontal padding. The outline carries the state —
