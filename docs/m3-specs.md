@@ -359,6 +359,14 @@ The clock dial uses a 256dp circular surface with 36dp numeral targets. Twelve-
 hour mode uses the outer ring; 24-hour mode adds a 72dp-radius inner ring for
 13–00. Effects transitions are removed under reduced motion.
 
+## Floating action buttons
+
+FABs follow the kit's 40, 56, and 96dp square scale with 12, 16, and 28dp
+resting corners; round alternatives use half-height radii. Extended FABs are
+56dp high with 16dp horizontal padding and a 12dp icon gap, or 96dp high with
+28dp padding and a 16dp gap. Surface, primary, secondary, and tertiary
+container roles all share elevation level 2, rising to level 3 on hover.
+
 ## Button shape morph on press
 
 Expressive buttons tighten their corners while pressed. The *classic* M3 set

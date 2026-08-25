@@ -532,6 +532,13 @@ presentation-independent `{ hour, minute }` value stays in 24-hour terms while
 `TimeDial` is available when an application already owns the surrounding
 modal. Native dial buttons support pointer, touch, and roving arrow-key focus.
 
+### Floating action buttons
+
+`FAB` supplies icon-only small, medium, and large actions and requires an
+accessible name. `ExtendedFAB` requires a visible `label`. Both expose Material
+surface, primary, secondary, and tertiary colors plus round and square
+expressive shapes while reusing Button interaction behavior.
+
 ## Where the specs come from
 
 The token values and component geometry are not hand-copied from the docs site —

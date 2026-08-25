@@ -144,9 +144,9 @@ custom dial interaction.
 
 ### Floating action buttons
 
-- [ ] Add `FAB` sizes and color variants.
-- [ ] Add `ExtendedFAB` with icon and label.
-- [ ] Add the round and square expressive shape behaviors from the kit.
+- [x] Add `FAB` sizes and color variants.
+- [x] Add `ExtendedFAB` with icon and label.
+- [x] Add the round and square expressive shape behaviors from the kit.
 - [ ] Add `FABMenu` with labeled actions, focus management, and coordinated
   entrance/exit motion.
 
