@@ -134,7 +134,7 @@ Input, Select, and Button.
 
 ### Time picker
 
-- [ ] Add keyboard-entry time picker.
+- [x] Add keyboard-entry time picker.
 - [ ] Add the Material dial picker.
 - [ ] Support 12- and 24-hour modes, validation, and accessible keyboard
   controls.

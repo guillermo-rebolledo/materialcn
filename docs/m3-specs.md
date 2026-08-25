@@ -349,6 +349,13 @@ modals use a 328dp content measure inside the responsive dialog shell. Range
 selection adds endpoint circles and a secondary-container band without
 changing day target size; incomplete ranges preserve only the start endpoint.
 
+## Time picker
+
+Keyboard time entry uses separate 80 × 64dp hour and minute segments with a
+14dp gap region for the separator and an adjacent 56dp period control in
+12-hour mode. The public value is always `{ hour, minute }` in 24-hour terms,
+so keyboard and dial presentations share constraints, formatting, and errors.
+
 ## Button shape morph on press
 
 Expressive buttons tighten their corners while pressed. The *classic* M3 set

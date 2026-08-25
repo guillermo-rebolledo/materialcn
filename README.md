@@ -522,6 +522,13 @@ uses `{ start, end }` values and explicit confirmation. All accept a locale,
 date constraints, and an unavailable-date predicate without coupling to a form
 library.
 
+### Time pickers
+
+`TimePicker` is a controlled segmented keyboard entry component. Its
+presentation-independent `{ hour, minute }` value stays in 24-hour terms while
+`mode="12-hour"` adds an AM/PM control. `parseTime`, `formatTime`, and
+`isValidTime` are exported for form adapters and alternate presentations.
+
 ## Where the specs come from
 
 The token values and component geometry are not hand-copied from the docs site —
