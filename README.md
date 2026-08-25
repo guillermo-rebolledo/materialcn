@@ -484,6 +484,36 @@ Use `value` with `onValueChange` for controlled state. `invalid`, `disabled`,
 `onClear`, and custom Button, voice, avatar, or navigation content in either
 slot remain independent of any future SearchView result model.
 
+### Search views
+
+`SearchView` combines the controlled SearchBar query with Material List results
+in either a `docked` or `full-screen` presentation. Arrow keys transfer focus
+from the query to enabled results, Enter selects, and Escape dismisses and
+restores focus.
+
+```tsx
+<SearchView
+  open={open}
+  onOpenChange={setOpen}
+  value={query}
+  onValueChange={setQuery}
+  onSelect={openDestination}
+  presentation="docked"
+>
+  <SearchViewBar>
+    <SearchBarInput aria-label="Search destinations" />
+  </SearchViewBar>
+  <SearchViewContent state="results">
+    <SearchViewList aria-label="Destinations">
+      <SearchViewItem value="Oaxaca">Oaxaca</SearchViewItem>
+    </SearchViewList>
+  </SearchViewContent>
+</SearchView>
+```
+
+Use `SearchViewMessage` for loading, empty, and error feedback. Result and
+suggestion rows compose the existing List item content slots.
+
 ## Where the specs come from
 
 The token values and component geometry are not hand-copied from the docs site —

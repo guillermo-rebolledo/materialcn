@@ -26,8 +26,12 @@ function ListItem({
   className,
   lines = 1,
   render,
+  wrapperRole = "listitem",
   ...props
-}: useRender.ComponentProps<"div"> & { lines?: 1 | 2 | 3 }) {
+}: useRender.ComponentProps<"div"> & {
+  lines?: 1 | 2 | 3
+  wrapperRole?: "listitem" | "presentation"
+}) {
   const item = useRender({
     defaultTagName: "div",
     render,
@@ -58,7 +62,7 @@ function ListItem({
 
   return (
     <div
-      role="listitem"
+      role={wrapperRole}
       data-slot="list-item-wrapper"
       data-lines={lines}
       className="contents"

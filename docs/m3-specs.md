@@ -323,6 +323,19 @@ surface/content roles; invalid state uses the error outline without changing
 layout. SearchBar controls only its query and form interactions—docked and
 full-screen result surfaces belong to SearchView.
 
+## Search view
+
+The kit's docked search view uses a 360dp-wide `Surface Container High`
+container with a 12dp outer radius. Its 56dp search row leaves 194dp for the
+scrolling suggestion or result region in the 250dp final state. The full-screen
+presentation fills its caller-provided viewport and removes the outer radius;
+both presentations preserve the SearchBar's 56dp row and List item geometry.
+
+SearchView deliberately keeps query and visibility controlled. This lets one
+model survive responsive switches between docked and full-screen presentation.
+Recent, suggestion, loading, result, empty, and error content all occupy the
+same live content region without replacing the search control.
+
 ## Button shape morph on press
 
 Expressive buttons tighten their corners while pressed. The *classic* M3 set
