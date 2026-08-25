@@ -552,6 +552,13 @@ the component to a page container.
 and an optional `BottomAppBarFAB` slot. `safeArea` adds the platform bottom
 inset without fixing the bar to an application shell.
 
+### Navigation
+
+`NavigationBar` owns no route state: pass `value` and `onValueChange`, then
+compose link or button `NavigationBarItem`s with icons, labels, and optional
+NotificationBadges. Horizontal and vertical modes share arrow, Home, and End
+keyboard navigation and selected links expose `aria-current="page"`.
+
 ## Where the specs come from
 
 The token values and component geometry are not hand-copied from the docs site —

@@ -381,6 +381,13 @@ Bottom app bars are 80dp high at the 412dp reference width, with a 16dp outer
 radius and Secondary Container fill. Actions keep 48dp targets; the optional
 FAB occupies the trailing region without changing source or focus order.
 
+## Navigation bar
+
+The reference navigation bar is 412 × 80dp and accepts three to five equal
+destinations. Each item keeps a 64 × 32dp selected indicator around the 24dp
+icon and a label-small destination name. The vertical presentation reuses the
+same 80dp measure and selection model rather than introducing separate items.
+
 ## Button shape morph on press
 
 Expressive buttons tighten their corners while pressed. The *classic* M3 set

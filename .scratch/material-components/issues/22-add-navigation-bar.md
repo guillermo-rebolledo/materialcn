@@ -4,11 +4,11 @@
 
 **Blocked by:** 03 — Add Material notification badges.
 
-**Status:** ready-for-agent
+**Status:** completed
 
-- [ ] Horizontal and vertical item layouts support the destination counts shown by the design kit.
-- [ ] Items support icons, labels, active indicators, disabled states, and notification badges.
-- [ ] Controlled selection, links, keyboard navigation, focus order, and accessible-current semantics work correctly.
-- [ ] Responsive sizing does not require consumers to override component styling through `className`.
-- [ ] Stories cover item counts, orientations, badges, states, and light/dark presentation.
-- [ ] Typecheck, lint, browser tests, and the library build pass.
+- [x] Horizontal and vertical item layouts support the destination counts shown by the design kit.
+- [x] Items support icons, labels, active indicators, disabled states, and notification badges.
+- [x] Controlled selection, links, keyboard navigation, focus order, and accessible-current semantics work correctly.
+- [x] Responsive sizing does not require consumers to override component styling through `className`.
+- [x] Stories cover item counts, orientations, badges, states, and light/dark presentation.
+- [x] Typecheck, lint, browser tests, and the library build pass.

@@ -166,9 +166,9 @@ FAB.
 
 ### Navigation bar
 
-- [ ] Add horizontal and vertical navigation-bar item layouts.
-- [ ] Support icons, labels, active indicators, and notification badges.
-- [ ] Support responsive item sizing and keyboard navigation.
+- [x] Add horizontal and vertical navigation-bar item layouts.
+- [x] Support icons, labels, active indicators, and notification badges.
+- [x] Support responsive item sizing and keyboard navigation.
 
 Foundation: existing ToggleGroup and Tooltip, plus the future Notification
 Badge.
