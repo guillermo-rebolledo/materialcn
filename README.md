@@ -590,6 +590,11 @@ focus, Escape/outside dismissal, collision placement, and focus restoration.
 plus vertical orientation. Use `decorative` for purely visual rules and
 `SeparatorSubhead` for a semantic heading-and-divider composition.
 
+`Slider` now accepts `size="small|medium|large"` and
+`variant="standard|centered"`, with optional tick and value indicators.
+Single/range and horizontal/vertical inputs keep Base UI dragging, keyboard,
+disabled, and accessible-value behavior.
+
 ## Where the specs come from
 
 The token values and component geometry are not hand-copied from the docs site —

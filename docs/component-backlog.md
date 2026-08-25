@@ -203,7 +203,7 @@ primitives.
 - [x] Add rich-tooltip content using shadcn `hover-card` or `popover` while
   retaining the existing plain Tooltip.
 - [x] Add inset, middle-inset, vertical, and subhead variants to Separator.
-- [ ] Add centered-slider and Material size variants to the existing Slider.
+- [x] Add centered-slider and Material size variants to the existing Slider.
 - [ ] Refine the existing bottom Sheet with Material shape, sizing, and drag
   handle presentation; do not introduce another modal state primitive unless
   drag physics require shadcn `drawer`.

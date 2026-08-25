@@ -430,6 +430,15 @@ container, inset begins 16dp from the leading edge, and middle-inset leaves
 composition uses a title-small heading in a 48dp row followed by a decorative
 rule.
 
+## Slider variants
+
+The Material slider size scale uses 4, 8, and 16dp tracks with 32, 40, and
+44dp handles; every handle retains a minimum 48dp invisible touch target.
+Centered sliders paint the active segment between the midpoint and the single
+value. Standard sliders retain min-to-value and range indicators. Horizontal
+and vertical geometry, ticks, value labels, dragging, and keyboard increments
+share the same Base UI value model.
+
 ## Button shape morph on press
 
 Expressive buttons tighten their corners while pressed. The *classic* M3 set
