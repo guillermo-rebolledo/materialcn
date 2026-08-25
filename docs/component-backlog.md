@@ -147,7 +147,7 @@ custom dial interaction.
 - [x] Add `FAB` sizes and color variants.
 - [x] Add `ExtendedFAB` with icon and label.
 - [x] Add the round and square expressive shape behaviors from the kit.
-- [ ] Add `FABMenu` with labeled actions, focus management, and coordinated
+- [x] Add `FABMenu` with labeled actions, focus management, and coordinated
   entrance/exit motion.
 
 Foundation: existing Button, Tooltip, and Material motion/shape tokens.

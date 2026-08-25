@@ -538,6 +538,9 @@ modal. Native dial buttons support pointer, touch, and roving arrow-key focus.
 accessible name. `ExtendedFAB` requires a visible `label`. Both expose Material
 surface, primary, secondary, and tertiary colors plus round and square
 expressive shapes while reusing Button interaction behavior.
+`FABMenu` adds controlled or uncontrolled expansion, labeled `FABMenuAction`
+slots, four anchored placements, scrim dismissal, contained focus, and focus
+restoration to the primary `FABMenuTrigger`.
 
 ## Where the specs come from
 

@@ -366,6 +366,10 @@ resting corners; round alternatives use half-height radii. Extended FABs are
 56dp high with 16dp horizontal padding and a 12dp icon gap, or 96dp high with
 28dp padding and a 16dp gap. Surface, primary, secondary, and tertiary
 container roles all share elevation level 2, rising to level 3 on hover.
+FAB menus keep 12dp between their 48dp labeled secondary actions and 16dp
+between the action stack and primary FAB. The scrim uses the shared scrim role
+at 32%; entrance uses the fast effects motion and disappears under reduced
+motion.
 
 ## Button shape morph on press
 
