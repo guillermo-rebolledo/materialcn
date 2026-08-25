@@ -571,6 +571,13 @@ DropdownMenu, and FAB primitives through labeled group, divider, overflow, and
 FAB slots. Standard and expressive presentations share arrow-key ordering;
 overflow focus restoration remains owned by DropdownMenu.
 
+### Text fields
+
+`TextField` unifies outlined and filled, single-line and multiline controls.
+Leading/trailing content, prefix/suffix text, support/error messages, counters,
+disabled/read-only state, and controlled or uncontrolled values share one API.
+Multiline uses `InputGroupTextarea`, not a nested raw control.
+
 ## Where the specs come from
 
 The token values and component geometry are not hand-copied from the docs site —

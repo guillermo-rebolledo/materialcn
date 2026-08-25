@@ -220,6 +220,12 @@ weight is painted as an inset shadow instead.
 
 Supporting text: 16dp padding, body-small, On Surface Variant.
 
+Filled fields keep the 56dp single-line measure but replace the full outline
+with `Surface Container Highest`, 4dp top corners, and a 1dp bottom rule.
+Multiline fields use the same InputGroup control slot with a 96dp minimum
+content area; leading/trailing icons, prefixes, suffixes, counters, and support
+or error text preserve 16dp supporting insets.
+
 ## Wavy progress (Expressive)
 
 The active indicator is a travelling sine. From the kit's `wave-increment`

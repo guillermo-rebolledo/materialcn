@@ -4,11 +4,11 @@
 
 **Blocked by:** None — can start immediately.
 
-**Status:** ready-for-agent
+**Status:** completed
 
-- [ ] Outlined and filled single-line fields share one coherent API and state model.
-- [ ] Multiline fields use the shadcn input-group textarea composition rather than nesting a raw textarea incorrectly.
-- [ ] Leading and trailing icons, prefixes, suffixes, counters, supporting text, errors, disabled, and read-only states are supported.
-- [ ] Validation uses `data-invalid` on Field and `aria-invalid` on the control.
-- [ ] Stories cover field variants, adornments, validation, multiline content, and light/dark presentation.
-- [ ] Typecheck, lint, browser tests, and the library build pass.
+- [x] Outlined and filled single-line fields share one coherent API and state model.
+- [x] Multiline fields use the shadcn input-group textarea composition rather than nesting a raw textarea incorrectly.
+- [x] Leading and trailing icons, prefixes, suffixes, counters, supporting text, errors, disabled, and read-only states are supported.
+- [x] Validation uses `data-invalid` on Field and `aria-invalid` on the control.
+- [x] Stories cover field variants, adornments, validation, multiline content, and light/dark presentation.
+- [x] Typecheck, lint, browser tests, and the library build pass.

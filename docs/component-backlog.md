@@ -197,7 +197,7 @@ ButtonGroup, DropdownMenu, and FAB.
 These are gaps in current components, not reasons to introduce parallel
 primitives.
 
-- [ ] Add filled and multiline variants to the existing text-field stack using
+- [x] Add filled and multiline variants to the existing text-field stack using
   shadcn `input-group` and `textarea`.
 - [ ] Add secondary-tab styling to the existing Tabs component.
 - [ ] Add rich-tooltip content using shadcn `hover-card` or `popover` while

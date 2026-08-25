@@ -27,7 +27,7 @@ function focusInputGroupControl(
   }
 
   const group = addon.closest('[data-slot="input-group"]')
-  const control = group?.querySelector<HTMLInputElement>(
+  const control = group?.querySelector<HTMLInputElement | HTMLTextAreaElement>(
     '[data-slot="input-group-control"]',
   )
   control?.focus()
@@ -94,4 +94,20 @@ function InputGroupInput({
   )
 }
 
-export { InputGroup, InputGroupAddon, InputGroupInput }
+function InputGroupTextarea({
+  className,
+  ...props
+}: React.ComponentProps<"textarea">) {
+  return (
+    <textarea
+      {...props}
+      data-slot="input-group-control"
+      className={cn(
+        "field-sizing-content min-h-24 min-w-0 flex-1 resize-y bg-transparent px-4 py-3 text-m3-body-lg text-foreground outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:text-muted-foreground/38",
+        className,
+      )}
+    />
+  )
+}
+
+export { InputGroup, InputGroupAddon, InputGroupInput, InputGroupTextarea }
