@@ -4,11 +4,11 @@
 
 **Blocked by:** None — can start immediately.
 
-**Status:** ready-for-agent
+**Status:** completed
 
-- [ ] Primary, secondary, and existing segmented presentations are distinct documented variants of the same Tabs API.
-- [ ] Secondary labels, icons, active indicator, hover, focus, pressed, and disabled states match the design kit.
-- [ ] Horizontal and vertical orientations remain keyboard accessible.
-- [ ] Every trigger remains inside a TabsList and active panel semantics are unchanged.
-- [ ] Stories cover icons/labels, orientations, states, and light/dark presentation.
-- [ ] Typecheck, lint, browser tests, and the library build pass.
+- [x] Primary, secondary, and existing segmented presentations are distinct documented variants of the same Tabs API.
+- [x] Secondary labels, icons, active indicator, hover, focus, pressed, and disabled states match the design kit.
+- [x] Horizontal and vertical orientations remain keyboard accessible.
+- [x] Every trigger remains inside a TabsList and active panel semantics are unchanged.
+- [x] Stories cover icons/labels, orientations, states, and light/dark presentation.
+- [x] Typecheck, lint, browser tests, and the library build pass.

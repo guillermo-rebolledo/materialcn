@@ -578,6 +578,10 @@ Leading/trailing content, prefix/suffix text, support/error messages, counters,
 disabled/read-only state, and controlled or uncontrolled values share one API.
 Multiline uses `InputGroupTextarea`, not a nested raw control.
 
+TabsList variants are documented as `primary`, `secondary`, and `segmented`;
+legacy `line` and `default` names remain compatible. Horizontal and vertical
+orientations continue to use the same TabsTrigger and TabsContent semantics.
+
 ## Where the specs come from
 
 The token values and component geometry are not hand-copied from the docs site —

@@ -407,6 +407,13 @@ expressive toolbars use 96dp and 28dp. Both retain source order across action,
 toggle, connected-control, divider, overflow, and FAB slots. Arrow keys move
 among enabled controls while composed menus continue to own popup focus.
 
+## Tabs
+
+Primary tabs use a 48dp row and 3dp full-trigger indicator. Secondary tabs
+keep the 48dp row but use body-medium labels and a 2dp indicator inset 16dp
+from the trigger edges. Segmented tabs retain their tonal active pill. All
+three presentations share the same Base UI tab/panel semantics and orientation.
+
 ## Button shape morph on press
 
 Expressive buttons tighten their corners while pressed. The *classic* M3 set
