@@ -105,9 +105,9 @@ DropdownMenu.
 
 ### Carousel
 
-- [ ] Add standard, multi-browse, hero, and uncontained layouts.
-- [ ] Add full-screen and responsive examples.
-- [ ] Support keyboard navigation, touch/drag interaction, and reduced motion.
+- [x] Add standard, multi-browse, hero, and uncontained layouts.
+- [x] Add full-screen and responsive examples.
+- [x] Support keyboard navigation, touch/drag interaction, and reduced motion.
 
 Foundation: shadcn `carousel`.
 

@@ -37,6 +37,73 @@ export default defineConfig({
                   reducedMotion: reduced ? "reduce" : "no-preference",
                 })
               },
+              dragPointer: async (
+                { iframe, page },
+                selector: string,
+                deltaX: number,
+                deltaY: number,
+              ) => {
+                const bounds = await iframe.locator(selector).boundingBox()
+                if (!bounds) throw new Error(`Could not locate ${selector}`)
+
+                const startX = bounds.x + bounds.width / 2
+                const startY = bounds.y + bounds.height / 2
+                await page.mouse.move(startX, startY)
+                await page.mouse.down()
+                await page.mouse.move(startX + deltaX, startY + deltaY, {
+                  steps: 8,
+                })
+                await page.mouse.up()
+              },
+              dragTouch: async (
+                { iframe, page },
+                selector: string,
+                deltaX: number,
+                deltaY: number,
+              ) => {
+                const bounds = await iframe.locator(selector).boundingBox()
+                if (!bounds) throw new Error(`Could not locate ${selector}`)
+
+                const startX = bounds.x + bounds.width / 2
+                const startY = bounds.y + bounds.height / 2
+                const session = await page.context().newCDPSession(page)
+                const touchPoint = (step: number) => ({
+                  x: startX + (deltaX * step) / 12,
+                  y: startY + (deltaY * step) / 12,
+                  radiusX: 1,
+                  radiusY: 1,
+                  force: 1,
+                  id: 1,
+                })
+
+                try {
+                  await session.send("Emulation.setTouchEmulationEnabled", {
+                    enabled: true,
+                    maxTouchPoints: 1,
+                  })
+                  await session.send("Input.dispatchTouchEvent", {
+                    type: "touchStart",
+                    touchPoints: [touchPoint(0)],
+                  })
+                  await page.waitForTimeout(50)
+                  for (let step = 1; step <= 12; step += 1) {
+                    await session.send("Input.dispatchTouchEvent", {
+                      type: "touchMove",
+                      touchPoints: [touchPoint(step)],
+                    })
+                    await page.waitForTimeout(20)
+                  }
+                  await session.send("Input.dispatchTouchEvent", {
+                    type: "touchEnd",
+                    touchPoints: [],
+                  })
+                } finally {
+                  await session.send("Emulation.setTouchEmulationEnabled", {
+                    enabled: false,
+                  })
+                  await session.detach()
+                }
+              },
               holdPointer: async ({ iframe, page }, selector: string) => {
                 await iframe.locator(selector).hover()
                 await page.mouse.down()

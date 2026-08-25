@@ -281,6 +281,34 @@ metadata uses label-small (11/16 Medium). Leading icons are 24dp, avatars are
 two-line supporting text grow beyond the baseline height rather than clipping
 content; the default-density kit example is 104dp with 12dp vertical padding.
 
+## Carousel
+
+The responsive carousel component sets in the kit use a 16dp horizontal inset,
+8dp vertical inset, 8dp item gap, and 28dp item radius. Mobile multi-browse,
+hero, and uncontained examples occupy 412 × 221dp with 205dp-tall items; the
+mobile standard example and every tablet example use 220dp shells with 204dp
+items. The one-pixel difference belongs to the source component rather than a
+separate public size.
+
+| Layout | Mobile visible widths | Tablet visible widths |
+| ------ | --------------------- | --------------------- |
+| Standard / multi-aspect ratio | 362.224, 270.674, 204, 153.249, 116 | same sequence |
+| Multi-browse | 188, 120, 56 | 184, 184, 120, 56 |
+| Hero | 316, 56 | 184, 184, 120, 56 |
+| Center-aligned hero | 56, 252, 56 | 184, 184, 120, 56 |
+| Uncontained | 154, 154, then 72 visible | 162.667 × 3, then 72 visible |
+| Full screen | one 412 × 892 item | — |
+
+Multi-browse and hero widths move with the selected snap so the emphasized
+item remains the current item. Uncontained items keep equal intrinsic widths;
+the 72dp value is the visible portion clipped by the viewport, not a smaller
+content item. Full-screen items inherit the available viewport height instead
+of fixing a device-specific 892dp height.
+
+Item-size morphs use the effects spring because flex basis is clamped. Embla
+owns spatial drag and swipe movement. Under reduced motion the item transition
+is removed and Embla is reinitialized with zero movement duration.
+
 ## Button shape morph on press
 
 Expressive buttons tighten their corners while pressed. The *classic* M3 set

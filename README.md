@@ -412,6 +412,47 @@ grouped content. `ListItemLeading` supports `icon`, `avatar`, `media`, and
 `control` presentations, while trailing slots can compose the exported
 Checkbox, RadioGroupItem, and Switch controls.
 
+### Carousels
+
+The Material carousel composes the shadcn/Embla interaction primitive with the
+responsive item emphasis from the design kit. Give every carousel an
+accessible name; slides receive positional names automatically unless they
+provide `aria-label` or `aria-labelledby`.
+
+```tsx
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "materialcn"
+
+<Carousel aria-label="Featured destinations" layout="multi-browse">
+  <CarouselContent>
+    {destinations.map((destination) => (
+      <CarouselItem key={destination.id} aria-label={destination.name}>
+        <img src={destination.image} alt="" />
+      </CarouselItem>
+    ))}
+  </CarouselContent>
+  <CarouselPrevious />
+  <CarouselNext />
+</Carousel>
+```
+
+`layout` accepts `"standard"` (the kit's multi-aspect-ratio sequence),
+`"multi-browse"`, `"hero"`, `"uncontained"`, and `"full-screen"`. Pass
+`opts={{ align: "center", startIndex: 1 }}` for the centered hero
+presentation. Embla options, plugins, and `setApi` remain available for
+advanced composition.
+
+Previous and next controls stay focusable at a finite boundary and communicate
+their unavailable state with `aria-disabled`. Arrow keys work while focus is
+inside the carousel, pointer and touch dragging are enabled by default, and
+reduced-motion preferences remove both inertial control movement and item-size
+morphing.
+
 ## Where the specs come from
 
 The token values and component geometry are not hand-copied from the docs site —

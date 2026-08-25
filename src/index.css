@@ -465,6 +465,138 @@
   }
 }
 
+/*
+ * Material carousel geometry is container-responsive so the component keeps
+ * its mobile and tablet compositions when it lives in a narrow page region.
+ * The values come from the kit's 412dp and 600dp component contexts.
+ */
+@utility m3-carousel {
+  container-type: inline-size;
+
+  & [data-slot="carousel-content"] {
+    height: 221px;
+    gap: 8px;
+    padding: 8px 16px;
+  }
+
+  & [data-slot="carousel-item"] {
+    height: 205px;
+    flex-basis: 56px;
+    border-radius: 28px;
+    transition-property: flex-basis;
+    transition-duration: var(--m3-spring-effects-default-duration);
+    transition-timing-function: var(--m3-spring-effects-default);
+  }
+
+  &[data-layout="standard"] [data-slot="carousel-content"] {
+    height: 220px;
+  }
+
+  &[data-layout="standard"] [data-slot="carousel-item"] {
+    height: 204px;
+  }
+
+  &[data-layout="standard"] [data-slot="carousel-item"]:nth-child(5n + 1) {
+    flex-basis: 362.224px;
+  }
+
+  &[data-layout="standard"] [data-slot="carousel-item"]:nth-child(5n + 2) {
+    flex-basis: 270.674px;
+  }
+
+  &[data-layout="standard"] [data-slot="carousel-item"]:nth-child(5n + 3) {
+    flex-basis: 204px;
+  }
+
+  &[data-layout="standard"] [data-slot="carousel-item"]:nth-child(5n + 4) {
+    flex-basis: 153.249px;
+  }
+
+  &[data-layout="standard"] [data-slot="carousel-item"]:nth-child(5n) {
+    flex-basis: 116px;
+  }
+
+  &[data-layout="multi-browse"] [data-slot="carousel-item"][data-selected] {
+    flex-basis: 188px;
+  }
+
+  &[data-layout="multi-browse"]
+    [data-slot="carousel-item"][data-selected]
+    + [data-slot="carousel-item"] {
+    flex-basis: 120px;
+  }
+
+  &[data-layout="hero"] [data-slot="carousel-item"][data-selected] {
+    flex-basis: 316px;
+  }
+
+  &[data-layout="hero"][data-align="center"]
+    [data-slot="carousel-item"][data-selected] {
+    flex-basis: 252px;
+  }
+
+  &[data-layout="uncontained"] [data-slot="carousel-item"] {
+    flex-basis: 154px;
+  }
+
+  &[data-layout="full-screen"] [data-slot="carousel-viewport"],
+  &[data-layout="full-screen"] [data-slot="carousel-content"] {
+    height: 100%;
+  }
+
+  &[data-layout="full-screen"] [data-slot="carousel-content"] {
+    padding: 0;
+  }
+
+  &[data-layout="full-screen"] [data-slot="carousel-item"] {
+    height: 100%;
+    flex-basis: 100%;
+  }
+}
+
+@container (min-width: 560px) {
+  .m3-carousel [data-slot="carousel-content"] {
+    height: 220px;
+  }
+
+  .m3-carousel [data-slot="carousel-item"] {
+    height: 204px;
+  }
+
+  .m3-carousel[data-layout="multi-browse"]
+    [data-slot="carousel-item"][data-selected],
+  .m3-carousel[data-layout="multi-browse"]
+    [data-slot="carousel-item"][data-selected]
+    + [data-slot="carousel-item"] {
+    flex-basis: 184px;
+  }
+
+  .m3-carousel[data-layout="multi-browse"]
+    [data-slot="carousel-item"][data-selected]
+    + [data-slot="carousel-item"]
+    + [data-slot="carousel-item"] {
+    flex-basis: 120px;
+  }
+
+  .m3-carousel[data-layout="hero"] [data-slot="carousel-item"][data-selected],
+  .m3-carousel[data-layout="hero"]
+    [data-slot="carousel-item"][data-selected]
+    + [data-slot="carousel-item"] {
+    flex-basis: 184px;
+  }
+
+  .m3-carousel[data-layout="hero"]
+    [data-slot="carousel-item"][data-selected]
+    + [data-slot="carousel-item"]
+    + [data-slot="carousel-item"] {
+    flex-basis: 120px;
+  }
+
+  .m3-carousel[data-layout="uncontained"] [data-slot="carousel-item"] {
+    flex-basis: 162.667px;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .m3-wave,
   .m3-wave-thick {
@@ -480,6 +612,10 @@
   .m3-loading-indicator-shape {
     animation: none;
     clip-path: var(--m3-loading-shape-1);
+  }
+
+  .m3-carousel [data-slot="carousel-item"] {
+    transition: none;
   }
 }
 
