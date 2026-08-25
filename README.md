@@ -252,6 +252,47 @@ buttons; an explicit prop on a child wins. Connected groups default to the
 tonal (`secondary`) button variant. Use `ToggleGroup` instead when one or more
 items can be selected.
 
+### Split buttons
+
+`SplitButton` pairs one immediate action with a trailing Material action menu.
+Compose its menu with the existing `DropdownMenu` primitives; the trigger owns
+menu opening and the leading action never opens it.
+
+```tsx
+import { PlusIcon } from "lucide-react"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  SplitButton,
+  SplitButtonAction,
+  SplitButtonTrigger,
+} from "materialcn"
+
+<SplitButton aria-label="Create actions" size="sm" variant="tonal">
+  <SplitButtonAction onClick={createDocument}>
+    <PlusIcon aria-hidden="true" data-icon="inline-start" />
+    Create
+  </SplitButtonAction>
+  <DropdownMenu>
+    <SplitButtonTrigger aria-label="More create actions" />
+    <DropdownMenuContent align="end">
+      <DropdownMenuGroup>
+        <DropdownMenuItem>Create folder</DropdownMenuItem>
+        <DropdownMenuItem>Import file</DropdownMenuItem>
+      </DropdownMenuGroup>
+    </DropdownMenuContent>
+  </DropdownMenu>
+</SplitButton>
+```
+
+The supported color variants are `default` (filled), `tonal`, `outline`, and
+`elevated`. Sizes follow the Button scale from `xs` through `2xl`, with
+`default` as an alias for `sm`. Both the group and menu trigger require an
+accessible name. Setting `disabled` on `SplitButton` disables both segments;
+an individual segment can also be disabled on its own.
+
 ### Snackbars
 
 Mount one `Toaster` near the application root, then use the exported imperative

@@ -83,6 +83,26 @@ groups apply the outer shape to the first and last inline edges; the vertical
 orientation mirrors that rule on the block axis. XS and S connected horizontal
 groups retain a 48dp minimum touch-target height.
 
+## Split button
+
+The split button composes a leading immediate action and a trailing action-menu
+trigger with a 2dp gap. Its segment proportions differ from the equal columns
+of a general connected button group.
+
+| API size | Group min | Segment height | Trigger width | Outer radius | Rest / focus inner | Hover / press inner | Action gap | Action padding | Action / trigger icon |
+| -------- | --------- | -------------- | ------------- | ------------ | ------------------ | ------------------- | ---------- | -------------- | --------------------- |
+| `xs` | 48 | 32 | 48 | 16 | 4 | 8 | 4 | 12 | 20 / 22 |
+| `sm` / `default` | 48 | 40 | 48 | 20 | 4 | 12 | 8 | 16 | 20 / 22 |
+| `lg` | 56 | 56 | 56 | 28 | 4 | 12 | 8 | 24 | 24 / 26 |
+| `xl` | 96 | 96 | 96 | 48 | 8 | 20 | 12 | 48 | 32 / 38 |
+| `2xl` | 136 | 136 | 136 | 68 | 12 | 20 | 16 | 64 | 40 / 50 |
+
+The outer inline corners stay at the outer radius. Hover and held press soften
+only the shared edge; focus retains the resting inner radius. While the menu is
+open, the trailing segment becomes a fully rounded selected shape. Filled,
+tonal, outlined, and elevated treatments reuse the corresponding Button color
+roles and state layers.
+
 ## Switch
 
 Track 52×32, radius full.

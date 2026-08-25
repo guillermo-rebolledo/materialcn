@@ -315,6 +315,156 @@
   }
 }
 
+/*
+ * Split buttons use the kit's asymmetric action/menu segments rather than the
+ * equal columns of a general connected ButtonGroup.
+ */
+@utility m3-split-button {
+  &[data-slot="button-group"] {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+  }
+
+  &[data-size="xs"] {
+    --m3-split-button-outer-radius: 16px;
+    --m3-split-button-inner-radius: 4px;
+    --m3-split-button-state-radius: 8px;
+    --m3-split-button-trigger-width: 48px;
+    --m3-split-button-action-gap: 4px;
+    --m3-split-button-action-padding: 12px;
+    --m3-split-button-action-icon-size: 20px;
+    --m3-split-button-trigger-icon-size: 22px;
+  }
+
+  &[data-size="sm"],
+  &[data-size="default"] {
+    --m3-split-button-outer-radius: 20px;
+    --m3-split-button-inner-radius: 4px;
+    --m3-split-button-state-radius: 12px;
+    --m3-split-button-trigger-width: 48px;
+    --m3-split-button-action-gap: 8px;
+    --m3-split-button-action-padding: 16px;
+    --m3-split-button-action-icon-size: 20px;
+    --m3-split-button-trigger-icon-size: 22px;
+  }
+
+  &[data-size="lg"] {
+    --m3-split-button-outer-radius: 28px;
+    --m3-split-button-inner-radius: 4px;
+    --m3-split-button-state-radius: 12px;
+    --m3-split-button-trigger-width: 56px;
+    --m3-split-button-action-gap: 8px;
+    --m3-split-button-action-padding: 24px;
+    --m3-split-button-action-icon-size: 24px;
+    --m3-split-button-trigger-icon-size: 26px;
+  }
+
+  &[data-size="xl"] {
+    --m3-split-button-outer-radius: 48px;
+    --m3-split-button-inner-radius: 8px;
+    --m3-split-button-state-radius: 20px;
+    --m3-split-button-trigger-width: 96px;
+    --m3-split-button-action-gap: 12px;
+    --m3-split-button-action-padding: 48px;
+    --m3-split-button-action-icon-size: 32px;
+    --m3-split-button-trigger-icon-size: 38px;
+  }
+
+  &[data-size="2xl"] {
+    --m3-split-button-outer-radius: 68px;
+    --m3-split-button-inner-radius: 12px;
+    --m3-split-button-state-radius: 20px;
+    --m3-split-button-trigger-width: 136px;
+    --m3-split-button-action-gap: 16px;
+    --m3-split-button-action-padding: 64px;
+    --m3-split-button-action-icon-size: 40px;
+    --m3-split-button-trigger-icon-size: 50px;
+  }
+
+  &[data-slot="button-group"] > [data-split-button-segment="action"] {
+    gap: var(--m3-split-button-action-gap);
+    padding-inline: var(--m3-split-button-action-padding);
+    border-radius: var(--m3-split-button-outer-radius)
+      var(--m3-split-button-inner-radius)
+      var(--m3-split-button-inner-radius)
+      var(--m3-split-button-outer-radius);
+  }
+
+  &[data-slot="button-group"] > [data-split-button-segment="trigger"] {
+    width: var(--m3-split-button-trigger-width);
+    min-width: var(--m3-split-button-trigger-width);
+    padding-inline: 0;
+    border-radius: var(--m3-split-button-inner-radius)
+      var(--m3-split-button-outer-radius)
+      var(--m3-split-button-outer-radius)
+      var(--m3-split-button-inner-radius);
+  }
+
+  &[data-slot="button-group"]
+    > [data-split-button-segment="action"]:is(:hover, :active):not(:disabled) {
+    border-radius: var(--m3-split-button-outer-radius)
+      var(--m3-split-button-state-radius)
+      var(--m3-split-button-state-radius)
+      var(--m3-split-button-outer-radius);
+  }
+
+  &[data-slot="button-group"]
+    > [data-split-button-segment="trigger"]:is(
+      :hover,
+      :active,
+      [data-split-button-pressing]
+    ):not(:disabled) {
+    border-radius: var(--m3-split-button-state-radius)
+      var(--m3-split-button-outer-radius)
+      var(--m3-split-button-outer-radius)
+      var(--m3-split-button-state-radius);
+  }
+
+  &[data-slot="button-group"][data-variant="connected"]
+    > [data-split-button-segment="action"]:focus-visible {
+    border-radius: var(--m3-split-button-outer-radius)
+      var(--m3-split-button-inner-radius)
+      var(--m3-split-button-inner-radius)
+      var(--m3-split-button-outer-radius);
+  }
+
+  &[data-slot="button-group"][data-variant="connected"]
+    > [data-split-button-segment="trigger"]:focus-visible {
+    border-radius: var(--m3-split-button-inner-radius)
+      var(--m3-split-button-outer-radius)
+      var(--m3-split-button-outer-radius)
+      var(--m3-split-button-inner-radius);
+  }
+
+  &[data-slot="button-group"][data-variant="connected"]
+    > [data-split-button-segment="trigger"][data-popup-open]:not(
+      :active,
+      [data-split-button-pressing]
+    ) {
+    border-radius: var(--m3-split-button-outer-radius);
+  }
+
+  &[data-slot="button-group"]
+    > [data-split-button-segment]:focus-visible {
+    z-index: 10;
+  }
+
+  &[data-slot="button-group"]
+    > [data-split-button-segment="action"]
+    > svg:not([class*="size-"]) {
+    width: var(--m3-split-button-action-icon-size);
+    height: var(--m3-split-button-action-icon-size);
+  }
+
+  &[data-slot="button-group"]
+    > [data-split-button-segment="trigger"]
+    > svg:not([class*="size-"]) {
+    width: var(--m3-split-button-trigger-icon-size);
+    height: var(--m3-split-button-trigger-icon-size);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .m3-wave,
   .m3-wave-thick {
