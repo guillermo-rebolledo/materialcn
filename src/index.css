@@ -153,10 +153,59 @@
   }
 }
 
+/*
+ * Circular indeterminate progress advances clockwise while its visible arc
+ * grows and contracts. The static 25% arc in reduced-motion mode still reads
+ * as ongoing work without implying a numeric value.
+ */
+@utility m3-circular-progress-indeterminate {
+  transform-origin: center;
+  animation:
+    m3-circular-progress-rotate 1.4s linear infinite,
+    m3-circular-progress-dash 1.4s var(--m3-ease-standard) infinite;
+}
+
+@utility m3-circular-progress-track-transition {
+  transition-property: stroke-dasharray, stroke-dashoffset;
+  transition-duration:
+    var(--m3-spring-effects-default-duration),
+    var(--m3-spring-spatial-default-duration);
+  transition-timing-function:
+    var(--m3-spring-effects-default),
+    var(--m3-spring-spatial-default);
+}
+
+@keyframes m3-circular-progress-rotate {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes m3-circular-progress-dash {
+  0% {
+    stroke-dasharray: 8 92;
+    stroke-dashoffset: 0;
+  }
+  50% {
+    stroke-dasharray: 60 40;
+    stroke-dashoffset: -20;
+  }
+  100% {
+    stroke-dasharray: 8 92;
+    stroke-dashoffset: -100;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .m3-wave,
   .m3-wave-thick {
     animation: none;
+  }
+
+  .m3-circular-progress-indeterminate {
+    animation: none;
+    stroke-dasharray: 25 75;
+    stroke-dashoffset: 0;
   }
 }
 

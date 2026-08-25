@@ -255,6 +255,29 @@ message warrants an urgent announcement. Timeouts pause while the snackbar
 stack is hovered or keyboard-focused; `F6` moves focus to the notification
 region without stealing it when a snackbar first appears.
 
+### Circular progress
+
+Pass a value for determinate progress or omit it for an indeterminate
+indicator. Every indicator needs an accessible name. Values are clamped to the
+`min`/`max` range, which defaults to 0–100.
+
+```tsx
+import { CircularProgress } from "materialcn"
+
+<CircularProgress aria-label="Upload progress" value={65} />
+<CircularProgress
+  aria-label="Loading results"
+  thickness={8}
+  variant="wavy"
+/>
+```
+
+`variant` accepts `"flat"` or `"wavy"`, and `thickness` accepts `4` or `8`.
+Their kit-defined outer sizes are 40/44dp for flat and 48/52dp for wavy. The
+active arc uses Primary, the track uses Secondary Container, and `disabled`
+switches both strokes to disabled On Surface roles. Indeterminate motion
+becomes a static partial arc when reduced motion is requested.
+
 ### Lists
 
 `ListItem` keeps a semantic list-item wrapper and uses Base UI's `render` prop

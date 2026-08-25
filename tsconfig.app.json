@@ -27,5 +27,5 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["src", "playground", ".storybook"]
+  "include": ["src", "playground", ".storybook", "vitest.shims.d.ts"]
 }

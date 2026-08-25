@@ -121,6 +121,21 @@ pill rather than a circle.
 Linear: 4dp thickness, full radius, 4dp gap between the active indicator and the
 remaining track, with a stop dot at the end.
 
+Circular progress uses a round-capped Primary indicator over a Secondary
+Container track. Determinate indicators leave a 4dp gap on both sides of the
+remaining track; indeterminate indicators keep the track visible while the
+active arc grows, contracts, and advances clockwise.
+
+| Circular variant | 4dp stroke | 8dp stroke |
+| ---------------- | ---------- | ---------- |
+| Flat | 40 × 40dp | 44 × 44dp |
+| Wavy | 48 × 48dp | 52 × 52dp |
+
+The Expressive wavy form uses six radial lobes on a 20dp centreline with ±2dp
+radial amplitude. Under reduced motion, an
+indeterminate indicator keeps a static partial arc so it still communicates
+ongoing work without continuous rotation.
+
 ## Text field (outlined)
 
 56dp tall, radius 4, 16dp horizontal padding. The outline carries the state —

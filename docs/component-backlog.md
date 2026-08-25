@@ -83,9 +83,9 @@ RadioGroup, and Switch.
 
 ### Circular progress and loading indicator
 
-- [ ] Add determinate and indeterminate `CircularProgress` variants.
+- [x] Add determinate and indeterminate `CircularProgress` variants.
 - [ ] Add the Material Expressive `LoadingIndicator` as a separate component.
-- [ ] Provide accessible labels and reduced-motion behavior.
+- [x] Provide accessible labels and reduced-motion behavior.
 
 Foundation: shadcn `spinner` where its behavior is sufficient; custom SVG or
 CSS geometry for the Material indicators.
