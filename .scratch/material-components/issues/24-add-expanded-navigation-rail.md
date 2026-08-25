@@ -4,11 +4,11 @@
 
 **Blocked by:** 04 — Add Material action menus; 23 — Add compact NavigationRail.
 
-**Status:** ready-for-agent
+**Status:** completed
 
-- [ ] Expanded mode reuses the compact rail's destination and selection model.
-- [ ] Labels, active indicators, notification badges, menu region, and optional FAB match the design kit.
-- [ ] Controlled expansion and responsive examples preserve focus and destination state.
-- [ ] Menu and destination keyboard interactions remain distinct and accessible.
-- [ ] Stories demonstrate compact-to-expanded behavior, optional regions, states, and light/dark presentation.
-- [ ] Typecheck, lint, browser tests, and the library build pass.
+- [x] Expanded mode reuses the compact rail's destination and selection model.
+- [x] Labels, active indicators, notification badges, menu region, and optional FAB match the design kit.
+- [x] Controlled expansion and responsive examples preserve focus and destination state.
+- [x] Menu and destination keyboard interactions remain distinct and accessible.
+- [x] Stories demonstrate compact-to-expanded behavior, optional regions, states, and light/dark presentation.
+- [x] Typecheck, lint, browser tests, and the library build pass.

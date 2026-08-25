@@ -1,11 +1,11 @@
 import { useState } from "react"
 import type { Meta, StoryObj } from "@storybook/react-vite"
-import { expect, userEvent, within } from "storybook/test"
+import { expect, userEvent, waitFor, within } from "storybook/test"
 import { HeartIcon, HomeIcon, MailIcon, MenuIcon, PlusIcon } from "lucide-react"
 
 import { Button } from "./button"
 import { FAB } from "./fab"
-import { NavigationRail, NavigationRailDestinations, NavigationRailFAB, NavigationRailItem, NavigationRailMenu } from "./navigation-rail"
+import { NavigationRail, NavigationRailDestinations, NavigationRailExpansionToggle, NavigationRailFAB, NavigationRailItem, NavigationRailMenu } from "./navigation-rail"
 import { NotificationBadge } from "./notification-badge"
 
 const meta = {
@@ -35,6 +35,24 @@ function CompactRail() {
   )
 }
 
+function ResponsiveRail() {
+  const [value, setValue] = useState("home")
+  const [expanded, setExpanded] = useState(false)
+  return (
+    <div className="flex h-[640px] items-start gap-3">
+      <NavigationRail value={value} onValueChange={setValue} expanded={expanded} onExpandedChange={setExpanded} aria-label="Responsive navigation">
+        <NavigationRailMenu><NavigationRailExpansionToggle aria-label="Toggle rail"><MenuIcon /></NavigationRailExpansionToggle></NavigationRailMenu>
+        <NavigationRailFAB><FAB aria-label="Create" size="small"><PlusIcon /></FAB></NavigationRailFAB>
+        <NavigationRailDestinations>
+          <NavigationRailItem value="home" label="Home" icon={<HomeIcon />} />
+          <NavigationRailItem value="favorites" label="Favorites" icon={<HeartIcon />} />
+          <NavigationRailItem value="messages" label="Messages" icon={<MailIcon />} badge={<NotificationBadge />} />
+        </NavigationRailDestinations>
+      </NavigationRail>
+    </div>
+  )
+}
+
 export const CompactInteraction: Story = {
   render: () => <div className="h-[640px]"><CompactRail /></div>,
   play: async ({ canvasElement }) => {
@@ -50,3 +68,18 @@ export const CompactInteraction: Story = {
 }
 
 export const RegionsAndBadges: Story = { parameters: { sideBySide: true }, render: () => <div className="h-[640px]"><CompactRail /></div> }
+
+export const ControlledExpansion: Story = {
+  parameters: { sideBySide: true },
+  render: () => <ResponsiveRail />,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const rails = canvasElement.querySelectorAll<HTMLElement>('[data-slot="navigation-rail"]')
+    await expect(rails[0].getBoundingClientRect().width).toBe(80)
+    const home = canvas.getAllByRole("button", { name: /Home/ })[0]
+    home.focus()
+    await userEvent.click(canvas.getAllByRole("button", { name: "Toggle rail" })[0])
+    await waitFor(() => expect(rails[0].getBoundingClientRect().width).toBe(360))
+    await expect(canvas.getAllByRole("button", { name: /Home/ })[0]).toHaveAttribute("aria-current", "page")
+  },
+}

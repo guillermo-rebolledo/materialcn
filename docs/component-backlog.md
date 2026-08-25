@@ -175,9 +175,9 @@ Badge.
 
 ### Navigation rail
 
-- [ ] Add compact and expanded navigation rails.
+- [x] Add compact and expanded navigation rails.
 - [x] Support optional menu and FAB regions.
-- [ ] Support active indicators, labels, notification badges, and responsive
+- [x] Support active indicators, labels, notification badges, and responsive
   expansion.
 
 Foundation: shadcn `sidebar` where useful, plus existing Button and Tooltip and

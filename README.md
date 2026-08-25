@@ -560,6 +560,9 @@ NotificationBadges. Horizontal and vertical modes share arrow, Home, and End
 keyboard navigation and selected links expose `aria-current="page"`.
 `NavigationRail` reuses that controlled destination model in a compact 80dp
 rail, with stable menu, FAB, destination, and notification regions.
+Pass controlled `expanded` and `onExpandedChange` props to switch that same
+rail to its 360dp persistent-label layout; `NavigationRailExpansionToggle`
+wires the state without mixing menu and destination keyboard behavior.
 
 ## Where the specs come from
 

@@ -390,6 +390,9 @@ same 80dp measure and selection model rather than introducing separate items.
 The compact navigation rail is 80dp wide with 4dp inline padding. Its menu and
 FAB regions precede a flexible vertical destination list; compact destinations
 hide labels visually and expose them through focus/hover tooltips.
+Expanded rails use a 360dp container and convert the same destinations to 56dp
+horizontal rows with persistent labels. Expansion changes only width and
+layout; destination identity, focusable nodes, selection, and badges persist.
 
 ## Button shape morph on press
 
