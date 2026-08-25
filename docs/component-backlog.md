@@ -200,7 +200,7 @@ primitives.
 - [x] Add filled and multiline variants to the existing text-field stack using
   shadcn `input-group` and `textarea`.
 - [x] Add secondary-tab styling to the existing Tabs component.
-- [ ] Add rich-tooltip content using shadcn `hover-card` or `popover` while
+- [x] Add rich-tooltip content using shadcn `hover-card` or `popover` while
   retaining the existing plain Tooltip.
 - [ ] Add inset, middle-inset, vertical, and subhead variants to Separator.
 - [ ] Add centered-slider and Material size variants to the existing Slider.

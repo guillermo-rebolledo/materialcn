@@ -4,11 +4,11 @@
 
 **Blocked by:** None — can start immediately.
 
-**Status:** ready-for-agent
+**Status:** completed
 
-- [ ] RichTooltip supports title, supporting text, and optional action content using an appropriate hover-card or popover foundation.
-- [ ] Pointer hover, keyboard focus, action interaction, escape, outside dismissal, and focus restoration are accessible.
-- [ ] Plain non-interactive hints continue to use the existing Tooltip component.
-- [ ] Placement, collision handling, shape, color, elevation, and spacing match the design kit.
-- [ ] Stories compare plain and rich tooltips across placements and light/dark presentation.
-- [ ] Typecheck, lint, browser tests, and the library build pass.
+- [x] RichTooltip supports title, supporting text, and optional action content using an appropriate hover-card or popover foundation.
+- [x] Pointer hover, keyboard focus, action interaction, escape, outside dismissal, and focus restoration are accessible.
+- [x] Plain non-interactive hints continue to use the existing Tooltip component.
+- [x] Placement, collision handling, shape, color, elevation, and spacing match the design kit.
+- [x] Stories compare plain and rich tooltips across placements and light/dark presentation.
+- [x] Typecheck, lint, browser tests, and the library build pass.

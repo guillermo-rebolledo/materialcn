@@ -582,6 +582,10 @@ TabsList variants are documented as `primary`, `secondary`, and `segmented`;
 legacy `line` and `default` names remain compatible. Horizontal and vertical
 orientations continue to use the same TabsTrigger and TabsContent semantics.
 
+Use `Tooltip` only for non-interactive hints. `RichTooltip` uses the Popover
+foundation for a title, supporting description, and action region, with hover,
+focus, Escape/outside dismissal, collision placement, and focus restoration.
+
 ## Where the specs come from
 
 The token values and component geometry are not hand-copied from the docs site —

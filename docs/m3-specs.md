@@ -414,6 +414,14 @@ keep the 48dp row but use body-medium labels and a 2dp indicator inset 16dp
 from the trigger edges. Segmented tabs retain their tonal active pill. All
 three presentations share the same Base UI tab/panel semantics and orientation.
 
+## Tooltips
+
+Plain hints retain their 24dp-high inverse-surface treatment. Rich tooltips use
+a collision-aware Popover foundation, a maximum 320dp width, 12dp corners,
+16dp padding, Surface Container fill, and elevation level 2. They can contain
+title, body, and actions and therefore expose dialog rather than tooltip
+semantics.
+
 ## Button shape morph on press
 
 Expressive buttons tighten their corners while pressed. The *classic* M3 set
