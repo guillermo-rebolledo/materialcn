@@ -309,6 +309,20 @@ Item-size morphs use the effects spring because flex basis is clamped. Embla
 owns spatial drag and swipe movement. Under reduced motion the item transition
 is removed and Embla is reinitialized with zero movement duration.
 
+## Search bar
+
+The kit's Search bar is 360 × 56dp with a 28dp container radius, 4dp outer
+inset, body-large input text (16/24 Regular), and `Surface Container High`
+fill. Leading and trailing regions occupy the inset 48dp touch area while their
+icon buttons retain the existing 40dp Material button target. The default
+container uses elevation level 1 and rises to level 2 for hover or focus.
+
+Populated, navigation, voice, avatar, disabled, and error compositions keep the
+same outer geometry. Disabled state removes elevation and uses the disabled
+surface/content roles; invalid state uses the error outline without changing
+layout. SearchBar controls only its query and form interactions—docked and
+full-screen result surfaces belong to SearchView.
+
 ## Button shape morph on press
 
 Expressive buttons tighten their corners while pressed. The *classic* M3 set

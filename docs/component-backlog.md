@@ -113,7 +113,7 @@ Foundation: shadcn `carousel`.
 
 ### Search
 
-- [ ] Add `SearchBar` with leading search, trailing actions, active, disabled,
+- [x] Add `SearchBar` with leading search, trailing actions, active, disabled,
   and populated states.
 - [ ] Add docked and full-screen `SearchView` presentations.
 - [ ] Support suggestions, recent searches, results, empty state, and keyboard

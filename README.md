@@ -453,6 +453,37 @@ inside the carousel, pointer and touch dragging are enabled by default, and
 reduced-motion preferences remove both inertial control movement and item-size
 morphing.
 
+### Search bars
+
+`SearchBar` is a controlled or uncontrolled search form. Its compound slots
+keep navigation and trailing actions composable without coupling the input to
+suggestions or result state.
+
+```tsx
+import {
+  SearchBar,
+  SearchBarClear,
+  SearchBarInput,
+  SearchBarLeading,
+  SearchBarTrailing,
+} from "materialcn"
+import { SearchIcon } from "lucide-react"
+
+<SearchBar defaultValue="" onSubmit={(query) => runSearch(query)}>
+  <SearchBarLeading>
+    <SearchIcon aria-hidden="true" />
+  </SearchBarLeading>
+  <SearchBarInput aria-label="Search destinations" />
+  <SearchBarTrailing>
+    <SearchBarClear />
+  </SearchBarTrailing>
+</SearchBar>
+```
+
+Use `value` with `onValueChange` for controlled state. `invalid`, `disabled`,
+`onClear`, and custom Button, voice, avatar, or navigation content in either
+slot remain independent of any future SearchView result model.
+
 ## Where the specs come from
 
 The token values and component geometry are not hand-copied from the docs site —

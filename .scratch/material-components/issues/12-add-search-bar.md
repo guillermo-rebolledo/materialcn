@@ -4,11 +4,11 @@
 
 **Blocked by:** None — can start immediately.
 
-**Status:** ready-for-agent
+**Status:** completed
 
-- [ ] Empty, focused, populated, disabled, and error states match the design kit.
-- [ ] Leading search/navigation controls and trailing clear, voice, avatar, or custom actions compose through stable slots.
-- [ ] Clear and submit interactions work with pointer and keyboard input and expose accessible labels.
-- [ ] The input works as a controlled or uncontrolled value without owning search results.
-- [ ] Stories cover content configurations, states, keyboard use, and light/dark presentation.
-- [ ] Typecheck, lint, browser tests, and the library build pass.
+- [x] Empty, focused, populated, disabled, and error states match the design kit.
+- [x] Leading search/navigation controls and trailing clear, voice, avatar, or custom actions compose through stable slots.
+- [x] Clear and submit interactions work with pointer and keyboard input and expose accessible labels.
+- [x] The input works as a controlled or uncontrolled value without owning search results.
+- [x] Stories cover content configurations, states, keyboard use, and light/dark presentation.
+- [x] Typecheck, lint, browser tests, and the library build pass.
