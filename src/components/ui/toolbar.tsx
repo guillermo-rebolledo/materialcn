@@ -26,10 +26,25 @@ function Toolbar({
       control.tabIndex = control === active ? 0 : -1
     })
   }
+  const ensureTabStop = () => {
+    const controls = rootRef.current ? getControls(rootRef.current) : []
+    if (!controls.length) return
+    const focused = controls.find((control) => control === document.activeElement)
+    const active = focused ?? controls.find((control) => control.tabIndex === 0) ?? controls[0]
+    setTabStop(controls, active)
+  }
 
   useEffect(() => {
-    const controls = rootRef.current ? getControls(rootRef.current) : []
-    if (controls.length) setTabStop(controls, controls[0])
+    if (!rootRef.current) return
+    ensureTabStop()
+    const observer = new MutationObserver(ensureTabStop)
+    observer.observe(rootRef.current, {
+      attributeFilter: ["aria-disabled", "disabled"],
+      attributes: true,
+      childList: true,
+      subtree: true,
+    })
+    return () => observer.disconnect()
   }, [])
 
   const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {

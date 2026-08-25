@@ -1,4 +1,4 @@
-import { Children, useState, type ComponentProps, type CSSProperties, type KeyboardEvent, type MouseEvent, type ReactNode } from "react"
+import { Children, useEffect, useLayoutEffect, useRef, useState, type ComponentProps, type CSSProperties, type KeyboardEvent, type MouseEvent, type ReactNode } from "react"
 
 import { cn } from "@/lib/utils"
 import { NavigationContext, useNavigation } from "./navigation-context"
@@ -19,10 +19,35 @@ function NavigationBar({
   onKeyDown,
   onValueChange,
   orientation = "horizontal",
+  ref,
   value,
   ...props
 }: NavigationBarProps) {
   const [focusValue, setFocusValue] = useState<string | null>(null)
+  const rootRef = useRef<HTMLElement>(null)
+  const ensureTabStop = () => {
+    const items = Array.from(
+      rootRef.current?.querySelectorAll<HTMLElement>('[data-slot="navigation-bar-item"]:not(:disabled):not([aria-disabled="true"])') ?? [],
+    )
+    if (!items.length) return
+    const active = items.find((item) => item.tabIndex === 0) ?? items[0]
+    items.forEach((item) => {
+      item.tabIndex = item === active ? 0 : -1
+    })
+  }
+
+  useLayoutEffect(ensureTabStop)
+  useEffect(() => {
+    if (!rootRef.current) return
+    const observer = new MutationObserver(ensureTabStop)
+    observer.observe(rootRef.current, {
+      attributeFilter: ["aria-disabled", "disabled"],
+      attributes: true,
+      childList: true,
+      subtree: true,
+    })
+    return () => observer.disconnect()
+  }, [])
   const handleKeyDown = (event: KeyboardEvent<HTMLElement>) => {
     onKeyDown?.(event)
     if (event.defaultPrevented) return
@@ -49,6 +74,11 @@ function NavigationBar({
     <NavigationContext.Provider value={{ focusValue: focusValue ?? value, onValueChange, setFocusValue, value }}>
       <nav
         {...props}
+        ref={(node) => {
+          rootRef.current = node
+          if (typeof ref === "function") ref(node)
+          else if (ref) ref.current = node
+        }}
         aria-label={ariaLabel}
         aria-orientation={orientation}
         data-slot="navigation-bar"
@@ -138,6 +168,7 @@ function NavigationBarItem({
         aria-current={selected ? "page" : undefined}
         aria-disabled={disabled || undefined}
         data-selected={selected || undefined}
+        data-value={value}
         data-slot="navigation-bar-item"
         className={itemClassName}
         tabIndex={tabbable ? 0 : -1}
@@ -154,6 +185,7 @@ function NavigationBarItem({
       title={title}
       aria-current={selected ? "page" : undefined}
       data-selected={selected || undefined}
+      data-value={value}
       data-slot="navigation-bar-item"
       className={itemClassName}
       disabled={disabled}

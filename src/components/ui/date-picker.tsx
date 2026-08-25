@@ -67,6 +67,7 @@ function DatePicker({
   }
   const draft = draftState.text
   const triggerRef = useRef<HTMLButtonElement>(null)
+  const calendarRef = useRef<HTMLDivElement>(null)
   const id = useId()
   const errorId = `${id}-error`
   const parsedDraft = draft ? parseDate(draft, locale) : null
@@ -135,12 +136,16 @@ function DatePicker({
         <PopoverPrimitive.Portal>
           <PopoverPrimitive.Positioner align="end" side="bottom" sideOffset={8} className="isolate z-50">
             <PopoverPrimitive.Popup
-              aria-label={`${label} calendar`}
-              data-slot="date-picker-popover"
+            aria-label={`${label} calendar`}
+            data-slot="date-picker-popover"
+            initialFocus={() =>
+              calendarRef.current?.querySelector<HTMLButtonElement>('[role="gridcell"][tabindex="0"]') ?? true
+            }
               className="max-w-[calc(100vw-2rem)] origin-(--transform-origin) outline-none transition-[transform,opacity] duration-(--m3-spring-effects-fast-duration) data-starting-style:scale-95 data-starting-style:opacity-0 data-ending-style:scale-95 data-ending-style:opacity-0 motion-reduce:transition-none"
             >
               <Calendar
-                selected={value}
+              selected={value}
+              ref={calendarRef}
                 onSelect={select}
                 defaultMonth={defaultMonth ?? value ?? undefined}
                 locale={locale}

@@ -48,6 +48,7 @@ export const DockedInteraction: Story = {
 
     const selected = page.getByRole("gridcell", { name: "Wednesday, August 12, 2026" })
     await expect(selected).toHaveAttribute("aria-selected", "true")
+    await expect(selected).toHaveFocus()
     await userEvent.click(page.getByRole("gridcell", { name: "Saturday, August 15, 2026" }))
     await expect(canvas.getByLabelText("Selected date")).toHaveTextContent("2026-08-15")
 
@@ -57,6 +58,10 @@ export const DockedInteraction: Story = {
     await userEvent.keyboard("{ArrowRight}")
     await expect(page.getByRole("gridcell", { name: "Sunday, August 16, 2026" })).toHaveFocus()
     await expect(page.getByRole("gridcell", { name: "Tuesday, August 18, 2026" })).toBeDisabled()
+    const beforeUnavailable = page.getByRole("gridcell", { name: "Monday, August 17, 2026" })
+    beforeUnavailable.focus()
+    await userEvent.keyboard("{ArrowRight}")
+    await expect(page.getByRole("gridcell", { name: "Wednesday, August 19, 2026" })).toHaveFocus()
     await expect(page.getByRole("button", { name: "Today" })).toBeDisabled()
     await userEvent.keyboard("{Escape}")
     await waitFor(() => expect(canvas.getByRole("button", { name: "Choose date" })).toHaveFocus())

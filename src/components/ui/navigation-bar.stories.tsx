@@ -1,6 +1,6 @@
 import { useState } from "react"
 import type { Meta, StoryObj } from "@storybook/react-vite"
-import { expect, userEvent, within } from "storybook/test"
+import { expect, userEvent, waitFor, within } from "storybook/test"
 import { HeartIcon, HomeIcon, MailIcon, SettingsIcon } from "lucide-react"
 
 import { NavigationBar, NavigationBarItem } from "./navigation-bar"
@@ -30,6 +30,19 @@ function ControlledNavigation({ orientation = "horizontal" }: { orientation?: "h
   )
 }
 
+function FallbackNavigation() {
+  const [homeDisabled, setHomeDisabled] = useState(false)
+  return (
+    <>
+      <NavigationBar value="missing" onValueChange={() => undefined}>
+        <NavigationBarItem value="home" label="Home" icon={<HomeIcon />} disabled={homeDisabled} />
+        <NavigationBarItem value="favorites" label="Favorites" icon={<HeartIcon />} />
+      </NavigationBar>
+      <button type="button" onClick={() => setHomeDisabled(true)}>Disable home</button>
+    </>
+  )
+}
+
 export const ControlledLinksAndKeyboard: Story = {
   render: () => <div className="w-[412px] max-w-full"><ControlledNavigation /></div>,
   play: async ({ canvasElement }) => {
@@ -51,4 +64,16 @@ export const ControlledLinksAndKeyboard: Story = {
 export const OrientationsAndCounts: Story = {
   parameters: { sideBySide: true },
   render: () => <div className="flex items-start gap-6"><div className="w-[412px]"><ControlledNavigation /></div><ControlledNavigation orientation="vertical" /></div>,
+}
+
+export const MissingAndDisabledFallback: Story = {
+  render: () => <FallbackNavigation />,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const home = canvas.getByRole("button", { name: /Home/ })
+    const favorites = canvas.getByRole("button", { name: /Favorites/ })
+    await expect(home).toHaveAttribute("tabindex", "0")
+    await userEvent.click(canvas.getByRole("button", { name: "Disable home" }))
+    await waitFor(() => expect(favorites).toHaveAttribute("tabindex", "0"))
+  },
 }

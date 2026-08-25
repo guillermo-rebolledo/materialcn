@@ -46,6 +46,7 @@ function Calendar({
   min,
   onSelect,
   range,
+  ref,
   selected,
   ...props
 }: CalendarProps) {
@@ -80,14 +81,25 @@ function Calendar({
   ) ?? days.find((date) => date.getMonth() === month.getMonth() && !unavailable(date))
     ?? days.find((date) => !unavailable(date))
 
-  const moveFocus = (date: Date, event: KeyboardEvent<HTMLButtonElement>) => {
+  const moveFocus = (
+    date: Date,
+    direction: -1 | 1,
+    event: KeyboardEvent<HTMLButtonElement>,
+  ) => {
     event.preventDefault()
-    pendingFocus.current = dateKey(date)
-    if (date.getMonth() !== month.getMonth() || date.getFullYear() !== month.getFullYear()) {
-      setMonth(startOfMonth(date))
+    let target = date
+    let attempts = 0
+    while (unavailable(target) && attempts < 3660) {
+      target = addDays(target, direction)
+      attempts += 1
+    }
+    if (unavailable(target)) return
+    pendingFocus.current = dateKey(target)
+    if (target.getMonth() !== month.getMonth() || target.getFullYear() !== month.getFullYear()) {
+      setMonth(startOfMonth(target))
     } else {
       requestAnimationFrame(() => {
-        rootRef.current?.querySelector<HTMLButtonElement>(`[data-date="${dateKey(date)}"]`)?.focus()
+        rootRef.current?.querySelector<HTMLButtonElement>(`[data-date="${dateKey(target)}"]`)?.focus()
       })
       pendingFocus.current = null
     }
@@ -96,7 +108,11 @@ function Calendar({
   return (
     <div
       {...props}
-      ref={rootRef}
+      ref={(node) => {
+        rootRef.current = node
+        if (typeof ref === "function") ref(node)
+        else if (ref) ref.current = node
+      }}
       data-slot="calendar"
       className={cn("w-[360px] max-w-full rounded-m3-md bg-m3-surface-container-high p-3 text-foreground shadow-m3-2", className)}
     >
@@ -178,14 +194,14 @@ function Calendar({
                   )}
                   onClick={() => onSelect(date)}
                   onKeyDown={(event) => {
-                    if (event.key === "ArrowRight") moveFocus(addDays(date, 1), event)
-                    if (event.key === "ArrowLeft") moveFocus(addDays(date, -1), event)
-                    if (event.key === "ArrowDown") moveFocus(addDays(date, 7), event)
-                    if (event.key === "ArrowUp") moveFocus(addDays(date, -7), event)
-                    if (event.key === "Home") moveFocus(addDays(date, -date.getDay()), event)
-                    if (event.key === "End") moveFocus(addDays(date, 6 - date.getDay()), event)
-                    if (event.key === "PageDown") moveFocus(addMonthsPreservingDay(date, 1), event)
-                    if (event.key === "PageUp") moveFocus(addMonthsPreservingDay(date, -1), event)
+                    if (event.key === "ArrowRight") moveFocus(addDays(date, 1), 1, event)
+                    if (event.key === "ArrowLeft") moveFocus(addDays(date, -1), -1, event)
+                    if (event.key === "ArrowDown") moveFocus(addDays(date, 7), 1, event)
+                    if (event.key === "ArrowUp") moveFocus(addDays(date, -7), -1, event)
+                    if (event.key === "Home") moveFocus(addDays(date, -date.getDay()), 1, event)
+                    if (event.key === "End") moveFocus(addDays(date, 6 - date.getDay()), -1, event)
+                    if (event.key === "PageDown") moveFocus(addMonthsPreservingDay(date, 1), 1, event)
+                    if (event.key === "PageUp") moveFocus(addMonthsPreservingDay(date, -1), -1, event)
                   }}
                 >
                   {date.getDate()}

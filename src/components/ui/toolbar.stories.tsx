@@ -1,3 +1,4 @@
+import { useState } from "react"
 import type { Meta, StoryObj } from "@storybook/react-vite"
 import { expect, userEvent, waitFor, within } from "storybook/test"
 import { BoldIcon, ItalicIcon, MoreVerticalIcon, PlusIcon, UndoIcon } from "lucide-react"
@@ -12,6 +13,19 @@ import { Toolbar, ToolbarDivider, ToolbarFAB, ToolbarGroup, ToolbarLabel, Toolba
 const meta = { title: "Components/Toolbar", component: Toolbar, tags: ["autodocs"] } satisfies Meta<typeof Toolbar>
 export default meta
 type Story = StoryObj<typeof meta>
+
+function DynamicToolbar() {
+  const [firstDisabled, setFirstDisabled] = useState(false)
+  return (
+    <div className="flex items-center gap-3">
+      <Toolbar aria-label="Dynamic tools">
+        <Button disabled={firstDisabled}>First tool</Button>
+        <Button>Second tool</Button>
+      </Toolbar>
+      <Button variant="outline" onClick={() => setFirstDisabled(true)}>Disable first tool</Button>
+    </div>
+  )
+}
 
 export const MixedControls: Story = {
   render: () => (
@@ -52,4 +66,14 @@ export const MixedControls: Story = {
 export const PresentationsAndStates: Story = {
   parameters: { sideBySide: true },
   render: () => <div className="flex flex-col gap-4"><Toolbar><Button>Standard</Button><Button disabled>Disabled</Button></Toolbar><Toolbar presentation="expressive"><Button size="lg">Expressive</Button><ToolbarDivider /><FAB aria-label="Add"><PlusIcon /></FAB></Toolbar></div>,
+}
+
+export const DynamicTabStopFallback: Story = {
+  render: () => <DynamicToolbar />,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    await expect(canvas.getByRole("button", { name: "First tool" })).toHaveAttribute("tabindex", "0")
+    await userEvent.click(canvas.getByRole("button", { name: "Disable first tool" }))
+    await waitFor(() => expect(canvas.getByRole("button", { name: "Second tool" })).toHaveAttribute("tabindex", "0"))
+  },
 }
