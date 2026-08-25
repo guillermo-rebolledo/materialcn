@@ -124,8 +124,8 @@ Dialog, Sheet, Input, and List once available.
 
 ### Date picker
 
-- [ ] Add docked input, modal date picker, and input-modal configurations.
-- [ ] Support single-date and range selection.
+- [x] Add docked input, modal date picker, and input-modal configurations.
+- [x] Support single-date and range selection.
 - [x] Support month/year navigation, validation, disabled dates, and locale
   formatting.
 

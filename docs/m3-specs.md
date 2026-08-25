@@ -344,6 +344,11 @@ The desktop docked picker is 360dp wide with a 16dp container radius and a
 header. Selected, today, outside-month, disabled, and unavailable dates use the
 same grid geometry so state changes never reflow the calendar.
 
+Modal day pickers use the kit's 360dp shell and reuse that same grid. Input
+modals use a 328dp content measure inside the responsive dialog shell. Range
+selection adds endpoint circles and a secondary-container band without
+changing day target size; incomplete ranges preserve only the start endpoint.
+
 ## Button shape morph on press
 
 Expressive buttons tighten their corners while pressed. The *classic* M3 set

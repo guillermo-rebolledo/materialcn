@@ -514,6 +514,14 @@ restores focus.
 Use `SearchViewMessage` for loading, empty, and error feedback. Result and
 suggestion rows compose the existing List item content slots.
 
+### Date pickers
+
+`DatePicker` provides a controlled docked field/calendar. `DatePickerDialog`
+reuses the calendar in modal calendar or input mode, while `DateRangePicker`
+uses `{ start, end }` values and explicit confirmation. All accept a locale,
+date constraints, and an unavailable-date predicate without coupling to a form
+library.
+
 ## Where the specs come from
 
 The token values and component geometry are not hand-copied from the docs site —

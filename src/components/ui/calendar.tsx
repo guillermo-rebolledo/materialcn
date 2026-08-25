@@ -12,6 +12,7 @@ type CalendarProps = Omit<ComponentProps<"div">, "onSelect"> & {
   max?: Date
   min?: Date
   onSelect: (date: Date) => void
+  range?: { start: Date | null; end: Date | null }
   selected?: Date | null
 }
 
@@ -53,6 +54,7 @@ function Calendar({
   max,
   min,
   onSelect,
+  range,
   selected,
   ...props
 }: CalendarProps) {
@@ -148,6 +150,11 @@ function Calendar({
         {days.map((date) => {
           const outside = date.getMonth() !== month.getMonth()
           const isSelected = sameDay(date, selected)
+          const isRangeStart = sameDay(date, range?.start)
+          const isRangeEnd = sameDay(date, range?.end)
+          const isInRange = Boolean(
+            range?.start && range.end && date > range.start && date < range.end,
+          )
           const isToday = sameDay(date, today)
           const isUnavailable = unavailable(date)
           return (
@@ -159,7 +166,10 @@ function Calendar({
               data-outside={outside || undefined}
               data-today={isToday || undefined}
               aria-label={fullDate.format(date)}
-              aria-selected={isSelected}
+              aria-selected={isSelected || isRangeStart || isRangeEnd || isInRange}
+              data-range-start={isRangeStart || undefined}
+              data-range-end={isRangeEnd || undefined}
+              data-in-range={isInRange || undefined}
               disabled={isUnavailable}
               tabIndex={isSelected || (!selected && sameDay(date, today)) ? 0 : -1}
               className={cn(
@@ -168,6 +178,8 @@ function Calendar({
                 outside && "text-muted-foreground/60",
                 isToday && !isSelected && "border border-m3-primary text-m3-primary",
                 isSelected && "bg-m3-primary text-m3-on-primary",
+                isInRange && "rounded-none bg-m3-secondary-container text-m3-on-secondary-container",
+                (isRangeStart || isRangeEnd) && "bg-m3-primary text-m3-on-primary",
                 "disabled:cursor-not-allowed disabled:text-muted-foreground/38 disabled:line-through",
               )}
               onClick={() => onSelect(date)}
