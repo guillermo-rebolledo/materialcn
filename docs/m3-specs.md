@@ -355,6 +355,9 @@ Keyboard time entry uses separate 80 × 64dp hour and minute segments with a
 14dp gap region for the separator and an adjacent 56dp period control in
 12-hour mode. The public value is always `{ hour, minute }` in 24-hour terms,
 so keyboard and dial presentations share constraints, formatting, and errors.
+The clock dial uses a 256dp circular surface with 36dp numeral targets. Twelve-
+hour mode uses the outer ring; 24-hour mode adds a 72dp-radius inner ring for
+13–00. Effects transitions are removed under reduced motion.
 
 ## Button shape morph on press
 

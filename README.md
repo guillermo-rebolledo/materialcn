@@ -528,6 +528,9 @@ library.
 presentation-independent `{ hour, minute }` value stays in 24-hour terms while
 `mode="12-hour"` adds an AM/PM control. `parseTime`, `formatTime`, and
 `isValidTime` are exported for form adapters and alternate presentations.
+`DialTimePicker` presents that same value in an accessible dialog, and
+`TimeDial` is available when an application already owns the surrounding
+modal. Native dial buttons support pointer, touch, and roving arrow-key focus.
 
 ## Where the specs come from
 

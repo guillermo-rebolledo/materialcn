@@ -135,8 +135,8 @@ Input, Select, and Button.
 ### Time picker
 
 - [x] Add keyboard-entry time picker.
-- [ ] Add the Material dial picker.
-- [ ] Support 12- and 24-hour modes, validation, and accessible keyboard
+- [x] Add the Material dial picker.
+- [x] Support 12- and 24-hour modes, validation, and accessible keyboard
   controls.
 
 Foundation: existing Dialog, Field, Input, Select, ToggleGroup, and Button;

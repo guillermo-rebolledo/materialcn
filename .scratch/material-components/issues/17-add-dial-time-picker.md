@@ -4,11 +4,11 @@
 
 **Blocked by:** 16 — Add keyboard TimePicker.
 
-**Status:** ready-for-agent
+**Status:** completed
 
-- [ ] Pointer, touch, and keyboard users can select hours and minutes from the dial.
-- [ ] The dial supports the established 12- and 24-hour modes and controlled value model.
-- [ ] Selection, focus, transition, disabled, and validation states match the design kit.
-- [ ] Dialog presentation includes accessible title, confirmation, cancellation, and focus restoration.
-- [ ] Stories cover both clock modes, interaction methods, states, and light/dark presentation.
-- [ ] Typecheck, lint, browser tests, and the library build pass.
+- [x] Pointer, touch, and keyboard users can select hours and minutes from the dial.
+- [x] The dial supports the established 12- and 24-hour modes and controlled value model.
+- [x] Selection, focus, transition, disabled, and validation states match the design kit.
+- [x] Dialog presentation includes accessible title, confirmation, cancellation, and focus restoration.
+- [x] Stories cover both clock modes, interaction methods, states, and light/dark presentation.
+- [x] Typecheck, lint, browser tests, and the library build pass.
