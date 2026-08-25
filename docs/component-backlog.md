@@ -28,12 +28,12 @@ Every completed item should:
 
 ### Notification badge
 
-- [ ] Add the Material notification badge: dot, small numeric, and large
+- [x] Add the Material notification badge: dot, small numeric, and large
   numeric variants.
-- [ ] Support placement over an icon without coupling the component to a
+- [x] Support placement over an icon without coupling the component to a
   particular navigation component.
-- [ ] Define overflow behavior such as `99+`.
-- [ ] Resolve naming with the existing `Badge`, which currently implements
+- [x] Define overflow behavior such as `99+`.
+- [x] Resolve naming with the existing `Badge`, which currently implements
   Material chip geometry. Prefer introducing `Chip` and preserving a
   compatibility path for current `Badge` consumers.
 
@@ -42,19 +42,19 @@ Avatar, and future navigation components.
 
 ### Chip API
 
-- [ ] Introduce a semantic `Chip` API around the existing chip visuals.
-- [ ] Add assist, filter, input, and suggestion variants.
-- [ ] Add selected, disabled, leading-icon, trailing-icon, and removable input
+- [x] Introduce a semantic `Chip` API around the existing chip visuals.
+- [x] Add assist, filter, input, and suggestion variants.
+- [x] Add selected, disabled, leading-icon, trailing-icon, and removable input
   states.
-- [ ] Add a chip-group example using `ToggleGroup` for selectable chips.
+- [x] Add a chip-group example using `ToggleGroup` for selectable chips.
 
 Foundation: existing `Badge`, `Toggle`, `ToggleGroup`, and Button.
 
 ### Menu
 
-- [ ] Add `DropdownMenu` primitives styled to the Material menu spec.
-- [ ] Add standard and vibrant menu items.
-- [ ] Support leading icons, trailing text, shortcuts, checked items,
+- [x] Add `DropdownMenu` primitives styled to the Material menu spec.
+- [x] Add standard and vibrant menu items.
+- [x] Support leading icons, trailing text, shortcuts, checked items,
   submenus, separators, destructive actions, and disabled states.
 
 Foundation: shadcn `dropdown-menu`.
@@ -116,7 +116,7 @@ Foundation: shadcn `carousel`.
 - [x] Add `SearchBar` with leading search, trailing actions, active, disabled,
   and populated states.
 - [x] Add docked and full-screen `SearchView` presentations.
-- [ ] Support suggestions, recent searches, results, empty state, and keyboard
+- [x] Support suggestions, recent searches, results, empty state, and keyboard
   navigation.
 
 Foundation: shadcn `input-group`, `command`, and `popover`, plus the existing
