@@ -377,6 +377,9 @@ Top app bars are 64dp small, 116dp medium, and 160dp large. Medium titles use
 headline-small at the lower edge; large titles use headline-medium. The caller
 owns scroll observation and supplies `scrolled`, which switches the bar from
 Surface to Surface Container and elevation level 2 without changing geometry.
+Bottom app bars are 80dp high at the 412dp reference width, with a 16dp outer
+radius and Secondary Container fill. Actions keep 48dp targets; the optional
+FAB occupies the trailing region without changing source or focus order.
 
 ## Button shape morph on press
 

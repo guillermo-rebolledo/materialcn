@@ -548,6 +548,9 @@ restoration to the primary `FABMenuTrigger`.
 title, actions, avatar/custom-content, and overflow slots. Supply `scrolled`
 from the application’s own scroll observer to raise the bar without coupling
 the component to a page container.
+`BottomAppBar` is a responsive 80dp action surface with `BottomAppBarActions`
+and an optional `BottomAppBarFAB` slot. `safeArea` adds the platform bottom
+inset without fixing the bar to an application shell.
 
 ## Where the specs come from
 
