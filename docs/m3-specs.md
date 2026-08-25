@@ -336,6 +336,14 @@ model survive responsive switches between docked and full-screen presentation.
 Recent, suggestion, loading, result, empty, and error content all occupy the
 same live content region without replacing the search control.
 
+## Date picker
+
+The desktop docked picker is 360dp wide with a 16dp container radius and a
+`Surface Container High` fill. The calendar uses seven 40dp day targets inside
+12dp horizontal padding and keeps its localized month/year controls in a 56dp
+header. Selected, today, outside-month, disabled, and unavailable dates use the
+same grid geometry so state changes never reflow the calendar.
+
 ## Button shape morph on press
 
 Expressive buttons tighten their corners while pressed. The *classic* M3 set

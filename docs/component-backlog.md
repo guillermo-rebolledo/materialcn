@@ -126,7 +126,7 @@ Dialog, Sheet, Input, and List once available.
 
 - [ ] Add docked input, modal date picker, and input-modal configurations.
 - [ ] Support single-date and range selection.
-- [ ] Support month/year navigation, validation, disabled dates, and locale
+- [x] Support month/year navigation, validation, disabled dates, and locale
   formatting.
 
 Foundation: shadcn `calendar` and `popover`, plus existing Dialog, Field,

@@ -1,0 +1,81 @@
+import { useState } from "react"
+import type { Meta, StoryObj } from "@storybook/react-vite"
+import { expect, userEvent, within } from "storybook/test"
+
+import { DatePicker } from "./date-picker"
+
+const meta = {
+  title: "Components/DatePicker",
+  component: DatePicker,
+  tags: ["autodocs"],
+  args: {
+    value: null,
+    onValueChange: () => undefined,
+    label: "Travel date",
+  },
+} satisfies Meta<typeof DatePicker>
+
+export default meta
+type Story = StoryObj<typeof meta>
+
+function ControlledDatePicker() {
+  const [value, setValue] = useState<Date | null>(new Date(2026, 7, 12))
+  return (
+    <div className="w-[360px] max-w-full">
+      <DatePicker
+        value={value}
+        onValueChange={setValue}
+        defaultMonth={new Date(2026, 7, 1)}
+        label="Travel date"
+        locale="en-US"
+        isDateUnavailable={(date) => date.getDate() === 18}
+      />
+      <output aria-label="Selected date">
+        {value ? value.toISOString().slice(0, 10) : "None"}
+      </output>
+    </div>
+  )
+}
+
+export const DockedInteraction: Story = {
+  render: () => <ControlledDatePicker />,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    await userEvent.click(canvas.getByRole("button", { name: "Choose date" }))
+    await expect(canvas.getByRole("grid", { name: "August 2026" })).toBeVisible()
+
+    const selected = canvas.getByRole("gridcell", { name: "Wednesday, August 12, 2026" })
+    await expect(selected).toHaveAttribute("aria-selected", "true")
+    await userEvent.click(canvas.getByRole("gridcell", { name: "Saturday, August 15, 2026" }))
+    await expect(canvas.getByLabelText("Selected date")).toHaveTextContent("2026-08-15")
+
+    await userEvent.click(canvas.getByRole("button", { name: "Choose date" }))
+    const day = canvas.getByRole("gridcell", { name: "Saturday, August 15, 2026" })
+    day.focus()
+    await userEvent.keyboard("{ArrowRight}")
+    await expect(canvas.getByRole("gridcell", { name: "Sunday, August 16, 2026" })).toHaveFocus()
+    await expect(canvas.getByRole("gridcell", { name: "Tuesday, August 18, 2026" })).toBeDisabled()
+    await userEvent.keyboard("{Escape}")
+    await expect(canvas.getByRole("button", { name: "Choose date" })).toHaveFocus()
+    await userEvent.click(canvas.getByRole("button", { name: "Clear date" }))
+    await expect(canvas.getByLabelText("Selected date")).toHaveTextContent("None")
+  },
+}
+
+export const LocalesAndStates: Story = {
+  parameters: { sideBySide: true },
+  render: () => (
+    <div className="flex w-[360px] flex-col gap-4">
+      <DatePicker
+        value={new Date(2026, 7, 12)}
+        onValueChange={() => undefined}
+        defaultMonth={new Date(2026, 7, 1)}
+        label="Fecha de viaje"
+        locale="es-MX"
+      />
+      <DatePicker value={null} onValueChange={() => undefined} label="Required date" invalid error="Choose a valid date" />
+      <DatePicker value={new Date(2026, 7, 12)} onValueChange={() => undefined} label="Disabled date" disabled />
+      <DatePicker value={new Date(2026, 7, 12)} onValueChange={() => undefined} label="Read-only date" readOnly />
+    </div>
+  ),
+}
