@@ -564,6 +564,13 @@ Pass controlled `expanded` and `onExpandedChange` props to switch that same
 rail to its 360dp persistent-label layout; `NavigationRailExpansionToggle`
 wires the state without mixing menu and destination keyboard behavior.
 
+### Toolbars
+
+`Toolbar` composes existing Button, ToggleGroup, ButtonGroup, Separator,
+DropdownMenu, and FAB primitives through labeled group, divider, overflow, and
+FAB slots. Standard and expressive presentations share arrow-key ordering;
+overflow focus restoration remains owned by DropdownMenu.
+
 ## Where the specs come from
 
 The token values and component geometry are not hand-copied from the docs site —

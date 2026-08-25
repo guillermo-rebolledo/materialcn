@@ -394,6 +394,13 @@ Expanded rails use a 360dp container and convert the same destinations to 56dp
 horizontal rows with persistent labels. Expansion changes only width and
 layout; destination identity, focusable nodes, selection, and badges persist.
 
+## Toolbar
+
+Standard toolbars use a 64dp minimum height and 16dp container radius;
+expressive toolbars use 96dp and 28dp. Both retain source order across action,
+toggle, connected-control, divider, overflow, and FAB slots. Arrow keys move
+among enabled controls while composed menus continue to own popup focus.
+
 ## Button shape morph on press
 
 Expressive buttons tighten their corners while pressed. The *classic* M3 set

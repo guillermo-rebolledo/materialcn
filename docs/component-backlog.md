@@ -185,8 +185,8 @@ the future FAB, Menu, and NotificationBadge.
 
 ### Toolbar
 
-- [ ] Add standard and expressive toolbar containers.
-- [ ] Support action buttons, toggle buttons, grouped controls, dividers,
+- [x] Add standard and expressive toolbar containers.
+- [x] Support action buttons, toggle buttons, grouped controls, dividers,
   overflow menus, and optional FAB composition.
 
 Foundation: existing Button, ToggleGroup, Separator, and Tooltip, plus future

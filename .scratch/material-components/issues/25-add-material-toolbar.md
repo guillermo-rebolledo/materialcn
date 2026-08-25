@@ -4,11 +4,11 @@
 
 **Blocked by:** 04 — Add Material action menus; 09 — Add standard and connected ButtonGroup.
 
-**Status:** ready-for-agent
+**Status:** completed
 
-- [ ] Standard and expressive toolbar presentations match the design kit.
-- [ ] Actions, toggle groups, button groups, dividers, labels, and overflow menus compose through stable slots.
-- [ ] Overflow behavior preserves action order, keyboard access, labels, and focus restoration.
-- [ ] Optional FAB composition does not introduce a second FAB implementation.
-- [ ] Stories cover common control mixtures, overflow, disabled states, and light/dark presentation.
-- [ ] Typecheck, lint, browser tests, and the library build pass.
+- [x] Standard and expressive toolbar presentations match the design kit.
+- [x] Actions, toggle groups, button groups, dividers, labels, and overflow menus compose through stable slots.
+- [x] Overflow behavior preserves action order, keyboard access, labels, and focus restoration.
+- [x] Optional FAB composition does not introduce a second FAB implementation.
+- [x] Stories cover common control mixtures, overflow, disabled states, and light/dark presentation.
+- [x] Typecheck, lint, browser tests, and the library build pass.

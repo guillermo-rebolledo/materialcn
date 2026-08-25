@@ -52,6 +52,7 @@ export * from "./components/ui/toast"
 export * from "./components/ui/top-app-bar"
 export * from "./components/ui/toggle"
 export * from "./components/ui/toggle-group"
+export * from "./components/ui/toolbar"
 export * from "./components/ui/tooltip"
 
 export { cn } from "./lib/utils"
