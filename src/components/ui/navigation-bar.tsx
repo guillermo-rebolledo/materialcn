@@ -1,7 +1,8 @@
-import { Children, type ComponentProps, type CSSProperties, type KeyboardEvent, type MouseEvent, type ReactNode } from "react"
+import { Children, useState, type ComponentProps, type CSSProperties, type KeyboardEvent, type MouseEvent, type ReactNode } from "react"
 
 import { cn } from "@/lib/utils"
 import { NavigationContext, useNavigation } from "./navigation-context"
+import { Tooltip, TooltipContent, TooltipTrigger } from "./tooltip"
 
 type NavigationOrientation = "horizontal" | "vertical"
 
@@ -21,6 +22,7 @@ function NavigationBar({
   value,
   ...props
 }: NavigationBarProps) {
+  const [focusValue, setFocusValue] = useState<string | null>(null)
   const handleKeyDown = (event: KeyboardEvent<HTMLElement>) => {
     onKeyDown?.(event)
     if (event.defaultPrevented) return
@@ -44,7 +46,7 @@ function NavigationBar({
   }
 
   return (
-    <NavigationContext.Provider value={{ onValueChange, value }}>
+    <NavigationContext.Provider value={{ focusValue: focusValue ?? value, onValueChange, setFocusValue, value }}>
       <nav
         {...props}
         aria-label={ariaLabel}
@@ -78,6 +80,8 @@ type NavigationBarItemProps = {
   showLabel?: boolean
   style?: CSSProperties
   title?: string
+  tooltip?: ReactNode
+  tooltipDisabled?: boolean
   value: string
 }
 
@@ -93,10 +97,13 @@ function NavigationBarItem({
   showLabel = true,
   style,
   title,
+  tooltip,
+  tooltipDisabled = false,
   value,
 }: NavigationBarItemProps) {
   const navigation = useNavigation()
   const selected = navigation.value === value
+  const tabbable = !disabled && (navigation.focusValue ?? navigation.value) === value
   const itemClassName = cn(
       "group/navigation-item relative flex min-w-0 flex-1 flex-col items-center justify-center gap-1 px-1 text-m3-label-md text-muted-foreground outline-none",
       "in-data-[orientation=vertical]:min-h-16 in-data-[orientation=vertical]:w-full in-data-[orientation=vertical]:flex-none",
@@ -122,8 +129,7 @@ function NavigationBarItem({
     </>
   )
 
-  if (href) {
-    return (
+  const item = href ? (
       <a
         href={disabled ? undefined : href}
         id={id}
@@ -134,14 +140,13 @@ function NavigationBarItem({
         data-selected={selected || undefined}
         data-slot="navigation-bar-item"
         className={itemClassName}
-        tabIndex={disabled ? -1 : undefined}
+        tabIndex={tabbable ? 0 : -1}
         onClick={handleClick}
+        onFocus={() => navigation.setFocusValue?.(value)}
       >
         {content}
       </a>
-    )
-  }
-  return (
+  ) : (
     <button
       type="button"
       id={id}
@@ -152,10 +157,20 @@ function NavigationBarItem({
       data-slot="navigation-bar-item"
       className={itemClassName}
       disabled={disabled}
+      tabIndex={tabbable ? 0 : -1}
       onClick={handleClick}
+      onFocus={() => navigation.setFocusValue?.(value)}
     >
       {content}
     </button>
+  )
+
+  if (!tooltip) return item
+  return (
+    <Tooltip disabled={tooltipDisabled}>
+      <TooltipTrigger render={item} disabled={tooltipDisabled} />
+      {!tooltipDisabled && <TooltipContent side="right">{tooltip}</TooltipContent>}
+    </Tooltip>
   )
 }
 

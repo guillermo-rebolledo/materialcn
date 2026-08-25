@@ -13,7 +13,8 @@ import {
   DialogTrigger,
 } from "./dialog"
 import { FieldError } from "./field"
-import { formatTime, isValidTime, type TimeMode, type TimeValue } from "./time-picker"
+import { type TimeMode, type TimeValue } from "./time-picker"
+import { formatTime, isValidTime } from "./time-picker-utils"
 
 type TimeDialProps = {
   disabled?: boolean
@@ -67,6 +68,7 @@ function TimeDial({
     <div data-slot="time-dial" data-phase={phase} className="flex flex-col items-center gap-3">
       <div className="flex items-center gap-2" aria-label="Time segments">
         <Button
+          disabled={disabled}
           aria-pressed={phase === "hour"}
           variant={phase === "hour" ? "tonal" : "outline"}
           onClick={() => !phaseProp && setInternalPhase("hour")}
@@ -75,6 +77,7 @@ function TimeDial({
         </Button>
         <span aria-hidden="true" className="text-m3-headline-lg">:</span>
         <Button
+          disabled={disabled}
           aria-pressed={phase === "minute"}
           variant={phase === "minute" ? "tonal" : "outline"}
           onClick={() => !phaseProp && setInternalPhase("minute")}
@@ -184,7 +187,7 @@ function DialTimePicker({
           <DialogTitle>{label}</DialogTitle>
           <DialogDescription>Choose the hour and minute on the clock dial.</DialogDescription>
         </DialogHeader>
-        <TimeDial value={draft} onValueChange={setDraft} mode={mode} />
+        <TimeDial value={draft} onValueChange={setDraft} mode={mode} disabled={disabled} />
         {valueInvalid && <FieldError>{error ?? "Choose a time within the allowed range"}</FieldError>}
         <DialogFooter>
           <DialogClose render={<Button variant="ghost">Cancel</Button>} />

@@ -51,6 +51,10 @@ export const CenteredSizesAndIndicators: Story = {
     small.focus()
     await userEvent.keyboard("{ArrowRight}")
     await expect(small).toHaveAttribute("aria-valuenow", "26")
+    const centeredRange = canvasElement.querySelectorAll<HTMLElement>('[data-slot="slider-centered-range"]')[0]
+    await expect(centeredRange.style.left).toBe("26%")
+    await expect(centeredRange.style.width).toBe("24%")
+    await expect(small.parentElement).toHaveTextContent("26")
     const tracks = canvasElement.querySelectorAll<HTMLElement>('[data-slot="slider-track"]')
     await expect(tracks[0].getBoundingClientRect().height).toBe(4)
     await expect(tracks[1].getBoundingClientRect().height).toBe(8)

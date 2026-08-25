@@ -2,7 +2,8 @@ import { useState } from "react"
 import type { Meta, StoryObj } from "@storybook/react-vite"
 import { expect, userEvent, within } from "storybook/test"
 
-import { TimePicker, formatTime, type TimeValue } from "./time-picker"
+import { TimePicker, type TimeValue } from "./time-picker"
+import { formatTime } from "./time-picker-utils"
 
 const meta = {
   title: "Components/TimePicker/Keyboard",
@@ -31,6 +32,8 @@ export const KeyboardInteraction: Story = {
     const hours = canvas.getByRole("spinbutton", { name: "Hours" })
     const minutes = canvas.getByRole("spinbutton", { name: "Minutes" })
     await userEvent.clear(hours)
+    await expect(hours).toHaveAttribute("aria-invalid", "true")
+    await expect(canvas.getByText("Enter both hours and minutes")).toBeVisible()
     await userEvent.type(hours, "11")
     await userEvent.selectOptions(canvas.getByRole("combobox", { name: "Period" }), "PM")
     await expect(canvas.getByLabelText("Selected time")).toHaveTextContent("23:30")
@@ -52,4 +55,10 @@ export const ModesAndStates: Story = {
       <TimePicker value={{ hour: 10, minute: 15 }} onValueChange={() => undefined} label="Read-only time" readOnly />
     </div>
   ),
+  play: async ({ canvasElement }) => {
+    const hours = within(canvasElement).getAllByRole("spinbutton", { name: "Hours" })[4]
+    hours.focus()
+    await userEvent.keyboard("{ArrowUp}")
+    await expect(hours).toHaveValue(10)
+  },
 }

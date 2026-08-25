@@ -1,6 +1,6 @@
 import { useState } from "react"
 import type { Meta, StoryObj } from "@storybook/react-vite"
-import { expect, userEvent, within } from "storybook/test"
+import { expect, userEvent, waitFor, within } from "storybook/test"
 import { EditIcon, MoreVerticalIcon, ShareIcon, StarIcon } from "lucide-react"
 
 import { FABMenu, FABMenuAction, FABMenuContent, FABMenuTrigger } from "./fab-menu"
@@ -38,9 +38,14 @@ export const Interactions: Story = {
     const trigger = canvas.getByRole("button", { name: "More actions" })
     await userEvent.click(trigger)
     await expect(canvas.getByRole("menuitem", { name: "Edit" })).toHaveFocus()
+    await userEvent.keyboard("{ArrowDown}")
+    await expect(canvas.getByRole("menuitem", { name: "Share" })).toHaveFocus()
     await userEvent.click(canvas.getByRole("menuitem", { name: "Share" }))
     await expect(canvas.getByLabelText("Selected action")).toHaveTextContent("Share")
     await expect(trigger).toHaveFocus()
+    const closingMenu = canvas.getByRole("menu", { hidden: true })
+    await expect(closingMenu).toHaveAttribute("data-open", "false")
+    await waitFor(() => expect(getComputedStyle(closingMenu).opacity).toBe("0"))
     await userEvent.keyboard("{Enter}")
     await userEvent.keyboard("{Escape}")
     await expect(trigger).toHaveFocus()

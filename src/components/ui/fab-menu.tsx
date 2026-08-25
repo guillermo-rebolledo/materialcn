@@ -63,6 +63,25 @@ function FABMenu({
             requestAnimationFrame(focusTrigger)
             return
           }
+          const actions = Array.from(
+            rootRef.current?.querySelectorAll<HTMLButtonElement>(
+              '[data-slot="fab-menu-action"]:not(:disabled)',
+            ) ?? [],
+          )
+          if (["ArrowDown", "ArrowUp", "Home", "End"].includes(event.key)) {
+            if (!actions.length) return
+            event.preventDefault()
+            const index = actions.indexOf(document.activeElement as HTMLButtonElement)
+            const next = event.key === "Home"
+              ? 0
+              : event.key === "End"
+                ? actions.length - 1
+                : event.key === "ArrowDown"
+                  ? (index + 1) % actions.length
+                  : (index - 1 + actions.length) % actions.length
+            actions[next]?.focus()
+            return
+          }
           if (event.key !== "Tab") return
           const focusable = Array.from(
             rootRef.current?.querySelectorAll<HTMLButtonElement>(
@@ -107,14 +126,16 @@ function FABMenuTrigger({ onClick, ref, ...props }: FABProps) {
 
 function FABMenuContent({ className, ...props }: ComponentProps<"div">) {
   const context = useFABMenu()
-  if (!context.open) return null
   return (
     <>
       <button
         type="button"
         aria-label="Dismiss actions"
+        aria-hidden={!context.open || undefined}
+        tabIndex={context.open ? 0 : -1}
         data-slot="fab-menu-scrim"
-        className="fixed inset-0 -z-10 cursor-default bg-m3-scrim/32"
+        data-open={context.open}
+        className="fixed inset-0 -z-10 cursor-default bg-m3-scrim/32 transition-opacity duration-(--m3-spring-effects-fast-duration) data-[open=false]:pointer-events-none data-[open=false]:opacity-0 motion-reduce:transition-none"
         onClick={() => {
           context.close()
           requestAnimationFrame(context.focusTrigger)
@@ -123,10 +144,13 @@ function FABMenuContent({ className, ...props }: ComponentProps<"div">) {
       <div
         {...props}
         role="menu"
+        aria-hidden={!context.open || undefined}
+        inert={!context.open}
         data-slot="fab-menu-content"
+        data-open={context.open}
         className={cn(
           "absolute flex min-w-max flex-col gap-3",
-          "animate-in fade-in zoom-in-95 duration-(--m3-spring-effects-fast-duration) motion-reduce:animate-none",
+          "transition-[transform,opacity] duration-(--m3-spring-effects-fast-duration) ease-(--m3-spring-effects-fast) data-[open=false]:pointer-events-none data-[open=false]:scale-95 data-[open=false]:opacity-0 data-[open=true]:scale-100 data-[open=true]:opacity-100 motion-reduce:transition-none",
           "in-data-[placement=bottom-start]:right-0 in-data-[placement=bottom-start]:bottom-full in-data-[placement=bottom-start]:mb-4",
           "in-data-[placement=bottom-end]:bottom-full in-data-[placement=bottom-end]:left-0 in-data-[placement=bottom-end]:mb-4",
           "in-data-[placement=top-start]:top-full in-data-[placement=top-start]:right-0 in-data-[placement=top-start]:mt-4",

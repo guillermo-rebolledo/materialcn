@@ -1,7 +1,8 @@
-import { useState } from "react"
+import { useId, useState } from "react"
 
 import { Button } from "./button"
 import { Calendar, type CalendarProps } from "./calendar"
+import { isDateSelectable } from "./calendar-utils"
 import {
   Dialog,
   DialogClose,
@@ -28,25 +29,31 @@ type SharedModalProps = Pick<
 }
 
 type DatePickerDialogProps = SharedModalProps & {
+  formatDate?: (date: Date, locale: string) => string
   mode?: "calendar" | "input"
   onValueChange: (value: Date | null) => void
+  parseDate?: (text: string, locale: string) => Date | null
   value: Date | null
 }
 
-function formatDate(date: Date | null, locale = "en-US") {
-  return date
-    ? new Intl.DateTimeFormat(locale, {
-        year: "numeric",
-        month: "short",
-        day: "numeric",
-      }).format(date)
-    : ""
+function defaultFormatDate(date: Date, locale = "en-US") {
+  return new Intl.DateTimeFormat(locale, {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  }).format(date)
+}
+
+function defaultParseDate(text: string) {
+  const timestamp = Date.parse(text)
+  return Number.isNaN(timestamp) ? null : new Date(timestamp)
 }
 
 function DatePickerDialog({
   defaultMonth,
   disabled,
   error,
+  formatDate = defaultFormatDate,
   invalid,
   isDateUnavailable,
   label,
@@ -55,11 +62,20 @@ function DatePickerDialog({
   min,
   mode = "calendar",
   onValueChange,
+  parseDate = defaultParseDate,
   value,
 }: DatePickerDialogProps) {
   const [open, setOpen] = useState(false)
   const [draft, setDraft] = useState<Date | null>(value)
-  const [text, setText] = useState(() => formatDate(value, locale))
+  const [text, setText] = useState(() => value ? formatDate(value, locale) : "")
+  const id = useId()
+  const inputId = `${id}-input`
+  const errorId = `${id}-error`
+  const parsedText = text ? parseDate(text, locale) : null
+  const inputInvalid = mode === "input" && Boolean(
+    text &&
+      (!parsedText || !isDateSelectable(parsedText, { isDateUnavailable, max, min })),
+  )
 
   return (
     <Dialog
@@ -68,7 +84,7 @@ function DatePickerDialog({
         setOpen(nextOpen)
         if (nextOpen) {
           setDraft(value)
-          setText(formatDate(value, locale))
+          setText(value ? formatDate(value, locale) : "")
         }
       }}
     >
@@ -97,26 +113,35 @@ function DatePickerDialog({
             isDateUnavailable={isDateUnavailable}
           />
         ) : (
-          <Field data-invalid={invalid || undefined} className="px-6 py-4">
-            <FieldLabel htmlFor="modal-date-input">Date</FieldLabel>
+          <Field data-invalid={invalid || inputInvalid || undefined} className="px-6 py-4">
+            <FieldLabel htmlFor={inputId}>Date</FieldLabel>
             <Input
-              id="modal-date-input"
+              id={inputId}
               value={text}
-              aria-invalid={invalid || undefined}
+              aria-invalid={invalid || inputInvalid || undefined}
+              aria-describedby={error || inputInvalid ? errorId : undefined}
               onChange={(event) => {
                 setText(event.target.value)
-                const parsed = Date.parse(event.target.value)
-                setDraft(Number.isNaN(parsed) ? null : new Date(parsed))
+                const parsed = parseDate(event.target.value, locale)
+                setDraft(
+                  parsed && isDateSelectable(parsed, { isDateUnavailable, max, min })
+                    ? parsed
+                    : null,
+                )
               }}
             />
-            {error && <FieldError>{error}</FieldError>}
+            {(error || inputInvalid) && (
+              <FieldError id={errorId}>
+                {error ?? "Enter an available date within the allowed range"}
+              </FieldError>
+            )}
           </Field>
         )}
         <DialogFooter className="px-6 pb-6">
           <DialogClose render={<Button variant="ghost">Cancel</Button>} />
           <DialogClose
             render={<Button />}
-            disabled={!draft || invalid}
+            disabled={!draft || invalid || inputInvalid}
             onClick={() => {
               onValueChange(draft)
             }}
@@ -150,7 +175,7 @@ function DateRangePicker({
   const [open, setOpen] = useState(false)
   const [draft, setDraft] = useState<DateRange>(value)
   const summary = value.start
-    ? `${formatDate(value.start, locale)}${value.end ? ` – ${formatDate(value.end, locale)}` : " – …"}`
+    ? `${defaultFormatDate(value.start, locale)}${value.end ? ` – ${defaultFormatDate(value.end, locale)}` : " – …"}`
     : `Choose ${label}`
 
   const select = (date: Date) => {

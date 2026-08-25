@@ -5,7 +5,7 @@ import { Button } from "./button"
 import { NavigationBar, NavigationBarItem, type NavigationBarItemProps } from "./navigation-bar"
 import { NavigationContext, useNavigation } from "./navigation-context"
 import { NavigationRailContext, useNavigationRail } from "./navigation-rail-context"
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./tooltip"
+import { TooltipProvider } from "./tooltip"
 
 type NavigationRailProps = ComponentProps<"aside"> & {
   expanded?: boolean
@@ -72,23 +72,16 @@ function NavigationRailDestinations({ className, ...props }: ComponentProps<"nav
 
 function NavigationRailItem({ label, ...props }: NavigationBarItemProps) {
   const rail = useNavigationRail()
-  const item = (
+  return (
     <NavigationBarItem
       {...props}
       label={label}
       showLabel={rail.expanded}
       title={rail.expanded ? undefined : label}
+      tooltip={label}
+      tooltipDisabled={rail.expanded}
       className={cn(rail.expanded && "min-h-14! w-full! flex-none! flex-row! justify-start! gap-3 px-4")}
     />
-  )
-  if (rail.expanded) return item
-  return (
-    <Tooltip>
-      <TooltipTrigger render={<span className="contents" />}>
-        {item}
-      </TooltipTrigger>
-      <TooltipContent side="right">{label}</TooltipContent>
-    </Tooltip>
   )
 }
 

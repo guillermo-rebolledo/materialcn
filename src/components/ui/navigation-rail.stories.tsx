@@ -63,7 +63,9 @@ export const CompactInteraction: Story = {
     await userEvent.keyboard("{ArrowDown}{Enter}")
     await expect(canvas.getByLabelText("Rail destination")).toHaveTextContent("favorites")
     await userEvent.hover(canvas.getByRole("button", { name: /Messages/ }))
-    await expect(within(canvasElement.ownerDocument.body).getByRole("tooltip")).toHaveTextContent("Messages")
+    const tooltip = within(canvasElement.ownerDocument.body).getByRole("tooltip")
+    await expect(tooltip).toHaveTextContent("Messages")
+    await expect(canvas.getByRole("button", { name: /Messages/ })).toHaveAttribute("data-base-ui-tooltip-trigger")
   },
 }
 
@@ -80,6 +82,8 @@ export const ControlledExpansion: Story = {
     home.focus()
     await userEvent.click(canvas.getAllByRole("button", { name: "Toggle rail" })[0])
     await waitFor(() => expect(rails[0].getBoundingClientRect().width).toBe(360))
-    await expect(canvas.getAllByRole("button", { name: /Home/ })[0]).toHaveAttribute("aria-current", "page")
+    const expandedHome = canvas.getAllByRole("button", { name: /Home/ })[0]
+    await expect(expandedHome).toBe(home)
+    await expect(expandedHome).toHaveAttribute("aria-current", "page")
   },
 }

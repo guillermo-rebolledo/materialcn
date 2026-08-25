@@ -69,7 +69,9 @@ function TabsTrigger({ className, ...props }: TabsPrimitive.Tab.Props) {
         "group-data-vertical/tabs:after:inset-y-0 group-data-vertical/tabs:after:right-0 group-data-vertical/tabs:after:w-[3px]",
         "group-data-[variant=line]/tabs-list:data-active:after:opacity-100",
         "group-data-[variant=primary]/tabs-list:data-active:after:opacity-100",
-        "group-data-[variant=secondary]/tabs-list:data-active:after:opacity-100 group-data-[variant=secondary]/tabs-list:after:h-0.5 group-data-[variant=secondary]/tabs-list:after:inset-x-4",
+        "group-data-[variant=secondary]/tabs-list:data-active:after:opacity-100",
+        "group-data-horizontal/tabs:group-data-[variant=secondary]/tabs-list:after:inset-x-4 group-data-horizontal/tabs:group-data-[variant=secondary]/tabs-list:after:h-0.5",
+        "group-data-vertical/tabs:group-data-[variant=secondary]/tabs-list:after:inset-y-4 group-data-vertical/tabs:group-data-[variant=secondary]/tabs-list:after:w-0.5",
         className
       )}
       {...props}

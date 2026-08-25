@@ -15,29 +15,37 @@ type Story = StoryObj<typeof meta>
 
 export const MixedControls: Story = {
   render: () => (
-    <Toolbar aria-label="Document tools">
-      <ToolbarLabel>Format</ToolbarLabel>
-      <ToolbarGroup><Button aria-label="Undo" size="icon" variant="ghost"><UndoIcon /></Button></ToolbarGroup>
-      <ToolbarDivider />
-      <ToolbarGroup><ToggleGroup><ToggleGroupItem value="bold" aria-label="Bold"><BoldIcon /></ToggleGroupItem><ToggleGroupItem value="italic" aria-label="Italic"><ItalicIcon /></ToggleGroupItem></ToggleGroup></ToolbarGroup>
-      <ToolbarGroup><ButtonGroup aria-label="Alignment"><Button>Left</Button><Button>Right</Button></ButtonGroup></ToolbarGroup>
-      <ToolbarOverflow>
-        <DropdownMenu><DropdownMenuTrigger render={<Button aria-label="More tools" size="icon" variant="ghost" />}><MoreVerticalIcon /></DropdownMenuTrigger><DropdownMenuContent><DropdownMenuItem>Export</DropdownMenuItem><DropdownMenuItem>Print</DropdownMenuItem></DropdownMenuContent></DropdownMenu>
-      </ToolbarOverflow>
-      <ToolbarFAB><FAB aria-label="Create" size="small"><PlusIcon /></FAB></ToolbarFAB>
-    </Toolbar>
+    <div className="flex items-center gap-3">
+      <Toolbar aria-label="Document tools">
+        <ToolbarLabel>Format</ToolbarLabel>
+        <ToolbarGroup><Button aria-label="Undo" size="icon" variant="ghost"><UndoIcon /></Button></ToolbarGroup>
+        <ToolbarDivider />
+        <ToolbarGroup><ToggleGroup><ToggleGroupItem value="bold" aria-label="Bold"><BoldIcon /></ToggleGroupItem><ToggleGroupItem value="italic" aria-label="Italic"><ItalicIcon /></ToggleGroupItem></ToggleGroup></ToolbarGroup>
+        <ToolbarGroup><ButtonGroup aria-label="Alignment"><Button>Left</Button><Button>Right</Button></ButtonGroup></ToolbarGroup>
+        <ToolbarOverflow>
+          <DropdownMenu><DropdownMenuTrigger render={<Button aria-label="More tools" size="icon" variant="ghost" />}><MoreVerticalIcon /></DropdownMenuTrigger><DropdownMenuContent><DropdownMenuItem>Export</DropdownMenuItem><DropdownMenuItem>Print</DropdownMenuItem></DropdownMenuContent></DropdownMenu>
+        </ToolbarOverflow>
+        <ToolbarFAB><FAB aria-label="Create" size="small"><PlusIcon /></FAB></ToolbarFAB>
+      </Toolbar>
+      <Button variant="outline">After toolbar</Button>
+    </div>
   ),
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement)
     const undo = canvas.getByRole("button", { name: "Undo" })
     undo.focus()
     await userEvent.keyboard("{ArrowRight}")
-    await expect(canvas.getByRole("button", { name: "Bold" })).toHaveFocus()
+    const bold = canvas.getByRole("button", { name: "Bold" })
+    await expect(bold).toHaveFocus()
+    await expect(undo).toHaveAttribute("tabindex", "-1")
+    await expect(bold).toHaveAttribute("tabindex", "0")
     const overflow = canvas.getByRole("button", { name: "More tools" })
     await userEvent.click(overflow)
     const page = within(canvasElement.ownerDocument.body)
     await userEvent.click(await page.findByRole("menuitem", { name: "Export" }))
     await waitFor(() => expect(overflow).toHaveFocus())
+    await userEvent.tab()
+    await expect(canvas.getByRole("button", { name: "After toolbar" })).toHaveFocus()
   },
 }
 

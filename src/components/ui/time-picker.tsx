@@ -2,42 +2,10 @@ import { useId, useRef, useState, type ComponentProps, type KeyboardEvent } from
 
 import { cn } from "@/lib/utils"
 import { Field, FieldDescription, FieldError, FieldLabel } from "./field"
+import { isValidTime } from "./time-picker-utils"
 
 type TimeValue = { hour: number; minute: number }
 type TimeMode = "12-hour" | "24-hour"
-
-function formatTime(value: TimeValue, mode: TimeMode = "24-hour") {
-  if (mode === "24-hour") {
-    return `${String(value.hour).padStart(2, "0")}:${String(value.minute).padStart(2, "0")}`
-  }
-  const period = value.hour >= 12 ? "PM" : "AM"
-  const hours = value.hour % 12 || 12
-  return `${hours}:${String(value.minute).padStart(2, "0")} ${period}`
-}
-
-function parseTime(text: string, mode: TimeMode = "24-hour"): TimeValue | null {
-  const match = text.trim().match(/^(\d{1,2}):(\d{2})(?:\s*(AM|PM))?$/i)
-  if (!match) return null
-  let hour = Number(match[1])
-  const minute = Number(match[2])
-  if (mode === "12-hour") {
-    const period = match[3]?.toUpperCase()
-    if (!period || hour < 1 || hour > 12) return null
-    hour = (hour % 12) + (period === "PM" ? 12 : 0)
-  }
-  if (hour < 0 || hour > 23 || minute < 0 || minute > 59) return null
-  return { hour, minute }
-}
-
-function minutesOf(value: TimeValue) {
-  return value.hour * 60 + value.minute
-}
-
-function isValidTime(value: TimeValue, min?: TimeValue, max?: TimeValue) {
-  if (value.hour < 0 || value.hour > 23 || value.minute < 0 || value.minute > 59) return false
-  const total = minutesOf(value)
-  return (!min || total >= minutesOf(min)) && (!max || total <= minutesOf(max))
-}
 
 type TimePickerProps = Omit<ComponentProps<"div">, "onChange"> & {
   disabled?: boolean
@@ -80,7 +48,8 @@ function TimePicker({
   const minuteRef = useRef<HTMLInputElement>(null)
   const id = useId()
   const valueInvalid = !isValidTime(value, min, max)
-  const ariaInvalid = invalid || valueInvalid
+  const emptySegment = draft.hour === "" || draft.minute === ""
+  const ariaInvalid = invalid || valueInvalid || emptySegment
 
   const updateHour = (raw: string) => {
     if (raw === "") return setDraft({ ...draft, hour: raw })
@@ -116,6 +85,7 @@ function TimePicker({
       hourRef.current?.focus()
       return
     }
+    if (readOnly) return
     if (event.key !== "ArrowUp" && event.key !== "ArrowDown") return
     event.preventDefault()
     const delta = event.key === "ArrowUp" ? 1 : -1
@@ -195,8 +165,10 @@ function TimePicker({
         )}
       </div>
       {supportingText && <FieldDescription>{supportingText}</FieldDescription>}
-      {(error || valueInvalid) && (
-        <FieldError>{error ?? "Enter a time within the allowed range"}</FieldError>
+      {(error || valueInvalid || emptySegment) && (
+        <FieldError>
+          {error ?? (emptySegment ? "Enter both hours and minutes" : "Enter a time within the allowed range")}
+        </FieldError>
       )}
     </Field>
   )
@@ -204,9 +176,6 @@ function TimePicker({
 
 export {
   TimePicker,
-  formatTime,
-  isValidTime,
-  parseTime,
   type TimeMode,
   type TimePickerProps,
   type TimeValue,

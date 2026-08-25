@@ -1,7 +1,9 @@
 import { createContext, useContext } from "react"
 
 type NavigationContextValue = {
+  focusValue?: string
   onValueChange: (value: string) => void
+  setFocusValue?: (value: string) => void
   value: string
 }
 

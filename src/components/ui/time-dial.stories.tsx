@@ -2,8 +2,9 @@ import { useState } from "react"
 import type { Meta, StoryObj } from "@storybook/react-vite"
 import { expect, userEvent, within } from "storybook/test"
 
-import { DialTimePicker } from "./time-dial"
-import { formatTime, type TimeValue } from "./time-picker"
+import { DialTimePicker, TimeDial } from "./time-dial"
+import { type TimeValue } from "./time-picker"
+import { formatTime } from "./time-picker-utils"
 
 const meta = {
   title: "Components/TimePicker/Dial",
@@ -52,4 +53,14 @@ export const ModesAndStates: Story = {
       <DialTimePicker value={{ hour: 25, minute: 80 }} onValueChange={() => undefined} label="Invalid dial" invalid error="Choose a valid time" />
     </div>
   ),
+}
+
+export const DisabledDialControls: Story = {
+  render: () => <TimeDial value={{ hour: 9, minute: 0 }} onValueChange={() => undefined} disabled />,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    await expect(canvas.getByRole("button", { name: "09" })).toBeDisabled()
+    await expect(canvas.getByRole("button", { name: "00" })).toBeDisabled()
+    await expect(canvas.getByRole("button", { name: "9 hours" })).toBeDisabled()
+  },
 }

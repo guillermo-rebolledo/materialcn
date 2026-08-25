@@ -1,3 +1,4 @@
+import { useState } from "react"
 import { Slider as SliderPrimitive } from "@base-ui/react/slider"
 
 import { cn } from "@/lib/utils"
@@ -29,6 +30,7 @@ function Slider({
   getAriaLabel,
   max = 100,
   min = 0,
+  onValueChange,
   orientation = "horizontal",
   showTicks = false,
   showValue = false,
@@ -38,14 +40,13 @@ function Slider({
   variant = "standard",
   ...props
 }: SliderProps) {
-  const _values = Array.isArray(value)
-    ? value
-    : Array.isArray(defaultValue)
-      ? defaultValue
-      : [min]
+  const normalizeValues = (input: number | readonly number[] | undefined) =>
+    typeof input === "number" ? [input] : Array.isArray(input) ? [...input] : [min]
+  const [uncontrolledValues, setUncontrolledValues] = useState(() => normalizeValues(defaultValue))
+  const values = value === undefined ? uncontrolledValues : normalizeValues(value)
   const percentage = (number: number) => ((number - min) / (max - min)) * 100
-  const centered = variant === "centered" && _values.length === 1
-  const currentPercentage = percentage(_values[0] ?? min)
+  const centered = variant === "centered" && values.length === 1
+  const currentPercentage = percentage(values[0] ?? min)
   const centerStart = Math.min(50, currentPercentage)
   const centerSize = Math.abs(currentPercentage - 50)
   const tickCount = Math.min(100, Math.max(1, Math.floor((max - min) / step)))
@@ -64,6 +65,10 @@ function Slider({
       step={step}
       orientation={orientation}
       thumbAlignment="edge"
+      onValueChange={(nextValue, eventDetails) => {
+        if (value === undefined) setUncontrolledValues(normalizeValues(nextValue))
+        onValueChange?.(nextValue, eventDetails)
+      }}
       {...props}
     >
       <SliderPrimitive.Control className="relative flex w-full touch-none items-center select-none data-vertical:h-full data-vertical:min-h-40 data-vertical:w-auto data-vertical:flex-col">
@@ -109,12 +114,12 @@ function Slider({
             />
           ))}
         </SliderPrimitive.Track>
-        {Array.from({ length: _values.length }, (_, index) => (
+        {Array.from({ length: values.length }, (_, index) => (
           <SliderPrimitive.Thumb
             data-slot="slider-thumb"
             key={index}
             getAriaLabel={getAriaLabel ?? (ariaLabel
-              ? (thumbIndex) => _values.length > 1
+              ? (thumbIndex) => values.length > 1
                 ? `${ariaLabel} ${thumbIndex === 0 ? "minimum" : "maximum"}`
                 : ariaLabel
               : undefined)}
@@ -133,7 +138,7 @@ function Slider({
               // surface color, so a slider on a non-surface background should
               // override `ring-m3-*` to match its own container.
               "ring-4 ring-m3-surface",
-              "transition-[width,height] duration-(--m3-spring-spatial-fast-duration) ease-(--m3-spring-spatial-fast)",
+              "transition-[width,height] duration-(--m3-spring-effects-fast-duration) ease-(--m3-spring-effects-fast)",
               "after:absolute after:-inset-3",
               // Expressive squeezes the handle narrower while it is dragged.
               "active:cursor-grabbing",
@@ -146,7 +151,7 @@ function Slider({
                 "pointer-events-none absolute rounded-m3-xs bg-m3-inverse-surface px-2 py-1 text-m3-label-sm text-m3-inverse-on-surface",
                 orientation === "horizontal" ? "bottom-full left-1/2 mb-2 -translate-x-1/2" : "bottom-auto left-full ml-2",
               )}>
-                {_values[index]}
+                {values[index]}
               </span>
             )}
           </SliderPrimitive.Thumb>

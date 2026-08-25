@@ -1,10 +1,11 @@
 import type { Meta, StoryObj } from "@storybook/react-vite"
-import { expect, userEvent, within } from "storybook/test"
+import { expect, userEvent, waitFor, within } from "storybook/test"
 import { ArrowLeftIcon, MoreVerticalIcon, SearchIcon, StarIcon } from "lucide-react"
 
 import { Avatar, AvatarFallback } from "./avatar"
 import { Button } from "./button"
-import { TopAppBar, TopAppBarActions, TopAppBarNavigation, TopAppBarTitle } from "./top-app-bar"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./dropdown-menu"
+import { TopAppBar, TopAppBarActions, TopAppBarNavigation, TopAppBarOverflow, TopAppBarTitle } from "./top-app-bar"
 
 const meta = { title: "Components/TopAppBar", component: TopAppBar, tags: ["autodocs"] } satisfies Meta<typeof TopAppBar>
 export default meta
@@ -19,7 +20,15 @@ function AppBar({ size, scrolled = false }: { size: "small" | "medium" | "large"
         <Button aria-label="Search" size="icon" variant="ghost"><SearchIcon /></Button>
         <Button aria-label="Favorite" size="icon" variant="ghost"><StarIcon /></Button>
         <Avatar className="size-8"><AvatarFallback>GO</AvatarFallback></Avatar>
-        <Button aria-label="More actions" size="icon" variant="ghost"><MoreVerticalIcon /></Button>
+        <TopAppBarOverflow>
+          <DropdownMenu>
+            <DropdownMenuTrigger render={<Button aria-label="More actions" size="icon" variant="ghost" />}><MoreVerticalIcon /></DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem>Share</DropdownMenuItem>
+              <DropdownMenuItem>Archive</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </TopAppBarOverflow>
       </TopAppBarActions>
     </TopAppBar>
   )
@@ -38,5 +47,10 @@ export const Configurations: Story = {
     firstBack.focus()
     await userEvent.tab()
     await expect(canvas.getAllByRole("button", { name: "Search" })[0]).toHaveFocus()
+    const overflow = canvas.getAllByRole("button", { name: "More actions" })[0]
+    await userEvent.click(overflow)
+    const page = within(canvasElement.ownerDocument.body)
+    await userEvent.click(page.getAllByRole("menuitem", { name: "Share" })[0])
+    await waitFor(() => expect(overflow).toHaveFocus())
   },
 }

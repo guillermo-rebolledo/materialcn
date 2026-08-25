@@ -1,6 +1,6 @@
 import { useState } from "react"
 import type { Meta, StoryObj } from "@storybook/react-vite"
-import { expect, userEvent, within } from "storybook/test"
+import { expect, userEvent, waitFor, within } from "storybook/test"
 
 import { DatePicker } from "./date-picker"
 
@@ -28,6 +28,7 @@ function ControlledDatePicker() {
         defaultMonth={new Date(2026, 7, 1)}
         label="Travel date"
         locale="en-US"
+        max={new Date(2026, 7, 20)}
         isDateUnavailable={(date) => date.getDate() === 18}
       />
       <output aria-label="Selected date">
@@ -41,23 +42,30 @@ export const DockedInteraction: Story = {
   render: () => <ControlledDatePicker />,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement)
+    const page = within(canvasElement.ownerDocument.body)
     await userEvent.click(canvas.getByRole("button", { name: "Choose date" }))
-    await expect(canvas.getByRole("grid", { name: "August 2026" })).toBeVisible()
+    await waitFor(() => expect(page.getByRole("grid", { name: "August 2026" })).toBeVisible())
 
-    const selected = canvas.getByRole("gridcell", { name: "Wednesday, August 12, 2026" })
+    const selected = page.getByRole("gridcell", { name: "Wednesday, August 12, 2026" })
     await expect(selected).toHaveAttribute("aria-selected", "true")
-    await userEvent.click(canvas.getByRole("gridcell", { name: "Saturday, August 15, 2026" }))
+    await userEvent.click(page.getByRole("gridcell", { name: "Saturday, August 15, 2026" }))
     await expect(canvas.getByLabelText("Selected date")).toHaveTextContent("2026-08-15")
 
     await userEvent.click(canvas.getByRole("button", { name: "Choose date" }))
-    const day = canvas.getByRole("gridcell", { name: "Saturday, August 15, 2026" })
+    const day = page.getByRole("gridcell", { name: "Saturday, August 15, 2026" })
     day.focus()
     await userEvent.keyboard("{ArrowRight}")
-    await expect(canvas.getByRole("gridcell", { name: "Sunday, August 16, 2026" })).toHaveFocus()
-    await expect(canvas.getByRole("gridcell", { name: "Tuesday, August 18, 2026" })).toBeDisabled()
+    await expect(page.getByRole("gridcell", { name: "Sunday, August 16, 2026" })).toHaveFocus()
+    await expect(page.getByRole("gridcell", { name: "Tuesday, August 18, 2026" })).toBeDisabled()
+    await expect(page.getByRole("button", { name: "Today" })).toBeDisabled()
     await userEvent.keyboard("{Escape}")
-    await expect(canvas.getByRole("button", { name: "Choose date" })).toHaveFocus()
+    await waitFor(() => expect(canvas.getByRole("button", { name: "Choose date" })).toHaveFocus())
     await userEvent.click(canvas.getByRole("button", { name: "Clear date" }))
+    await expect(canvas.getByLabelText("Selected date")).toHaveTextContent("None")
+    const input = canvas.getByRole("textbox", { name: "Travel date" })
+    await userEvent.type(input, "Aug 18, 2026")
+    await userEvent.tab()
+    await expect(input).toHaveAttribute("aria-invalid", "true")
     await expect(canvas.getByLabelText("Selected date")).toHaveTextContent("None")
   },
 }

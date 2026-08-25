@@ -107,6 +107,9 @@ export const SecondaryVerticalKeyboard: Story = {
     await userEvent.keyboard("{ArrowDown}")
     await expect(canvas.getByRole("tab", { name: "Two" })).toHaveFocus()
     await userEvent.keyboard("{Enter}")
-    await expect(canvas.getByRole("tabpanel")).toHaveTextContent("Two panel")
+    await expect(canvas.getByRole("tabpanel", { name: "Two" })).toHaveTextContent("Two panel")
+    const indicator = getComputedStyle(canvas.getByRole("tab", { name: "Two" }), "::after")
+    await expect(Number.parseFloat(indicator.width)).toBe(2)
+    await expect(indicator.height).not.toBe("2px")
   },
 }

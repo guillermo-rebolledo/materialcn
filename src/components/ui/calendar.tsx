@@ -1,8 +1,9 @@
-import { useEffect, useMemo, useRef, useState, type ComponentProps, type KeyboardEvent } from "react"
+import { useLayoutEffect, useMemo, useRef, useState, type ComponentProps, type KeyboardEvent } from "react"
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import { Button } from "./button"
+import { dateKey, isDateSelectable, sameDay } from "./calendar-utils"
 
 type CalendarProps = Omit<ComponentProps<"div">, "onSelect"> & {
   defaultMonth?: Date
@@ -28,21 +29,11 @@ function addMonths(date: Date, amount: number) {
   return new Date(date.getFullYear(), date.getMonth() + amount, 1, 12)
 }
 
-function sameDay(a?: Date | null, b?: Date | null) {
-  return Boolean(
-    a && b &&
-      a.getFullYear() === b.getFullYear() &&
-      a.getMonth() === b.getMonth() &&
-      a.getDate() === b.getDate(),
-  )
-}
-
-function dateKey(date: Date) {
-  return [
-    date.getFullYear(),
-    String(date.getMonth() + 1).padStart(2, "0"),
-    String(date.getDate()).padStart(2, "0"),
-  ].join("-")
+function addMonthsPreservingDay(date: Date, amount: number) {
+  const target = new Date(date.getFullYear(), date.getMonth() + amount, 1, 12)
+  const lastDay = new Date(target.getFullYear(), target.getMonth() + 1, 0, 12).getDate()
+  target.setDate(Math.min(date.getDate(), lastDay))
+  return target
 }
 
 function Calendar({
@@ -75,20 +66,19 @@ function Calendar({
   const days = Array.from({ length: 42 }, (_, index) => addDays(firstVisible, index))
   const years = Array.from({ length: 21 }, (_, index) => month.getFullYear() - 10 + index)
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!pendingFocus.current) return
     const key = pendingFocus.current
     pendingFocus.current = null
-    requestAnimationFrame(() => {
-      rootRef.current?.querySelector<HTMLButtonElement>(`[data-date="${key}"]`)?.focus()
-    })
+    rootRef.current?.querySelector<HTMLButtonElement>(`[data-date="${key}"]`)?.focus()
   }, [month])
 
   const unavailable = (date: Date) =>
-    disabled ||
-    Boolean(min && date < new Date(min.getFullYear(), min.getMonth(), min.getDate(), 12)) ||
-    Boolean(max && date > new Date(max.getFullYear(), max.getMonth(), max.getDate(), 12)) ||
-    Boolean(isDateUnavailable?.(date))
+    !isDateSelectable(date, { disabled, isDateUnavailable, max, min })
+  const focusDate = [selected, range?.end, range?.start, today].find(
+    (candidate) => candidate && days.some((date) => sameDay(date, candidate)) && !unavailable(candidate),
+  ) ?? days.find((date) => date.getMonth() === month.getMonth() && !unavailable(date))
+    ?? days.find((date) => !unavailable(date))
 
   const moveFocus = (date: Date, event: KeyboardEvent<HTMLButtonElement>) => {
     event.preventDefault()
@@ -142,65 +132,71 @@ function Calendar({
         </Button>
       </div>
       <div role="grid" aria-label={monthLabel} className="grid grid-cols-7 gap-y-1">
-        {Array.from({ length: 7 }, (_, index) => (
-          <div key={index} role="columnheader" aria-label={weekday.format(addDays(firstVisible, index))} className="flex h-10 items-center justify-center text-m3-label-sm text-muted-foreground">
-            {weekday.format(addDays(firstVisible, index))}
+        <div role="row" className="contents">
+          {Array.from({ length: 7 }, (_, index) => (
+            <div key={index} role="columnheader" aria-label={weekday.format(addDays(firstVisible, index))} className="flex h-10 items-center justify-center text-m3-label-sm text-muted-foreground">
+              {weekday.format(addDays(firstVisible, index))}
+            </div>
+          ))}
+        </div>
+        {Array.from({ length: 6 }, (_, rowIndex) => (
+          <div key={rowIndex} role="row" className="contents">
+            {days.slice(rowIndex * 7, rowIndex * 7 + 7).map((date) => {
+              const outside = date.getMonth() !== month.getMonth()
+              const isSelected = sameDay(date, selected)
+              const isRangeStart = sameDay(date, range?.start)
+              const isRangeEnd = sameDay(date, range?.end)
+              const isInRange = Boolean(
+                range?.start && range.end && date > range.start && date < range.end,
+              )
+              const isToday = sameDay(date, today)
+              const isUnavailable = unavailable(date)
+              return (
+                <button
+                  key={dateKey(date)}
+                  type="button"
+                  role="gridcell"
+                  data-date={dateKey(date)}
+                  data-outside={outside || undefined}
+                  data-today={isToday || undefined}
+                  aria-label={fullDate.format(date)}
+                  aria-selected={isSelected || isRangeStart || isRangeEnd || isInRange}
+                  data-range-start={isRangeStart || undefined}
+                  data-range-end={isRangeEnd || undefined}
+                  data-in-range={isInRange || undefined}
+                  disabled={isUnavailable}
+                  tabIndex={sameDay(date, focusDate) ? 0 : -1}
+                  className={cn(
+                    "mx-auto flex size-10 items-center justify-center rounded-full text-m3-body-md outline-none transition-colors",
+                    "hover:not-disabled:bg-m3-on-surface/8 focus-visible:ring-3 focus-visible:ring-m3-secondary",
+                    outside && "text-muted-foreground/60",
+                    isToday && !isSelected && "border border-m3-primary text-m3-primary",
+                    isSelected && "bg-m3-primary text-m3-on-primary",
+                    isInRange && "rounded-none bg-m3-secondary-container text-m3-on-secondary-container",
+                    (isRangeStart || isRangeEnd) && "bg-m3-primary text-m3-on-primary",
+                    "disabled:cursor-not-allowed disabled:text-muted-foreground/38 disabled:line-through",
+                  )}
+                  onClick={() => onSelect(date)}
+                  onKeyDown={(event) => {
+                    if (event.key === "ArrowRight") moveFocus(addDays(date, 1), event)
+                    if (event.key === "ArrowLeft") moveFocus(addDays(date, -1), event)
+                    if (event.key === "ArrowDown") moveFocus(addDays(date, 7), event)
+                    if (event.key === "ArrowUp") moveFocus(addDays(date, -7), event)
+                    if (event.key === "Home") moveFocus(addDays(date, -date.getDay()), event)
+                    if (event.key === "End") moveFocus(addDays(date, 6 - date.getDay()), event)
+                    if (event.key === "PageDown") moveFocus(addMonthsPreservingDay(date, 1), event)
+                    if (event.key === "PageUp") moveFocus(addMonthsPreservingDay(date, -1), event)
+                  }}
+                >
+                  {date.getDate()}
+                </button>
+              )
+            })}
           </div>
         ))}
-        {days.map((date) => {
-          const outside = date.getMonth() !== month.getMonth()
-          const isSelected = sameDay(date, selected)
-          const isRangeStart = sameDay(date, range?.start)
-          const isRangeEnd = sameDay(date, range?.end)
-          const isInRange = Boolean(
-            range?.start && range.end && date > range.start && date < range.end,
-          )
-          const isToday = sameDay(date, today)
-          const isUnavailable = unavailable(date)
-          return (
-            <button
-              key={dateKey(date)}
-              type="button"
-              role="gridcell"
-              data-date={dateKey(date)}
-              data-outside={outside || undefined}
-              data-today={isToday || undefined}
-              aria-label={fullDate.format(date)}
-              aria-selected={isSelected || isRangeStart || isRangeEnd || isInRange}
-              data-range-start={isRangeStart || undefined}
-              data-range-end={isRangeEnd || undefined}
-              data-in-range={isInRange || undefined}
-              disabled={isUnavailable}
-              tabIndex={isSelected || (!selected && sameDay(date, today)) ? 0 : -1}
-              className={cn(
-                "mx-auto flex size-10 items-center justify-center rounded-full text-m3-body-md outline-none transition-colors",
-                "hover:not-disabled:bg-m3-on-surface/8 focus-visible:ring-3 focus-visible:ring-m3-secondary",
-                outside && "text-muted-foreground/60",
-                isToday && !isSelected && "border border-m3-primary text-m3-primary",
-                isSelected && "bg-m3-primary text-m3-on-primary",
-                isInRange && "rounded-none bg-m3-secondary-container text-m3-on-secondary-container",
-                (isRangeStart || isRangeEnd) && "bg-m3-primary text-m3-on-primary",
-                "disabled:cursor-not-allowed disabled:text-muted-foreground/38 disabled:line-through",
-              )}
-              onClick={() => onSelect(date)}
-              onKeyDown={(event) => {
-                if (event.key === "ArrowRight") moveFocus(addDays(date, 1), event)
-                if (event.key === "ArrowLeft") moveFocus(addDays(date, -1), event)
-                if (event.key === "ArrowDown") moveFocus(addDays(date, 7), event)
-                if (event.key === "ArrowUp") moveFocus(addDays(date, -7), event)
-                if (event.key === "Home") moveFocus(addDays(date, -date.getDay()), event)
-                if (event.key === "End") moveFocus(addDays(date, 6 - date.getDay()), event)
-                if (event.key === "PageDown") moveFocus(addMonths(date, 1), event)
-                if (event.key === "PageUp") moveFocus(addMonths(date, -1), event)
-              }}
-            >
-              {date.getDate()}
-            </button>
-          )
-        })}
       </div>
       <div className="flex justify-end pt-2">
-        <Button variant="ghost" size="sm" disabled={disabled} onClick={() => { setMonth(startOfMonth(today)); onSelect(today) }}>
+        <Button variant="ghost" size="sm" disabled={unavailable(today)} onClick={() => { setMonth(startOfMonth(today)); onSelect(today) }}>
           Today
         </Button>
       </div>
@@ -208,4 +204,4 @@ function Calendar({
   )
 }
 
-export { Calendar, type CalendarProps, dateKey, sameDay }
+export { Calendar, type CalendarProps }

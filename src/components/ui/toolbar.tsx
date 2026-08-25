@@ -1,4 +1,4 @@
-import type { ComponentProps, KeyboardEvent } from "react"
+import { useEffect, useRef, type ComponentProps, type KeyboardEvent } from "react"
 
 import { cn } from "@/lib/utils"
 import { Separator } from "./separator"
@@ -14,14 +14,28 @@ function Toolbar({
   className,
   onKeyDown,
   presentation = "standard",
+  ref,
   ...props
 }: ToolbarProps) {
+  const rootRef = useRef<HTMLDivElement>(null)
+  const getControls = (root: HTMLElement) => Array.from(
+    root.querySelectorAll<HTMLElement>('button:not(:disabled), a[href], [role="button"]:not([aria-disabled="true"])'),
+  )
+  const setTabStop = (controls: HTMLElement[], active: HTMLElement) => {
+    controls.forEach((control) => {
+      control.tabIndex = control === active ? 0 : -1
+    })
+  }
+
+  useEffect(() => {
+    const controls = rootRef.current ? getControls(rootRef.current) : []
+    if (controls.length) setTabStop(controls, controls[0])
+  }, [])
+
   const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
     onKeyDown?.(event)
     if (event.defaultPrevented || !["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return
-    const controls = Array.from(
-      event.currentTarget.querySelectorAll<HTMLElement>('button:not(:disabled), a[href], [role="button"]:not([aria-disabled="true"])'),
-    )
+    const controls = getControls(event.currentTarget)
     if (!controls.length) return
     const index = controls.indexOf(document.activeElement as HTMLElement)
     const next = event.key === "Home"
@@ -32,11 +46,17 @@ function Toolbar({
           ? (index + 1) % controls.length
           : (index - 1 + controls.length) % controls.length
     event.preventDefault()
+    if (controls[next]) setTabStop(controls, controls[next])
     controls[next]?.focus()
   }
   return (
     <div
       {...props}
+      ref={(node) => {
+        rootRef.current = node
+        if (typeof ref === "function") ref(node)
+        else if (ref) ref.current = node
+      }}
       role="toolbar"
       aria-label={ariaLabel}
       data-slot="toolbar"
@@ -48,6 +68,11 @@ function Toolbar({
         className,
       )}
       onKeyDown={handleKeyDown}
+      onFocusCapture={(event) => {
+        const controls = getControls(event.currentTarget)
+        const focused = controls.find((control) => control === event.target)
+        if (focused) setTabStop(controls, focused)
+      }}
     />
   )
 }
