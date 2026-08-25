@@ -156,9 +156,9 @@ Foundation: existing Button, Tooltip, and Material motion/shape tokens.
 
 ### App bars
 
-- [ ] Add small, medium, and large `TopAppBar` configurations.
+- [x] Add small, medium, and large `TopAppBar` configurations.
 - [ ] Add `BottomAppBar` with actions and optional FAB placement.
-- [ ] Support scrolling/elevation state without owning the page's scroll
+- [x] Support scrolling/elevation state without owning the page's scroll
   container.
 
 Foundation: existing Button, Avatar, Separator, and future DropdownMenu and

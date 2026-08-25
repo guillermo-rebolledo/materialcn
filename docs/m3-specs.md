@@ -371,6 +371,13 @@ between the action stack and primary FAB. The scrim uses the shared scrim role
 at 32%; entrance uses the fast effects motion and disappears under reduced
 motion.
 
+## App bars
+
+Top app bars are 64dp small, 116dp medium, and 160dp large. Medium titles use
+headline-small at the lower edge; large titles use headline-medium. The caller
+owns scroll observation and supplies `scrolled`, which switches the bar from
+Surface to Surface Container and elevation level 2 without changing geometry.
+
 ## Button shape morph on press
 
 Expressive buttons tighten their corners while pressed. The *classic* M3 set

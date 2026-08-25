@@ -542,6 +542,13 @@ expressive shapes while reusing Button interaction behavior.
 slots, four anchored placements, scrim dismissal, contained focus, and focus
 restoration to the primary `FABMenuTrigger`.
 
+### Application bars
+
+`TopAppBar` provides small, medium, and large shells with explicit navigation,
+title, actions, avatar/custom-content, and overflow slots. Supply `scrolled`
+from the application’s own scroll observer to raise the bar without coupling
+the component to a page container.
+
 ## Where the specs come from
 
 The token values and component geometry are not hand-copied from the docs site —
