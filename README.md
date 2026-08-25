@@ -255,6 +255,41 @@ message warrants an urgent announcement. Timeouts pause while the snackbar
 stack is hovered or keyboard-focused; `F6` moves focus to the notification
 region without stealing it when a snackbar first appears.
 
+### Lists
+
+`ListItem` keeps a semantic list-item wrapper and uses Base UI's `render` prop
+for the row action, so navigation remains an anchor and commands remain native
+buttons. Density belongs to the list and does not change the content slots.
+
+```tsx
+import {
+  List,
+  ListItem,
+  ListItemContent,
+  ListItemHeadline,
+  ListItemLeading,
+  ListItemSupportingText,
+  ListItemTrailing,
+} from "materialcn"
+
+<List density="-2" aria-label="Folders">
+  <ListItem lines={2} render={<a href="/archive" />}>
+    <ListItemLeading variant="icon">{/* 24dp icon */}</ListItemLeading>
+    <ListItemContent>
+      <ListItemHeadline>Archive</ListItemHeadline>
+      <ListItemSupportingText>Updated yesterday</ListItemSupportingText>
+    </ListItemContent>
+    <ListItemTrailing>24 files</ListItemTrailing>
+  </ListItem>
+</List>
+```
+
+Available densities are `"default"`, `"-2"`, and `"-4"`; `lines` accepts
+`1`, `2`, or `3`. Use `ListSection` with an accessible `ListSubheader` for
+grouped content. `ListItemLeading` supports `icon`, `avatar`, `media`, and
+`control` presentations, while trailing slots can compose the exported
+Checkbox, RadioGroupItem, and Switch controls.
+
 ## Where the specs come from
 
 The token values and component geometry are not hand-copied from the docs site —

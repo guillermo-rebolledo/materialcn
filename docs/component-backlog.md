@@ -70,12 +70,12 @@ Foundation: shadcn `toast` for this Base UI project.
 
 ### List and list item
 
-- [ ] Add `List`, `ListItem`, and list section composition.
-- [ ] Support one-, two-, and three-line items.
-- [ ] Support the kit's default, `-2`, and `-4` density options.
-- [ ] Support leading icons, avatars, media, overlines, supporting text, and
+- [x] Add `List`, `ListItem`, and list section composition.
+- [x] Support one-, two-, and three-line items.
+- [x] Support the kit's default, `-2`, and `-4` density options.
+- [x] Support leading icons, avatars, media, overlines, supporting text, and
   trailing controls.
-- [ ] Ensure interactive items use the correct semantic element rather than a
+- [x] Ensure interactive items use the correct semantic element rather than a
   clickable wrapper.
 
 Foundation: shadcn `item` and the existing Separator, Avatar, Checkbox,

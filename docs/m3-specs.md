@@ -184,7 +184,22 @@ from the action-menu composition above.
 
 ## List item
 
-56dp for a single line, 16dp horizontal padding, 8dp vertical.
+List items use 16dp horizontal padding and a 16dp gap between leading,
+content, and trailing slots. Density changes only the vertical geometry; the
+content structure and type roles stay the same.
+
+| Density | One line | Two lines | Three lines |
+| ------- | -------- | --------- | ----------- |
+| Default | 56 | 72 | 88 |
+| -2 | 48 | 64 | 80 |
+| -4 | 40 | 56 | 72 |
+
+The headline uses body-large (16/24 Regular), supporting text uses body-medium
+(14/20 Regular), overlines use label-medium (12/16 Medium), and trailing
+metadata uses label-small (11/16 Medium). Leading icons are 24dp, avatars are
+40dp, and image media is 56dp. Three-line items with both an overline and
+two-line supporting text grow beyond the baseline height rather than clipping
+content; the default-density kit example is 104dp with 12dp vertical padding.
 
 ## Button shape morph on press
 
