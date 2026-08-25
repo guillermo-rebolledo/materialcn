@@ -595,6 +595,13 @@ plus vertical orientation. Use `decorative` for purely visual rules and
 Single/range and horizontal/vertical inputs keep Base UI dragging, keyboard,
 disabled, and accessible-value behavior.
 
+`SheetContent side="bottom"` uses the Material modal bottom-sheet shape,
+surface, scrim, elevation, and 412×480dp maximum geometry. Compose
+`SheetHandle`, `SheetHeader`, `SheetBody`, and `SheetFooter` for the standard
+layout. `SheetHandle` is presentation-only and deliberately exposes no drag
+semantics; products that require swipe-to-dismiss physics should adopt the
+shadcn Drawer/Vaul foundation instead of layering gestures onto Dialog state.
+
 ## Where the specs come from
 
 The token values and component geometry are not hand-copied from the docs site —
@@ -615,8 +622,6 @@ node tools/fig-report.mjs /tmp/m3 '^Switch$'              # component geometry
 ## Status
 
 Tokens, theming, the shadcn bridge, Storybook, tests, and the library build are
-in place, and every primitive listed above is drawn to the Material spec.
-
-Not yet built: the components Material has and shadcn does not — FAB and FAB
-menu, navigation bar and rail, app bars, and the connected button group. The
-`m3-` token layer is what those would be built on.
+in place. The component backlog through the Material bottom-sheet refinement
+is implemented; remaining compatibility coverage and deferred kit content are
+tracked in `docs/component-backlog.md`.

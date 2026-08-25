@@ -204,7 +204,7 @@ primitives.
   retaining the existing plain Tooltip.
 - [x] Add inset, middle-inset, vertical, and subhead variants to Separator.
 - [x] Add centered-slider and Material size variants to the existing Slider.
-- [ ] Refine the existing bottom Sheet with Material shape, sizing, and drag
+- [x] Refine the existing bottom Sheet with Material shape, sizing, and drag
   handle presentation; do not introduce another modal state primitive unless
   drag physics require shadcn `drawer`.
 - [ ] Add Storybook coverage for Field, Label, Separator, Sheet, Skeleton, and

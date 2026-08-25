@@ -140,6 +140,14 @@ Radius 12.
 
 Radius 28 (extra-large), padding 24, headline 24/32, Surface Container High.
 
+## Bottom sheet
+
+The modal bottom sheet is 412dp wide and up to 480dp tall, with 28dp top
+corners, 16dp content padding, 12dp internal spacing, Surface Container Low,
+elevation 3, and a 32×4dp visual drag handle. The scrim uses the semantic Scrim
+role at 32% opacity. Short content may reduce the height; long content scrolls
+inside the body while the header and actions remain visible.
+
 ## Tooltip
 
 Plain: Inverse Surface container, Inverse On Surface label, body-small (12/16),
