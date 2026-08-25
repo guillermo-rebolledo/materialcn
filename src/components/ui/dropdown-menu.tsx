@@ -82,7 +82,7 @@ function DropdownMenuGroup({ className, ...props }: MenuPrimitive.Group.Props) {
   return (
     <MenuPrimitive.Group
       data-slot="dropdown-menu-group"
-      className={cn("flex flex-col py-0.5", className)}
+      className={cn("flex flex-col rounded-m3-sm py-0.5", className)}
       {...props}
     />
   )
@@ -100,10 +100,10 @@ function DropdownMenuLabel({
       data-slot="dropdown-menu-label"
       data-inset={inset}
       className={cn(
-        "flex h-8 items-center px-4 text-m3-label-md data-inset:pl-10",
+        "flex h-8 items-center px-4 text-m3-label-lg data-inset:pl-10",
         presentation === "standard"
           ? "text-m3-on-surface-variant"
-          : "text-m3-on-tertiary-container/70",
+          : "text-m3-on-tertiary-container",
         className,
       )}
       {...props}
@@ -287,7 +287,7 @@ function DropdownMenuShortcut({
         "ml-auto text-m3-label-sm tracking-normal",
         presentation === "standard"
           ? "text-m3-on-surface-variant"
-          : "text-m3-on-tertiary-container/70",
+          : "text-m3-on-tertiary-container",
         className,
       )}
       {...props}

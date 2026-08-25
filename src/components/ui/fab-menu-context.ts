@@ -1,7 +1,10 @@
 import { createContext, useContext } from "react"
 
+type FABMenuColor = "primary" | "secondary" | "tertiary"
+
 type FABMenuContextValue = {
   close: () => void
+  color: FABMenuColor
   focusTrigger: () => void
   open: boolean
   setTriggerNode: (node: HTMLButtonElement | null) => void
@@ -16,4 +19,4 @@ function useFABMenu() {
   return context
 }
 
-export { FABMenuContext, useFABMenu }
+export { FABMenuContext, useFABMenu, type FABMenuColor }

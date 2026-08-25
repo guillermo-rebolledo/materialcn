@@ -6,6 +6,7 @@ import { cardVariants } from "./card-variants"
 
 function Card({
   className,
+  interactive = false,
   size = "default",
   variant = "elevated",
   ...props
@@ -15,7 +16,9 @@ function Card({
     <div
       data-slot="card"
       data-size={size}
-      className={cn(cardVariants({ variant }), className)}
+      data-interactive={interactive || undefined}
+      tabIndex={interactive && props.tabIndex === undefined ? 0 : props.tabIndex}
+      className={cn(cardVariants({ variant, interactive }), className)}
       {...props}
     />
   )

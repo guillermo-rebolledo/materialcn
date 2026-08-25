@@ -1,7 +1,7 @@
 import { Toolbar, ToolbarDivider, ToolbarGroup } from "../../index"
 
 function ToolbarTypeChecks() {
-  return <Toolbar presentation="expressive"><ToolbarGroup /><ToolbarDivider /></Toolbar>
+  return <Toolbar variant="docked" color="vibrant"><ToolbarGroup /><ToolbarDivider /></Toolbar>
 }
 
 void ToolbarTypeChecks

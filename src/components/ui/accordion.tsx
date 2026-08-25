@@ -54,12 +54,14 @@ function AccordionContent({
   return (
     <AccordionPrimitive.Panel
       data-slot="accordion-content"
-      className="overflow-hidden text-m3-body-lg data-open:animate-accordion-down data-closed:animate-accordion-up"
+      // Base UI measures the panel into `--accordion-panel-height`; the panel
+      // itself transitions between 0 and that height on the effects spring.
+      className="h-(--accordion-panel-height) overflow-hidden text-m3-body-lg transition-[height] duration-(--m3-spring-effects-default-duration) ease-(--m3-spring-effects-default) data-ending-style:h-0 data-starting-style:h-0 motion-reduce:transition-none"
       {...props}
     >
       <div
         className={cn(
-          "h-(--accordion-panel-height) px-4 pt-0 pb-4 text-m3-on-surface-variant data-ending-style:h-0 data-starting-style:h-0 [&_a]:underline [&_a]:underline-offset-3 [&_a]:hover:text-m3-primary [&_p:not(:last-child)]:mb-4",
+          "px-4 pt-0 pb-4 text-m3-on-surface-variant [&_a]:underline [&_a]:underline-offset-3 [&_a]:hover:text-m3-primary [&_p:not(:last-child)]:mb-4",
           className
         )}
       >

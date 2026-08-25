@@ -114,14 +114,15 @@ function Calendar({
         else if (ref) ref.current = node
       }}
       data-slot="calendar"
-      className={cn("w-[360px] max-w-full rounded-m3-md bg-m3-surface-container-high p-3 text-foreground shadow-m3-2", className)}
+      // Kit docked picker: 360dp, 16dp corners, Surface Container High, 12dp grid inset.
+      className={cn("w-[360px] max-w-full rounded-m3-lg bg-m3-surface-container-high p-3 text-foreground shadow-m3-2", className)}
     >
       <div className="flex h-14 items-center gap-2 px-1">
         <select
           aria-label="Month"
           value={month.getMonth()}
           disabled={disabled}
-          className="h-10 rounded-m3-sm bg-transparent px-2 text-m3-title-md outline-none focus-visible:ring-3 focus-visible:ring-m3-secondary"
+          className="flex h-10 items-center gap-2 rounded-full bg-transparent pr-2 pl-3 text-m3-label-lg text-m3-on-surface-variant outline-none transition-colors duration-(--m3-spring-effects-fast-duration) ease-(--m3-spring-effects-fast) hover:not-disabled:bg-m3-on-surface/8 focus-visible:ring-3 focus-visible:ring-m3-secondary disabled:text-m3-on-surface/38"
           onChange={(event) => setMonth(new Date(month.getFullYear(), Number(event.target.value), 1, 12))}
         >
           {Array.from({ length: 12 }, (_, index) => (
@@ -134,7 +135,7 @@ function Calendar({
           aria-label="Year"
           value={month.getFullYear()}
           disabled={disabled}
-          className="h-10 rounded-m3-sm bg-transparent px-2 text-m3-title-md outline-none focus-visible:ring-3 focus-visible:ring-m3-secondary"
+          className="flex h-10 items-center gap-2 rounded-full bg-transparent pr-2 pl-3 text-m3-label-lg text-m3-on-surface-variant outline-none transition-colors duration-(--m3-spring-effects-fast-duration) ease-(--m3-spring-effects-fast) hover:not-disabled:bg-m3-on-surface/8 focus-visible:ring-3 focus-visible:ring-m3-secondary disabled:text-m3-on-surface/38"
           onChange={(event) => setMonth(new Date(Number(event.target.value), month.getMonth(), 1, 12))}
         >
           {years.map((year) => <option key={year}>{year}</option>)}
@@ -147,10 +148,11 @@ function Calendar({
           <ChevronRightIcon aria-hidden="true" />
         </Button>
       </div>
-      <div role="grid" aria-label={monthLabel} className="grid grid-cols-7 gap-y-1">
+      {/* Kit grid: 48dp rows with a 40dp visual circle centred in each 48dp cell. */}
+      <div role="grid" aria-label={monthLabel} className="grid grid-cols-7">
         <div role="row" className="contents">
           {Array.from({ length: 7 }, (_, index) => (
-            <div key={index} role="columnheader" aria-label={weekday.format(addDays(firstVisible, index))} className="flex h-10 items-center justify-center text-m3-label-sm text-muted-foreground">
+            <div key={index} role="columnheader" aria-label={weekday.format(addDays(firstVisible, index))} className="flex h-12 items-center justify-center text-m3-label-md text-foreground">
               {weekday.format(addDays(firstVisible, index))}
             </div>
           ))}
@@ -183,14 +185,20 @@ function Calendar({
                   disabled={isUnavailable}
                   tabIndex={sameDay(date, focusDate) ? 0 : -1}
                   className={cn(
-                    "mx-auto flex size-10 items-center justify-center rounded-full text-m3-body-md outline-none transition-colors",
-                    "hover:not-disabled:bg-m3-on-surface/8 focus-visible:ring-3 focus-visible:ring-m3-secondary",
-                    outside && "text-muted-foreground/60",
-                    isToday && !isSelected && "border border-m3-primary text-m3-primary",
-                    isSelected && "bg-m3-primary text-m3-on-primary",
-                    isInRange && "rounded-none bg-m3-secondary-container text-m3-on-secondary-container",
-                    (isRangeStart || isRangeEnd) && "bg-m3-primary text-m3-on-primary",
-                    "disabled:cursor-not-allowed disabled:text-muted-foreground/38 disabled:line-through",
+                    "relative isolate flex size-12 items-center justify-center text-m3-body-lg outline-none",
+                    // The 40dp visual container.
+                    "before:absolute before:size-10 before:rounded-full before:-z-10 before:transition-colors before:duration-(--m3-spring-effects-fast-duration) before:ease-(--m3-spring-effects-fast)",
+                    "hover:not-disabled:before:bg-m3-on-surface/8 focus-visible:before:ring-3 focus-visible:before:ring-m3-secondary",
+                    outside && "text-muted-foreground",
+                    isToday && !isSelected && !isRangeStart && !isRangeEnd && "text-m3-primary before:border before:border-m3-primary",
+                    (isSelected || isRangeStart || isRangeEnd) && "text-m3-on-primary before:bg-m3-primary hover:not-disabled:before:bg-m3-primary",
+                    // Range band: painted across the full 48dp column so it is
+                    // continuous; endpoints fill only their inner half.
+                    (isInRange || (isRangeStart && range?.end) || (isRangeEnd && range?.start)) && "after:absolute after:inset-y-1 after:-z-20 after:bg-m3-secondary-container",
+                    isInRange && "text-m3-on-secondary-container after:inset-x-0",
+                    isRangeStart && range?.end && !isRangeEnd && "after:left-1/2 after:right-0",
+                    isRangeEnd && range?.start && !isRangeStart && "after:left-0 after:right-1/2",
+                    "disabled:cursor-not-allowed disabled:text-m3-on-surface/38",
                   )}
                   onClick={() => onSelect(date)}
                   onKeyDown={(event) => {

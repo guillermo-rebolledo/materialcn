@@ -15,11 +15,11 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof meta>
 
-function ControlledNavigation({ orientation = "horizontal" }: { orientation?: "horizontal" | "vertical" }) {
+function ControlledNavigation({ itemLayout, orientation = "horizontal" }: { itemLayout?: "stacked" | "inline"; orientation?: "horizontal" | "vertical" }) {
   const [value, setValue] = useState("home")
   return (
     <>
-      <NavigationBar value={value} onValueChange={setValue} orientation={orientation} aria-label="Primary navigation">
+      <NavigationBar value={value} onValueChange={setValue} orientation={orientation} itemLayout={itemLayout} aria-label="Primary navigation">
         <NavigationBarItem value="home" label="Home" href="#home" icon={<HomeIcon />} />
         <NavigationBarItem value="favorites" label="Favorites" icon={<HeartIcon />} />
         <NavigationBarItem value="messages" label="Messages" icon={<MailIcon />} badge={<NotificationBadge aria-label="3 unread messages" value={3} />} />
@@ -63,7 +63,22 @@ export const ControlledLinksAndKeyboard: Story = {
 
 export const OrientationsAndCounts: Story = {
   parameters: { sideBySide: true },
-  render: () => <div className="flex items-start gap-6"><div className="w-[412px]"><ControlledNavigation /></div><ControlledNavigation orientation="vertical" /></div>,
+  render: () => (
+    <div className="flex flex-col items-start gap-6">
+      <div className="w-[412px]"><ControlledNavigation /></div>
+      <div className="w-[440px]"><ControlledNavigation itemLayout="inline" /></div>
+      <ControlledNavigation orientation="vertical" />
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const bars = canvasElement.querySelectorAll<HTMLElement>('[data-slot="navigation-bar"][data-orientation="horizontal"]')
+    for (const bar of bars) await expect(bar.getBoundingClientRect().height).toBe(64)
+    const indicator = bars[0].querySelector<HTMLElement>('[data-slot="navigation-bar-indicator"]')!.getBoundingClientRect()
+    await expect(indicator.width).toBe(56)
+    await expect(indicator.height).toBe(32)
+    const inline = bars[1].querySelector<HTMLElement>('[data-slot="navigation-bar-indicator"]')!.getBoundingClientRect()
+    await expect(inline.height).toBe(40)
+  },
 }
 
 export const MissingAndDisabledFallback: Story = {

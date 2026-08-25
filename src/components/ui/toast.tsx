@@ -140,7 +140,7 @@ function ToastClose({
       aria-label="Dismiss notification"
       render={render}
       className={cn(
-        "size-12 shrink-0 rounded-[24px] text-m3-inverse-on-surface",
+        "size-12 shrink-0 rounded-[24px] text-m3-inverse-on-surface [&_svg]:size-6",
         "focus-visible:outline-m3-inverse-primary",
         className,
       )}
@@ -194,6 +194,8 @@ function ToastList() {
               data-slot="toast-controls"
               className={cn(
                 "flex shrink-0 items-center",
+                // Kit: 8dp trailing inset when the action is the last control.
+                hasAction && !dismissible && "pr-2",
                 layout === "stacked" && "h-12 w-full justify-end px-2",
               )}
             >

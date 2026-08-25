@@ -4,8 +4,10 @@ import { cva } from "class-variance-authority"
 export const dropdownMenuContentVariants = cva(
   [
     "z-50 max-h-(--available-height) w-(--anchor-width) min-w-52",
-    "overflow-x-hidden overflow-y-auto rounded-m3-sm py-0.5 has-[>[data-slot=dropdown-menu-group]:only-child]:rounded-m3-xs",
-    "text-m3-label-lg shadow-m3-2 outline-none",
+    // Kit: a 16dp-radius container at elevation 3 holding 8dp-radius group
+    // cards 2dp apart.
+    "flex flex-col gap-0.5 overflow-x-hidden overflow-y-auto rounded-m3-lg",
+    "text-m3-label-lg shadow-m3-3 outline-none",
     "duration-(--m3-spring-effects-fast-duration) ease-(--m3-spring-effects-fast)",
     "data-open:animate-in data-open:fade-in-0",
     "data-closed:animate-out data-closed:overflow-hidden data-closed:fade-out-0",
@@ -28,6 +30,8 @@ const menuItemBase = [
   "after:pointer-events-none after:absolute after:inset-x-1 after:inset-y-0.5 after:-z-10 after:rounded-m3-xs after:bg-current after:opacity-0",
   "after:transition-opacity after:duration-(--m3-spring-effects-fast-duration) after:ease-(--m3-spring-effects-fast)",
   "hover:not-data-disabled:after:opacity-8 focus-visible:not-data-disabled:after:opacity-10 active:not-data-disabled:after:opacity-10",
+  // Kit focus indicator: a 2dp Secondary stroke 4dp outside the state layer.
+  "focus-visible:before:opacity-100 focus-visible:before:-inset-x-0 focus-visible:before:-inset-y-0 focus-visible:before:rounded-[6px] focus-visible:before:ring-2 focus-visible:before:ring-m3-secondary focus-visible:data-checked:before:rounded-[14px]",
   "data-disabled:pointer-events-none data-disabled:opacity-38",
   "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-5",
   "data-inset:pl-10",

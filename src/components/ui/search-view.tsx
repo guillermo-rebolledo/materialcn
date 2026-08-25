@@ -128,9 +128,11 @@ function SearchView({
         data-presentation={presentation}
         data-slot="search-view"
         className={cn(
-          "flex max-w-full flex-col overflow-hidden bg-m3-surface-container-high text-foreground shadow-m3-3",
-          "data-[presentation=docked]:w-[360px] data-[presentation=docked]:rounded-m3-md",
-          "data-[presentation=full-screen]:h-full data-[presentation=full-screen]:w-full data-[presentation=full-screen]:rounded-none",
+          // Docked: the kit keeps the 28dp search bar and a separate
+          // 12dp-radius Surface Container High list 2dp beneath it, unelevated.
+          "flex max-w-full flex-col text-foreground",
+          "data-[presentation=docked]:w-[360px] data-[presentation=docked]:gap-0.5",
+          "data-[presentation=full-screen]:h-full data-[presentation=full-screen]:w-full data-[presentation=full-screen]:overflow-hidden data-[presentation=full-screen]:bg-m3-surface-container-high",
           "motion-reduce:transition-none",
           className,
         )}
@@ -150,8 +152,7 @@ function SearchViewBar({ className, ...props }: Omit<SearchBarProps, "value" | "
       value={context.value}
       onValueChange={context.setValue}
       className={cn(
-        "shrink-0 [&_[data-slot=input-group]]:shadow-m3-0",
-        "in-data-[presentation=docked]:[&_[data-slot=input-group]]:rounded-m3-md",
+        "shrink-0",
         "in-data-[presentation=full-screen]:[&_[data-slot=input-group]]:rounded-none",
         className,
       )}
@@ -171,8 +172,8 @@ function SearchViewContent({
         data-slot="search-view-content"
         data-state={state}
         className={cn(
-          "min-h-0 flex-1 overflow-y-auto overscroll-contain py-1",
-          "in-data-[presentation=docked]:max-h-[194px]",
+          "min-h-0 flex-1 overflow-y-auto overscroll-contain",
+          "in-data-[presentation=docked]:max-h-48 in-data-[presentation=docked]:rounded-m3-md in-data-[presentation=docked]:bg-m3-surface-container-high in-data-[presentation=docked]:py-1",
           className,
         )}
       />

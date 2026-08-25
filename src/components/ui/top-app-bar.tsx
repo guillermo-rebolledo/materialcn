@@ -17,9 +17,13 @@ function TopAppBar({ className, scrolled = false, size = "small", ...props }: To
       data-size={size}
       data-scrolled={scrolled || undefined}
       className={cn(
-        "relative grid w-full grid-cols-[auto_minmax(0,1fr)_auto] items-start bg-m3-surface px-1 text-foreground transition-[background-color,box-shadow]",
-        "data-[size=small]:h-16 data-[size=medium]:h-[116px] data-[size=large]:h-40",
-        "data-scrolled:bg-m3-surface-container data-scrolled:shadow-m3-2",
+        // Kit geometry (App bars page): 64 / 112 / 120dp tall, 4dp inline padding
+        // and a 4dp gap so the title starts 56dp in. Scrolling only swaps the fill
+        // to Surface Container — the kit carries no elevation on either state.
+        "relative grid w-full grid-cols-[auto_minmax(0,1fr)_auto] items-start gap-1 bg-m3-surface px-1 text-foreground transition-[background-color]",
+        "duration-(--m3-spring-effects-default-duration) ease-(--m3-spring-effects-default)",
+        "data-[size=small]:h-16 data-[size=medium]:h-28 data-[size=large]:h-30",
+        "data-scrolled:bg-m3-surface-container",
         "motion-reduce:transition-none",
         className,
       )}
@@ -28,7 +32,7 @@ function TopAppBar({ className, scrolled = false, size = "small", ...props }: To
 }
 
 function TopAppBarNavigation({ className, ...props }: ComponentProps<"div">) {
-  return <div {...props} data-slot="top-app-bar-navigation" className={cn("z-10 flex h-16 items-center px-1", className)} />
+  return <div {...props} data-slot="top-app-bar-navigation" className={cn("z-10 flex h-16 items-center", className)} />
 }
 
 function TopAppBarTitle({ className, ...props }: ComponentProps<"div">) {
@@ -38,9 +42,9 @@ function TopAppBarTitle({ className, ...props }: ComponentProps<"div">) {
       data-slot="top-app-bar-title"
       className={cn(
         "min-w-0 truncate text-m3-title-lg",
-        "in-data-[size=small]:self-center in-data-[size=small]:px-2",
-        "in-data-[size=medium]:absolute in-data-[size=medium]:right-4 in-data-[size=medium]:bottom-5 in-data-[size=medium]:left-4 in-data-[size=medium]:text-m3-headline-sm",
-        "in-data-[size=large]:absolute in-data-[size=large]:right-4 in-data-[size=large]:bottom-7 in-data-[size=large]:left-4 in-data-[size=large]:text-m3-headline-md",
+        "in-data-[size=small]:self-center",
+        "in-data-[size=medium]:absolute in-data-[size=medium]:right-4 in-data-[size=medium]:bottom-3 in-data-[size=medium]:left-4 in-data-[size=medium]:text-m3-headline-sm",
+        "in-data-[size=large]:absolute in-data-[size=large]:right-4 in-data-[size=large]:bottom-3 in-data-[size=large]:left-4 in-data-[size=large]:text-m3-headline-md",
         className,
       )}
     />
@@ -52,7 +56,7 @@ function TopAppBarActions({ className, ...props }: ComponentProps<"div">) {
     <div
       {...props}
       data-slot="top-app-bar-actions"
-      className={cn("z-10 col-start-3 row-start-1 flex h-16 items-center gap-0 px-1", className)}
+      className={cn("z-10 col-start-3 row-start-1 flex h-16 items-center gap-0", className)}
     />
   )
 }

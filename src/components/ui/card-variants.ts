@@ -28,9 +28,29 @@ export const cardVariants = cva(
         outlined:
           "bg-m3-surface text-m3-on-surface border border-m3-outline-variant",
       },
+      // Kit `Card states`: interactive cards wash an 8% On Surface state layer
+      // over the container, lift one elevation step on hover, and show a
+      // 3dp Secondary focus ring 2dp outside the 12dp shape.
+      interactive: {
+        true: [
+          "relative isolate cursor-pointer outline-none",
+          "transition-[box-shadow,background-color] duration-(--m3-spring-effects-fast-duration) ease-(--m3-spring-effects-fast)",
+          "after:pointer-events-none after:absolute after:-inset-px after:-z-10 after:rounded-[inherit] after:bg-m3-on-surface after:opacity-0",
+          "after:transition-opacity after:duration-(--m3-spring-effects-fast-duration) after:ease-(--m3-spring-effects-fast)",
+          "hover:after:opacity-8 focus-visible:after:opacity-10 active:after:opacity-10",
+          "focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-m3-secondary",
+        ],
+        false: "",
+      },
     },
+    compoundVariants: [
+      { variant: "elevated", interactive: true, class: "hover:shadow-m3-2 active:shadow-m3-1" },
+      { variant: "filled", interactive: true, class: "hover:shadow-m3-1 active:shadow-m3-0" },
+      { variant: "outlined", interactive: true, class: "hover:shadow-m3-1 active:shadow-m3-0" },
+    ],
     defaultVariants: {
       variant: "elevated",
+      interactive: false,
     },
   },
 )

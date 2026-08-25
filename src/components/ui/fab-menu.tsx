@@ -3,11 +3,18 @@ import { useCallback, useLayoutEffect, useRef, useState, type ComponentProps } f
 import { cn } from "@/lib/utils"
 import { Button } from "./button"
 import { FAB, type FABProps } from "./fab"
-import { FABMenuContext, useFABMenu } from "./fab-menu-context"
+import { FABMenuContext, useFABMenu, type FABMenuColor } from "./fab-menu-context"
 
 type FABMenuPlacement = "bottom-start" | "bottom-end" | "top-start" | "top-end"
 
+/**
+ * Kit geometry (`FAB menu` on the Buttons page): 56dp pill actions with
+ * 24dp horizontal padding, an 8dp icon gap and title-medium labels, stacked
+ * 4dp apart and 8dp away from a 56dp *round* FAB. Actions take the
+ * `<color>-container` roles while the trigger takes the plain role.
+ */
 type FABMenuProps = ComponentProps<"div"> & {
+  color?: FABMenuColor
   defaultOpen?: boolean
   onOpenChange?: (open: boolean) => void
   open?: boolean
@@ -17,6 +24,7 @@ type FABMenuProps = ComponentProps<"div"> & {
 function FABMenu({
   children,
   className,
+  color = "primary",
   defaultOpen = false,
   onKeyDown,
   onOpenChange,
@@ -46,11 +54,12 @@ function FABMenu({
   }, [open])
 
   return (
-    <FABMenuContext.Provider value={{ close, focusTrigger, open, setTriggerNode, toggle }}>
+    <FABMenuContext.Provider value={{ close, color, focusTrigger, open, setTriggerNode, toggle }}>
       <div
         {...props}
         ref={rootRef}
         data-slot="fab-menu"
+        data-color={color}
         data-open={open || undefined}
         data-placement={placement}
         className={cn("relative z-50 inline-flex", className)}
@@ -107,6 +116,8 @@ function FABMenuTrigger({ onClick, ref, ...props }: FABProps) {
   const context = useFABMenu()
   return (
     <FAB
+      color={context.color}
+      shape="round"
       {...props}
       ref={(node) => {
         context.setTriggerNode(node)
@@ -149,12 +160,12 @@ function FABMenuContent({ className, ...props }: ComponentProps<"div">) {
         data-slot="fab-menu-content"
         data-open={context.open}
         className={cn(
-          "absolute flex min-w-max flex-col gap-3",
+          "absolute flex min-w-max flex-col gap-1",
           "transition-[transform,opacity] duration-(--m3-spring-effects-fast-duration) ease-(--m3-spring-effects-fast) data-[open=false]:pointer-events-none data-[open=false]:scale-95 data-[open=false]:opacity-0 data-[open=true]:scale-100 data-[open=true]:opacity-100 motion-reduce:transition-none",
-          "in-data-[placement=bottom-start]:right-0 in-data-[placement=bottom-start]:bottom-full in-data-[placement=bottom-start]:mb-4",
-          "in-data-[placement=bottom-end]:bottom-full in-data-[placement=bottom-end]:left-0 in-data-[placement=bottom-end]:mb-4",
-          "in-data-[placement=top-start]:top-full in-data-[placement=top-start]:right-0 in-data-[placement=top-start]:mt-4",
-          "in-data-[placement=top-end]:top-full in-data-[placement=top-end]:left-0 in-data-[placement=top-end]:mt-4",
+          "in-data-[placement=bottom-start]:right-0 in-data-[placement=bottom-start]:bottom-full in-data-[placement=bottom-start]:mb-2",
+          "in-data-[placement=bottom-end]:bottom-full in-data-[placement=bottom-end]:left-0 in-data-[placement=bottom-end]:mb-2",
+          "in-data-[placement=top-start]:top-full in-data-[placement=top-start]:right-0 in-data-[placement=top-start]:mt-2",
+          "in-data-[placement=top-end]:top-full in-data-[placement=top-end]:left-0 in-data-[placement=top-end]:mt-2",
           className,
         )}
       />
@@ -166,6 +177,12 @@ type FABMenuActionProps = Omit<ComponentProps<typeof Button>, "children"> & {
   children?: React.ReactNode
   closeOnSelect?: boolean
   label: string
+}
+
+const actionColorStyles: Record<FABMenuColor, string> = {
+  primary: "bg-m3-primary-container text-m3-on-primary-container",
+  secondary: "bg-m3-secondary-container text-m3-on-secondary-container",
+  tertiary: "bg-m3-tertiary-container text-m3-on-tertiary-container",
 }
 
 function FABMenuAction({
@@ -182,8 +199,12 @@ function FABMenuAction({
       {...props}
       role="menuitem"
       data-slot="fab-menu-action"
-      variant="elevated"
-      className={cn("h-12 justify-start gap-3 rounded-m3-lg px-4 shadow-m3-2", className)}
+      size="lg"
+      className={cn(
+        "h-14 justify-start gap-2 rounded-[28px] px-6 has-[>svg]:pl-6 text-m3-title-md active:not-disabled:rounded-[28px]",
+        actionColorStyles[context.color],
+        className,
+      )}
       onClick={(event) => {
         onClick?.(event)
         if (event.defaultPrevented || !closeOnSelect) return

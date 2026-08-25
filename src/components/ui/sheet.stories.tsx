@@ -132,7 +132,8 @@ export const SideSheets: Story = {
     await userEvent.click(canvas.getByRole("button", { name: "Open right sheet" }))
     const dialog = await page.findByRole("dialog", { name: "Details" })
     await expect(dialog).toHaveAttribute("data-side", "right")
-    await expect(Number.parseFloat(getComputedStyle(dialog).borderLeftWidth)).toBeGreaterThan(0)
+    // Kit side sheet: 16dp corners on the inner edge, no hairline.
+    await expect(getComputedStyle(dialog).borderTopLeftRadius).toBe("16px")
     await expect(page.queryByTestId("sheet-handle")).not.toBeInTheDocument()
   },
 }

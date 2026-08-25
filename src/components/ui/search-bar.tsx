@@ -130,11 +130,12 @@ function SearchBar({
         <fieldset className="contents" disabled={disabled}>
           <InputGroup
             className={cn(
-              "h-14 rounded-[28px] border border-transparent bg-m3-surface-container-high px-1 shadow-m3-1",
-              "transition-[box-shadow,border-color] duration-(--m3-spring-effects-fast-duration) ease-(--m3-spring-effects-fast)",
-              "focus-within:shadow-m3-2 hover:not-has-disabled:shadow-m3-2",
-              "has-[[aria-invalid=true]]:border-m3-error has-[[aria-invalid=true]]:shadow-m3-0",
-              "has-disabled:cursor-not-allowed has-disabled:bg-m3-on-surface/12 has-disabled:shadow-m3-0",
+              // Kit: 56dp, 28dp radius, Surface Container High, 4dp inset —
+              // and no elevation in any state.
+              "h-14 rounded-[28px] border border-transparent bg-m3-surface-container-high px-1",
+              "transition-[border-color,background-color] duration-(--m3-spring-effects-fast-duration) ease-(--m3-spring-effects-fast)",
+              "has-[[aria-invalid=true]]:border-m3-error",
+              "has-disabled:cursor-not-allowed has-disabled:bg-m3-on-surface/12",
             )}
           >
             {children}
@@ -166,7 +167,7 @@ function SearchBarInput({
       readOnly={context.readOnly}
       aria-invalid={context.invalid || undefined}
       className={cn(
-        "h-full appearance-none px-0 text-m3-body-lg text-foreground placeholder:text-muted-foreground disabled:text-m3-on-surface/38",
+        "h-full appearance-none px-1 text-m3-body-lg text-foreground placeholder:text-muted-foreground disabled:text-m3-on-surface/38",
         "[&::-webkit-search-cancel-button]:hidden",
         className,
       )}

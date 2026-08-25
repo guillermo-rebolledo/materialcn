@@ -33,7 +33,8 @@ function SheetOverlay({
       data-slot="sheet-overlay"
       data-side={side}
       className={cn(
-        "fixed inset-0 z-50 bg-black/10 transition-opacity duration-150 data-ending-style:opacity-0 data-starting-style:opacity-0 supports-backdrop-filter:backdrop-blur-xs data-[side=bottom]:bg-m3-scrim/32 data-[side=bottom]:backdrop-blur-none motion-reduce:transition-none",
+        // Kit scrim: the Scrim role at 32%, no blur, on every side.
+        "fixed inset-0 z-50 bg-m3-scrim/32 transition-opacity duration-(--m3-spring-effects-fast-duration) ease-(--m3-spring-effects-fast) data-ending-style:opacity-0 data-starting-style:opacity-0 motion-reduce:transition-none",
         className
       )}
       {...props}
@@ -58,7 +59,9 @@ function SheetContent({
         data-slot="sheet-content"
         data-side={side}
         className={cn(
-          "group/sheet fixed z-50 flex flex-col gap-4 bg-popover bg-clip-padding text-m3-body-md text-popover-foreground shadow-lg outline-none transition duration-200 ease-in-out data-ending-style:opacity-0 data-starting-style:opacity-0 motion-reduce:transition-none data-[side=bottom]:inset-x-0 data-[side=bottom]:bottom-0 data-[side=bottom]:mx-auto data-[side=bottom]:h-auto data-[side=bottom]:max-h-[min(480px,calc(100dvh-16px))] data-[side=bottom]:w-full data-[side=bottom]:max-w-[412px] data-[side=bottom]:gap-3 data-[side=bottom]:overflow-hidden data-[side=bottom]:rounded-t-m3-xl data-[side=bottom]:bg-m3-surface-container-low data-[side=bottom]:p-4 data-[side=bottom]:text-m3-on-surface data-[side=bottom]:shadow-m3-3 data-[side=bottom]:data-ending-style:translate-y-[2.5rem] data-[side=bottom]:data-starting-style:translate-y-[2.5rem] data-[side=left]:inset-y-0 data-[side=left]:left-0 data-[side=left]:h-full data-[side=left]:w-3/4 data-[side=left]:border-r data-[side=left]:data-ending-style:translate-x-[-2.5rem] data-[side=left]:data-starting-style:translate-x-[-2.5rem] data-[side=right]:inset-y-0 data-[side=right]:right-0 data-[side=right]:h-full data-[side=right]:w-3/4 data-[side=right]:border-l data-[side=right]:data-ending-style:translate-x-[2.5rem] data-[side=right]:data-starting-style:translate-x-[2.5rem] data-[side=top]:inset-x-0 data-[side=top]:top-0 data-[side=top]:h-auto data-[side=top]:border-b data-[side=top]:data-ending-style:translate-y-[-2.5rem] data-[side=top]:data-starting-style:translate-y-[-2.5rem] data-[side=left]:sm:max-w-sm data-[side=right]:sm:max-w-sm",
+          // Side sheets (kit `Side Sheet`): Surface Container Low, 16dp corners on the
+          // inner edge, elevation 1, 320dp wide.
+          "group/sheet fixed z-50 flex flex-col gap-4 bg-m3-surface-container-low bg-clip-padding text-m3-body-md text-m3-on-surface shadow-m3-1 outline-none transition duration-(--m3-spring-effects-default-duration) ease-(--m3-spring-effects-default) data-ending-style:opacity-0 data-starting-style:opacity-0 motion-reduce:transition-none data-[side=bottom]:inset-x-0 data-[side=bottom]:bottom-0 data-[side=bottom]:mx-auto data-[side=bottom]:h-auto data-[side=bottom]:max-h-[min(480px,calc(100dvh-16px))] data-[side=bottom]:w-full data-[side=bottom]:max-w-[412px] data-[side=bottom]:gap-3 data-[side=bottom]:overflow-hidden data-[side=bottom]:rounded-t-m3-xl data-[side=bottom]:bg-m3-surface-container-low data-[side=bottom]:p-4 data-[side=bottom]:text-m3-on-surface data-[side=bottom]:shadow-m3-3 data-[side=bottom]:data-ending-style:translate-y-[2.5rem] data-[side=bottom]:data-starting-style:translate-y-[2.5rem] data-[side=left]:inset-y-0 data-[side=left]:left-0 data-[side=left]:h-full data-[side=left]:w-3/4 data-[side=left]:rounded-r-m3-lg data-[side=left]:data-ending-style:translate-x-[-2.5rem] data-[side=left]:data-starting-style:translate-x-[-2.5rem] data-[side=right]:inset-y-0 data-[side=right]:right-0 data-[side=right]:h-full data-[side=right]:w-3/4 data-[side=right]:rounded-l-m3-lg data-[side=right]:data-ending-style:translate-x-[2.5rem] data-[side=right]:data-starting-style:translate-x-[2.5rem] data-[side=top]:inset-x-0 data-[side=top]:top-0 data-[side=top]:h-auto data-[side=top]:rounded-b-m3-lg data-[side=top]:data-ending-style:translate-y-[-2.5rem] data-[side=top]:data-starting-style:translate-y-[-2.5rem] data-[side=left]:sm:max-w-80 data-[side=right]:sm:max-w-80",
           className
         )}
         {...props}
@@ -132,7 +135,7 @@ function SheetHandle({ className, ...props }: React.ComponentProps<"div">) {
       aria-hidden="true"
       data-slot="sheet-handle"
       className={cn(
-        "mx-auto h-1 w-8 shrink-0 rounded-m3-full bg-m3-on-surface-variant/40",
+        "mx-auto h-1 w-8 shrink-0 rounded-m3-full bg-m3-outline",
         className
       )}
       {...props}
@@ -145,7 +148,8 @@ function SheetTitle({ className, ...props }: SheetPrimitive.Title.Props) {
     <SheetPrimitive.Title
       data-slot="sheet-title"
       className={cn(
-        "font-heading text-base font-medium text-m3-on-surface group-data-[side=bottom]/sheet:text-m3-title-lg",
+        // Kit: title-large Regular; side sheets set it in On Surface Variant.
+        "text-m3-title-lg font-m3-regular text-m3-on-surface-variant group-data-[side=bottom]/sheet:text-m3-on-surface",
         className
       )}
       {...props}

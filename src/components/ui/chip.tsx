@@ -6,21 +6,36 @@ import { Check, X } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Badge, badgeVariants } from "./badge"
 
+/**
+ * Kit `Style=Elevated`: Surface Container Low at level 1, level 2 while pressed,
+ * no outline.
+ */
+const elevatedChipClassName =
+  "border-transparent bg-m3-surface-container-low shadow-m3-1 active:not-disabled:shadow-m3-2 disabled:bg-m3-on-surface/12 disabled:shadow-m3-0 disabled:border-transparent"
+
 const actionChipClassName =
   "cursor-pointer select-none hover:bg-m3-on-surface/8 focus-visible:bg-m3-on-surface/10 active:bg-m3-on-surface/10 disabled:pointer-events-none disabled:border-m3-on-surface/12 disabled:text-m3-on-surface/38 [&_[data-icon]]:text-m3-primary disabled:[&_[data-icon]]:text-m3-on-surface/38"
 
+type ActionChipProps = ButtonPrimitive.Props & { elevated?: boolean }
+
 function AssistChip({
   className,
+  elevated = false,
   type = "button",
   ...props
-}: ButtonPrimitive.Props) {
+}: ActionChipProps) {
   return (
     <ButtonPrimitive
       data-slot="assist-chip"
+      data-elevated={elevated || undefined}
       type={type}
       className={cn(
         badgeVariants({ variant: "outline" }),
         actionChipClassName,
+        // The kit's assist chip label is On Surface (filter / suggestion stay
+        // On Surface Variant).
+        "text-m3-on-surface",
+        elevated && elevatedChipClassName,
         className
       )}
       {...props}
@@ -30,16 +45,19 @@ function AssistChip({
 
 function SuggestionChip({
   className,
+  elevated = false,
   type = "button",
   ...props
-}: ButtonPrimitive.Props) {
+}: ActionChipProps) {
   return (
     <ButtonPrimitive
       data-slot="suggestion-chip"
+      data-elevated={elevated || undefined}
       type={type}
       className={cn(
         badgeVariants({ variant: "outline" }),
         actionChipClassName,
+        elevated && elevatedChipClassName,
         className
       )}
       {...props}
@@ -49,20 +67,24 @@ function SuggestionChip({
 
 type FilterChipProps<Value extends string = string> =
   TogglePrimitive.Props<Value> & {
+    elevated?: boolean
     selectedIcon?: React.ReactNode
   }
 
 function FilterChip<Value extends string>({
   children,
   className,
+  elevated = false,
   selectedIcon = <Check />,
   ...props
 }: FilterChipProps<Value>) {
   return (
     <TogglePrimitive
       data-slot="filter-chip"
+      data-elevated={elevated || undefined}
       className={cn(
         badgeVariants({ variant: "outline" }),
+        elevated && elevatedChipClassName,
         "group/filter-chip relative isolate cursor-pointer select-none outline-none after:pointer-events-none after:absolute after:-inset-px after:-z-10 after:rounded-[inherit] after:bg-current after:opacity-0 after:transition-opacity after:duration-(--m3-spring-effects-fast-duration) after:ease-(--m3-spring-effects-fast) hover:not-disabled:after:opacity-8 focus-visible:after:opacity-10 active:not-disabled:after:opacity-10 data-[pressed]:border-transparent data-[pressed]:bg-m3-secondary-container data-[pressed]:text-m3-on-secondary-container disabled:pointer-events-none disabled:border-m3-on-surface/12 disabled:text-m3-on-surface/38",
         selectedIcon && "data-[pressed]:pl-2",
         className
@@ -89,6 +111,8 @@ type InputChipProps = Omit<
 > &
   {
     disabled?: boolean
+    /** Kit `Selected=True`: Secondary Container fill, no outline. */
+    selected?: boolean
   } & (
     | {
         onRemove: React.MouseEventHandler<HTMLButtonElement>
@@ -106,6 +130,7 @@ function InputChip({
   disabled = false,
   onRemove,
   removeLabel,
+  selected = false,
   ...props
 }: InputChipProps) {
   return (
@@ -113,10 +138,14 @@ function InputChip({
       {...props}
       aria-disabled={disabled || undefined}
       data-disabled={disabled ? "" : undefined}
+      data-selected={selected || undefined}
       data-slot="input-chip"
       variant="outline"
       className={cn(
-        "bg-m3-surface-container-low text-m3-on-surface-variant data-disabled:border-m3-on-surface/12 data-disabled:text-m3-on-surface/38 data-disabled:[&_[data-icon]]:text-m3-on-surface/38",
+        // Kit: no container fill, 1dp outline-variant stroke, 12dp leading
+        // inset for a label-only chip.
+        "pl-3 text-m3-on-surface-variant data-disabled:border-m3-on-surface/12 data-disabled:text-m3-on-surface/38 data-disabled:[&_[data-icon]]:text-m3-on-surface/38",
+        selected && "border-transparent bg-m3-secondary-container text-m3-on-secondary-container",
         className
       )}
     >
@@ -151,6 +180,7 @@ export {
   InputChip,
   SuggestionChip,
   chipVariants,
+  type ActionChipProps,
   type FilterChipProps,
   type InputChipProps,
 }

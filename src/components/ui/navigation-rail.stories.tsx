@@ -17,17 +17,17 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof meta>
 
-function CompactRail() {
+function CompactRail({ labels = true, variant }: { labels?: boolean; variant?: "docked" | "floating" }) {
   const [value, setValue] = useState("home")
   return (
     <>
-      <NavigationRail value={value} onValueChange={setValue} aria-label="Workspace navigation">
+      <NavigationRail value={value} onValueChange={setValue} variant={variant} aria-label="Workspace navigation">
         <NavigationRailMenu><Button aria-label="Menu" size="icon" variant="ghost"><MenuIcon /></Button></NavigationRailMenu>
-        <NavigationRailFAB><FAB aria-label="Create" size="small"><PlusIcon /></FAB></NavigationRailFAB>
+        <NavigationRailFAB><FAB aria-label="Create"><PlusIcon /></FAB></NavigationRailFAB>
         <NavigationRailDestinations>
-          <NavigationRailItem value="home" label="Home" icon={<HomeIcon />} href="#home" />
-          <NavigationRailItem value="favorites" label="Favorites" icon={<HeartIcon />} />
-          <NavigationRailItem value="messages" label="Messages" icon={<MailIcon />} badge={<NotificationBadge />} />
+          <NavigationRailItem value="home" label="Home" icon={<HomeIcon />} href="#home" showLabel={labels} />
+          <NavigationRailItem value="favorites" label="Favorites" icon={<HeartIcon />} showLabel={labels} />
+          <NavigationRailItem value="messages" label="Messages" icon={<MailIcon />} badge={<NotificationBadge />} showLabel={labels} />
         </NavigationRailDestinations>
       </NavigationRail>
       <output aria-label="Rail destination">{value}</output>
@@ -42,7 +42,7 @@ function ResponsiveRail() {
     <div className="flex h-[640px] items-start gap-3">
       <NavigationRail value={value} onValueChange={setValue} expanded={expanded} onExpandedChange={setExpanded} aria-label="Responsive navigation">
         <NavigationRailMenu><NavigationRailExpansionToggle aria-label="Toggle rail"><MenuIcon /></NavigationRailExpansionToggle></NavigationRailMenu>
-        <NavigationRailFAB><FAB aria-label="Create" size="small"><PlusIcon /></FAB></NavigationRailFAB>
+        <NavigationRailFAB><FAB aria-label="Create"><PlusIcon /></FAB></NavigationRailFAB>
         <NavigationRailDestinations>
           <NavigationRailItem value="home" label="Home" icon={<HomeIcon />} />
           <NavigationRailItem value="favorites" label="Favorites" icon={<HeartIcon />} />
@@ -54,7 +54,7 @@ function ResponsiveRail() {
 }
 
 export const CompactInteraction: Story = {
-  render: () => <div className="h-[640px]"><CompactRail /></div>,
+  render: () => <div className="h-[640px]"><CompactRail labels={false} /></div>,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement)
     const home = canvas.getByRole("link", { name: /Home/ })
@@ -69,7 +69,23 @@ export const CompactInteraction: Story = {
   },
 }
 
-export const RegionsAndBadges: Story = { parameters: { sideBySide: true }, render: () => <div className="h-[640px]"><CompactRail /></div> }
+export const RegionsAndBadges: Story = {
+  parameters: { sideBySide: true },
+  render: () => (
+    <div className="flex h-[640px] items-start gap-6">
+      <CompactRail />
+      <CompactRail labels={false} />
+      <CompactRail variant="floating" />
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const rail = canvasElement.querySelector<HTMLElement>('[data-slot="navigation-rail"]')!
+    await expect(rail.getBoundingClientRect().width).toBe(96)
+    const indicator = rail.querySelector<HTMLElement>('[data-slot="navigation-bar-indicator"]')!.getBoundingClientRect()
+    await expect(indicator.width).toBe(56)
+    await expect(indicator.height).toBe(32)
+  },
+}
 
 export const ControlledExpansion: Story = {
   parameters: { sideBySide: true },
@@ -77,11 +93,11 @@ export const ControlledExpansion: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement)
     const rails = canvasElement.querySelectorAll<HTMLElement>('[data-slot="navigation-rail"]')
-    await expect(rails[0].getBoundingClientRect().width).toBe(80)
+    await expect(rails[0].getBoundingClientRect().width).toBe(96)
     const home = canvas.getAllByRole("button", { name: /Home/ })[0]
     home.focus()
     await userEvent.click(canvas.getAllByRole("button", { name: "Toggle rail" })[0])
-    await waitFor(() => expect(rails[0].getBoundingClientRect().width).toBe(360))
+    await waitFor(() => expect(rails[0].getBoundingClientRect().width).toBe(220))
     const expandedHome = canvas.getAllByRole("button", { name: /Home/ })[0]
     await expect(expandedHome).toBe(home)
     await expect(expandedHome).toHaveAttribute("aria-current", "page")

@@ -16,7 +16,7 @@ import { cva } from "class-variance-authority"
  * the chip, which is what shadcn's Badge is used for in practice.
  */
 export const badgeVariants = cva(
-  "group/badge inline-flex h-8 w-fit shrink-0 items-center justify-center gap-2 overflow-hidden rounded-m3-sm border border-transparent px-4 text-m3-label-lg whitespace-nowrap transition-colors duration-(--m3-spring-effects-fast-duration) ease-(--m3-spring-effects-fast) focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-m3-secondary has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 [&>svg]:pointer-events-none [&>svg]:size-4.5!",
+  "group/badge inline-flex h-8 w-fit shrink-0 items-center justify-center gap-2 rounded-m3-sm border border-transparent px-4 text-m3-label-lg whitespace-nowrap transition-colors duration-(--m3-spring-effects-fast-duration) ease-(--m3-spring-effects-fast) focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-m3-secondary has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 [&>svg]:pointer-events-none [&>svg]:size-4.5!",
   {
     variants: {
       variant: {

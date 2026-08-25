@@ -24,9 +24,12 @@ function Separator({
       role={decorative ? "none" : (props.role ?? "separator")}
       aria-hidden={decorative || undefined}
       className={cn(
-        "shrink-0 bg-m3-outline-variant data-horizontal:h-px data-horizontal:w-full data-vertical:w-px data-vertical:self-stretch",
-        orientation === "horizontal" && variant === "inset" && "ml-4 w-[calc(100%-1rem)]!",
-        orientation === "horizontal" && variant === "middle-inset" && "mx-4 w-[calc(100%-2rem)]!",
+        // Kit: 1dp Outline Variant. `inset` starts 16dp from the leading edge,
+        // `middle-inset` leaves 16dp at both ends — on either axis.
+        "shrink-0 bg-m3-outline-variant",
+        orientation === "horizontal"
+          ? cn("h-px", variant === "full" && "w-full", variant === "inset" && "ml-4 w-[calc(100%-1rem)]", variant === "middle-inset" && "mx-4 w-[calc(100%-2rem)]")
+          : cn("w-px", variant === "full" && "self-stretch", variant === "inset" && "mt-4 self-stretch", variant === "middle-inset" && "my-4 self-stretch"),
         className
       )}
     />
@@ -42,10 +45,12 @@ function SeparatorSubhead({
     <div
       {...props}
       data-slot="separator-subhead"
-      className={cn("flex min-h-12 items-center gap-4 px-4", className)}
+      // Kit `Divider with subhead`: the rule on top, the subhead 4dp beneath
+      // it with 16dp side padding.
+      className={cn("flex flex-col gap-1", className)}
     >
-      <h3 className="shrink-0 text-m3-title-sm text-muted-foreground">{children}</h3>
-      <Separator decorative className="flex-1" />
+      <Separator decorative />
+      <h3 className="px-4 text-m3-title-sm text-muted-foreground">{children}</h3>
     </div>
   )
 }

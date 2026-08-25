@@ -99,10 +99,16 @@ function TimePicker({
   }
 
   const segmentClass = cn(
-    "h-16 w-20 rounded-m3-md border border-m3-outline bg-m3-surface-container-high text-center text-m3-display-sm text-foreground outline-none",
-    "focus-visible:border-m3-primary focus-visible:shadow-[inset_0_0_0_2px_var(--m3-primary)]",
+    // Kit keyboard segment: 96 × 72, 8dp corners, Surface Container Highest,
+    // no stroke, display-medium numerals; the focused segment turns Primary
+    // Container with a 2dp Primary outline (painted inset so nothing reflows).
+    "h-18 w-24 rounded-m3-sm bg-m3-surface-container-highest text-center text-m3-display-md text-foreground outline-none",
+    "[appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none",
+    "transition-[background-color,box-shadow] duration-(--m3-spring-effects-fast-duration) ease-(--m3-spring-effects-fast)",
+    "focus:bg-m3-primary-container focus:text-m3-on-primary-container focus:shadow-[inset_0_0_0_2px_var(--m3-primary)]",
+    "focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-m3-secondary",
     "disabled:cursor-not-allowed disabled:text-muted-foreground/38",
-    "aria-invalid:border-m3-error",
+    "aria-invalid:shadow-[inset_0_0_0_2px_var(--m3-error)]",
   )
 
   return (
@@ -114,7 +120,7 @@ function TimePicker({
       className={cn("max-w-[360px]", className)}
     >
       <FieldLabel id={`${id}-label`}>{label}</FieldLabel>
-      <div role="group" aria-labelledby={`${id}-label`} className="flex items-center gap-2">
+      <div role="group" aria-labelledby={`${id}-label`} className="flex items-center gap-0">
         <input
           ref={hourRef}
           type="number"
@@ -130,7 +136,7 @@ function TimePicker({
           onChange={(event) => updateHour(event.target.value)}
           onKeyDown={(event) => handleSegmentKey("hour", event)}
         />
-        <span aria-hidden="true" className="text-m3-display-sm">:</span>
+        <span aria-hidden="true" className="flex w-6 justify-center text-m3-display-lg">:</span>
         <input
           ref={minuteRef}
           type="number"
@@ -152,7 +158,8 @@ function TimePicker({
             value={value.hour >= 12 ? "PM" : "AM"}
             disabled={disabled}
             aria-readonly={readOnly || undefined}
-            className="h-14 rounded-m3-sm border border-m3-outline bg-transparent px-3 text-m3-label-lg outline-none focus-visible:ring-3 focus-visible:ring-m3-secondary disabled:text-muted-foreground/38"
+            // Kit period selector: 52 × 72, 8dp corners, 1dp Outline, title-medium.
+            className="ml-3 h-18 w-13 rounded-m3-sm border border-m3-outline bg-transparent text-center text-m3-title-md outline-none focus-visible:ring-3 focus-visible:ring-m3-secondary disabled:text-muted-foreground/38"
             onChange={(event) => {
               if (readOnly) return
               const pm = event.target.value === "PM"

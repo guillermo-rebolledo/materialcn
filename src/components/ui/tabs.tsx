@@ -40,7 +40,7 @@ function TabsList({
   )
 }
 
-function TabsTrigger({ className, ...props }: TabsPrimitive.Tab.Props) {
+function TabsTrigger({ className, children, ...props }: TabsPrimitive.Tab.Props) {
   return (
     <TabsPrimitive.Tab
       data-slot="tabs-trigger"
@@ -58,24 +58,44 @@ function TabsTrigger({ className, ...props }: TabsPrimitive.Tab.Props) {
         "group-data-[variant=default]/tabs-list:data-active:bg-m3-secondary-container group-data-[variant=default]/tabs-list:data-active:text-m3-on-secondary-container",
         "group-data-[variant=segmented]/tabs-list:h-full group-data-[variant=segmented]/tabs-list:rounded-m3-full group-data-[variant=segmented]/tabs-list:px-4",
         "group-data-[variant=segmented]/tabs-list:data-active:bg-m3-secondary-container group-data-[variant=segmented]/tabs-list:data-active:text-m3-on-secondary-container",
-        // Primary: label turns primary and a pill indicator slides under it.
-        "group-data-[variant=line]/tabs-list:h-12 group-data-[variant=line]/tabs-list:px-4",
+        // Primary / secondary rows are 48dp; the kit's icon-and-label tab grows
+        // to 64dp with the icon stacked 2dp above the label (10 / 8 padding).
+        "group-data-[variant=line]/tabs-list:h-12 group-data-[variant=line]/tabs-list:px-4 group-data-[variant=line]/tabs-list:has-[svg]:h-16",
+        "group-data-[variant=primary]/tabs-list:h-12 group-data-[variant=primary]/tabs-list:px-4 group-data-[variant=primary]/tabs-list:has-[svg]:h-16",
+        "group-data-[variant=secondary]/tabs-list:h-12 group-data-[variant=secondary]/tabs-list:px-4 group-data-[variant=secondary]/tabs-list:has-[svg]:h-16",
         "group-data-[variant=line]/tabs-list:data-active:text-m3-primary",
-        "group-data-[variant=primary]/tabs-list:h-12 group-data-[variant=primary]/tabs-list:px-4 group-data-[variant=primary]/tabs-list:data-active:text-m3-primary",
-        "group-data-[variant=secondary]/tabs-list:h-12 group-data-[variant=secondary]/tabs-list:px-4 group-data-[variant=secondary]/tabs-list:text-m3-body-md group-data-[variant=secondary]/tabs-list:data-active:text-foreground",
-        "after:absolute after:rounded-t-m3-full after:bg-m3-primary after:opacity-0",
+        "group-data-[variant=primary]/tabs-list:data-active:text-m3-primary",
+        "group-data-[variant=secondary]/tabs-list:data-active:text-foreground",
+        // Secondary indicator: 2dp, square, spanning the whole trigger.
+        "after:absolute after:bg-m3-primary after:opacity-0",
         "after:transition-opacity after:duration-(--m3-spring-effects-fast-duration)",
-        "group-data-horizontal/tabs:after:inset-x-0 group-data-horizontal/tabs:after:bottom-0 group-data-horizontal/tabs:after:h-[3px]",
-        "group-data-vertical/tabs:after:inset-y-0 group-data-vertical/tabs:after:right-0 group-data-vertical/tabs:after:w-[3px]",
-        "group-data-[variant=line]/tabs-list:data-active:after:opacity-100",
-        "group-data-[variant=primary]/tabs-list:data-active:after:opacity-100",
+        "group-data-horizontal/tabs:after:inset-x-0 group-data-horizontal/tabs:after:bottom-0 group-data-horizontal/tabs:after:h-0.5",
+        "group-data-vertical/tabs:after:inset-y-0 group-data-vertical/tabs:after:right-0 group-data-vertical/tabs:after:w-0.5",
         "group-data-[variant=secondary]/tabs-list:data-active:after:opacity-100",
-        "group-data-horizontal/tabs:group-data-[variant=secondary]/tabs-list:after:inset-x-4 group-data-horizontal/tabs:group-data-[variant=secondary]/tabs-list:after:h-0.5",
-        "group-data-vertical/tabs:group-data-[variant=secondary]/tabs-list:after:inset-y-4 group-data-vertical/tabs:group-data-[variant=secondary]/tabs-list:after:w-0.5",
         className
       )}
       {...props}
-    />
+    >
+      <span
+        data-slot="tabs-trigger-label"
+        className={cn(
+          "relative flex items-center gap-2",
+          "group-has-[svg]/tabs-list:flex-col group-has-[svg]/tabs-list:gap-0.5",
+          "group-data-vertical/tabs:flex-row",
+          // Primary indicator: a 3dp rounded pill as wide as the label, not
+          // the trigger (kit: a 20dp shape under a 24dp label box).
+          "after:pointer-events-none after:absolute after:rounded-t-m3-full after:bg-m3-primary after:opacity-0",
+          "after:transition-opacity after:duration-(--m3-spring-effects-fast-duration)",
+          "group-data-horizontal/tabs:after:inset-x-0 group-data-horizontal/tabs:after:-bottom-3.5 group-data-horizontal/tabs:after:h-[3px]",
+          "group-data-horizontal/tabs:group-has-[svg]/tabs-list:after:-bottom-[9px]",
+          "group-data-vertical/tabs:after:inset-y-0 group-data-vertical/tabs:after:-right-4 group-data-vertical/tabs:after:w-[3px] group-data-vertical/tabs:after:rounded-l-m3-full group-data-vertical/tabs:after:rounded-tr-none",
+          "in-data-[variant=line]:in-data-active:after:opacity-100",
+          "in-data-[variant=primary]:in-data-active:after:opacity-100",
+        )}
+      >
+        {children}
+      </span>
+    </TabsPrimitive.Tab>
   )
 }
 

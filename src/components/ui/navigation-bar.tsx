@@ -1,12 +1,27 @@
 import { Children, useEffect, useLayoutEffect, useRef, useState, type ComponentProps, type CSSProperties, type KeyboardEvent, type MouseEvent, type ReactNode } from "react"
 
 import { cn } from "@/lib/utils"
-import { NavigationContext, useNavigation } from "./navigation-context"
+import { NavigationContext, useNavigation, type NavigationItemLayout } from "./navigation-context"
 import { Tooltip, TooltipContent, TooltipTrigger } from "./tooltip"
 
 type NavigationOrientation = "horizontal" | "vertical"
 
+/**
+ * Material 3 navigation bar.
+ *
+ * Kit geometry (`Navigation Bar: Vertical items` / `Horizontal items` on the
+ * Navigation page): a 64dp Surface Container bar. Each destination is 64dp
+ * tall with a 56×32 Secondary Container indicator pill around the 24dp icon
+ * and a label-medium caption 4dp beneath it; the inline variant puts icon and
+ * caption together inside a 40dp pill. Hover/focus/press state layers paint on
+ * the indicator, not the whole destination, and the selected caption uses the
+ * Secondary role.
+ *
+ * The vertical orientation is the compact navigation rail's destination
+ * column: 96dp wide with 4dp between destinations.
+ */
 type NavigationBarProps = ComponentProps<"nav"> & {
+  itemLayout?: NavigationItemLayout
   onValueChange: (value: string) => void
   orientation?: NavigationOrientation
   value: string
@@ -16,6 +31,7 @@ function NavigationBar({
   "aria-label": ariaLabel = "Primary navigation",
   children,
   className,
+  itemLayout = "stacked",
   onKeyDown,
   onValueChange,
   orientation = "horizontal",
@@ -71,7 +87,7 @@ function NavigationBar({
   }
 
   return (
-    <NavigationContext.Provider value={{ focusValue: focusValue ?? value, onValueChange, setFocusValue, value }}>
+    <NavigationContext.Provider value={{ focusValue: focusValue ?? value, itemLayout, onValueChange, setFocusValue, value }}>
       <nav
         {...props}
         ref={(node) => {
@@ -83,11 +99,13 @@ function NavigationBar({
         aria-orientation={orientation}
         data-slot="navigation-bar"
         data-orientation={orientation}
+        data-item-layout={itemLayout}
         data-count={Children.count(children)}
         className={cn(
           "flex bg-m3-surface-container text-foreground",
-          "data-[orientation=horizontal]:h-20 data-[orientation=horizontal]:w-full data-[orientation=horizontal]:items-stretch",
-          "data-[orientation=vertical]:w-20 data-[orientation=vertical]:flex-col data-[orientation=vertical]:py-2",
+          "data-[orientation=horizontal]:h-16 data-[orientation=horizontal]:w-full data-[orientation=horizontal]:items-stretch",
+          "data-[orientation=horizontal]:data-[item-layout=inline]:justify-center data-[orientation=horizontal]:data-[item-layout=inline]:gap-5",
+          "data-[orientation=vertical]:w-24 data-[orientation=vertical]:flex-col data-[orientation=vertical]:gap-1",
           className,
         )}
         onKeyDown={handleKeyDown}
@@ -132,30 +150,57 @@ function NavigationBarItem({
   value,
 }: NavigationBarItemProps) {
   const navigation = useNavigation()
+  const layout = navigation.itemLayout ?? "stacked"
+  const stacked = layout === "stacked"
   const selected = navigation.value === value
   const tabbable = !disabled && (navigation.focusValue ?? navigation.value) === value
   const itemClassName = cn(
-      "group/navigation-item relative flex min-w-0 flex-1 flex-col items-center justify-center gap-1 px-1 text-m3-label-md text-muted-foreground outline-none",
-      "in-data-[orientation=vertical]:min-h-16 in-data-[orientation=vertical]:w-full in-data-[orientation=vertical]:flex-none",
-      "hover:bg-m3-on-surface/8 focus-visible:ring-3 focus-visible:ring-inset focus-visible:ring-m3-secondary",
-      "data-selected:text-foreground disabled:pointer-events-none disabled:text-muted-foreground/38 aria-disabled:pointer-events-none aria-disabled:text-muted-foreground/38",
-      className,
-    )
+    "group/navigation-item relative flex min-w-0 flex-col items-center justify-center gap-1 text-m3-label-md text-muted-foreground outline-none",
+    "focus-visible:ring-3 focus-visible:ring-inset focus-visible:ring-m3-secondary",
+    "disabled:pointer-events-none disabled:text-m3-on-surface/38 aria-disabled:pointer-events-none aria-disabled:text-m3-on-surface/38",
+    "in-data-[orientation=horizontal]:flex-1",
+    "in-data-[orientation=vertical]:w-full in-data-[orientation=vertical]:flex-none",
+    layout === "row"
+      ? "min-h-14 rounded-full"
+      : cn("min-h-16 rounded-m3-md", stacked && showLabel ? "py-1.5" : "py-1"),
+    layout === "inline" && "in-data-[orientation=horizontal]:flex-none",
+    className,
+  )
   const handleClick = (event: MouseEvent<HTMLElement>) => {
-      if (disabled) {
-        event.preventDefault()
-        return
-      }
-      onClick?.(event)
-      if (!event.defaultPrevented) navigation.onValueChange(value)
+    if (disabled) {
+      event.preventDefault()
+      return
+    }
+    onClick?.(event)
+    if (!event.defaultPrevented) navigation.onValueChange(value)
   }
   const content = (
     <>
-      <span className="relative flex h-8 min-w-16 items-center justify-center rounded-full px-5 transition-colors group-data-selected/navigation-item:bg-m3-secondary-container group-data-selected/navigation-item:text-m3-on-secondary-container [&>svg]:size-6">
-        {icon}
-        {badge && <span className="absolute top-0 right-3">{badge}</span>}
+      <span
+        data-slot="navigation-bar-indicator"
+        className={cn(
+          "relative isolate flex shrink-0 items-center justify-center rounded-full",
+          "transition-colors duration-(--m3-spring-effects-fast-duration) ease-(--m3-spring-effects-fast) motion-reduce:transition-none",
+          // State layer: the content colour washed over the indicator at the
+          // kit's 8 / 10 / 10 % — it never spreads to the whole destination.
+          "after:pointer-events-none after:absolute after:inset-0 after:-z-10 after:rounded-[inherit] after:bg-current after:opacity-0",
+          "after:transition-opacity after:duration-(--m3-spring-effects-fast-duration) after:ease-(--m3-spring-effects-fast)",
+          "group-hover/navigation-item:after:opacity-8 group-focus-visible/navigation-item:after:opacity-10 group-active/navigation-item:after:opacity-10",
+          "group-data-selected/navigation-item:bg-m3-secondary-container group-data-selected/navigation-item:text-m3-on-secondary-container",
+          stacked && (showLabel ? "h-8 w-14" : "size-14"),
+          layout === "inline" && "h-10 gap-1 px-4",
+          layout === "row" && "h-14 w-full justify-start gap-2 px-4 text-m3-label-lg",
+        )}
+      >
+        <span className="relative flex shrink-0 [&>svg]:size-6">
+          {icon}
+          {badge && <span className="absolute -top-1 left-4">{badge}</span>}
+        </span>
+        {!stacked && showLabel && <span className="min-w-0 truncate">{label}</span>}
       </span>
-      {showLabel && <span className="max-w-full truncate px-1">{label}</span>}
+      {stacked && showLabel && (
+        <span className="max-w-full truncate px-1 group-data-selected/navigation-item:text-m3-secondary">{label}</span>
+      )}
     </>
   )
 

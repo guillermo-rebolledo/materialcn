@@ -3,20 +3,35 @@ import { useEffect, useRef, type ComponentProps, type KeyboardEvent } from "reac
 import { cn } from "@/lib/utils"
 import { Separator } from "./separator"
 
+/** @deprecated Use `variant` (`floating` | `docked`) — the kit has no 96dp toolbar. */
 type ToolbarPresentation = "standard" | "expressive"
+type ToolbarVariant = "floating" | "docked"
+type ToolbarColor = "standard" | "vibrant"
 
+/**
+ * Kit geometry (Toolbars page): every toolbar is 64dp. `floating` has 32dp
+ * corners, 12×8dp padding, a 4dp gap and elevation level 3; `docked` is flat,
+ * square and full-width with 12×16dp padding and an 8dp gap. `standard`
+ * colour is Surface Container, `vibrant` is Primary Container.
+ */
 type ToolbarProps = ComponentProps<"div"> & {
+  color?: ToolbarColor
+  /** @deprecated Use `variant`. `standard` maps to `floating`. */
   presentation?: ToolbarPresentation
+  variant?: ToolbarVariant
 }
 
 function Toolbar({
   "aria-label": ariaLabel = "Tools",
   className,
+  color = "standard",
   onKeyDown,
-  presentation = "standard",
+  presentation,
   ref,
+  variant = "floating",
   ...props
 }: ToolbarProps) {
+  void presentation
   const rootRef = useRef<HTMLDivElement>(null)
   const getControls = (root: HTMLElement) => Array.from(
     root.querySelectorAll<HTMLElement>('button:not(:disabled), a[href], [role="button"]:not([aria-disabled="true"])'),
@@ -75,11 +90,16 @@ function Toolbar({
       role="toolbar"
       aria-label={ariaLabel}
       data-slot="toolbar"
-      data-presentation={presentation}
+      data-variant={variant}
+      data-color={color}
       className={cn(
-        "flex w-fit max-w-full items-center gap-1 overflow-x-auto bg-m3-surface-container px-2 text-foreground shadow-m3-1",
-        "data-[presentation=standard]:min-h-16 data-[presentation=standard]:rounded-m3-lg",
-        "data-[presentation=expressive]:min-h-24 data-[presentation=expressive]:gap-2 data-[presentation=expressive]:rounded-m3-xl data-[presentation=expressive]:px-3",
+        "flex min-h-16 max-w-full items-center overflow-x-auto text-foreground",
+        variant === "floating"
+          ? "w-fit gap-1 rounded-m3-xl-increased px-2 py-3 shadow-m3-3"
+          : "w-full gap-2 px-4 py-3",
+        color === "vibrant"
+          ? "bg-m3-primary-container text-m3-on-primary-container"
+          : "bg-m3-surface-container",
         className,
       )}
       onKeyDown={handleKeyDown}
@@ -119,6 +139,8 @@ export {
   ToolbarGroup,
   ToolbarLabel,
   ToolbarOverflow,
+  type ToolbarColor,
   type ToolbarPresentation,
   type ToolbarProps,
+  type ToolbarVariant,
 }

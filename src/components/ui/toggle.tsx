@@ -8,12 +8,14 @@ function Toggle({
   className,
   variant = "default",
   size = "default",
+  shape = "round",
   ...props
 }: TogglePrimitive.Props & VariantProps<typeof toggleVariants>) {
   return (
     <TogglePrimitive
       data-slot="toggle"
-      className={cn(toggleVariants({ variant, size, className }))}
+      data-shape={shape}
+      className={cn(toggleVariants({ variant, size, shape, className }))}
       {...props}
     />
   )

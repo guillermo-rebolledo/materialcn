@@ -140,7 +140,9 @@ function RichTooltipContent({
           {...props}
           data-slot="rich-tooltip-content"
           className={cn(
-            "flex w-80 max-w-[calc(100vw-2rem)] flex-col gap-2 rounded-m3-md bg-m3-surface-container p-4 text-foreground shadow-m3-2 outline-none",
+            // Kit: 312dp, 12dp corners, 12 top / 16 side / 8 bottom padding, 4dp
+            // between subhead and body.
+            "flex w-[312px] max-w-[calc(100vw-2rem)] flex-col gap-1 rounded-m3-md bg-m3-surface-container px-4 pt-3 pb-2 text-foreground shadow-m3-2 outline-none",
             "origin-(--transform-origin) transition-[transform,opacity] duration-(--m3-spring-effects-fast-duration) data-starting-style:scale-95 data-starting-style:opacity-0 data-ending-style:scale-95 data-ending-style:opacity-0 motion-reduce:transition-none",
             className,
           )}
@@ -172,7 +174,7 @@ function RichTooltipContent({
 }
 
 function RichTooltipTitle({ className, ...props }: PopoverPrimitive.Title.Props) {
-  return <PopoverPrimitive.Title {...props} data-slot="rich-tooltip-title" className={cn("text-m3-title-md", className)} />
+  return <PopoverPrimitive.Title {...props} data-slot="rich-tooltip-title" className={cn("text-m3-title-sm text-m3-on-surface-variant", className)} />
 }
 
 function RichTooltipDescription({ className, ...props }: PopoverPrimitive.Description.Props) {
@@ -180,7 +182,7 @@ function RichTooltipDescription({ className, ...props }: PopoverPrimitive.Descri
 }
 
 function RichTooltipActions({ className, ...props }: ComponentProps<"div">) {
-  return <div {...props} data-slot="rich-tooltip-actions" className={cn("flex items-center gap-2 pt-1", className)} />
+  return <div {...props} data-slot="rich-tooltip-actions" className={cn("-mx-3 flex items-center gap-2 pt-1", className)} />
 }
 
 export {

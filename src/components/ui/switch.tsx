@@ -47,21 +47,33 @@ function Switch({
       <SwitchPrimitive.Thumb
         data-slot="switch-thumb"
         className={cn(
-          "pointer-events-none block rounded-m3-full",
-          "transition-[translate,width,height,background-color]",
-          "duration-(--m3-spring-spatial-fast-duration) ease-(--m3-spring-spatial-fast)",
+          "pointer-events-none relative block rounded-m3-full",
+          // Only the travel is spatial; width, height and colour are clamped
+          // properties and ride the effects spring.
+          "[transition:translate_var(--m3-spring-spatial-fast-duration)_var(--m3-spring-spatial-fast),width_var(--m3-spring-effects-fast-duration)_var(--m3-spring-effects-fast),height_var(--m3-spring-effects-fast-duration)_var(--m3-spring-effects-fast),background-color_var(--m3-spring-effects-fast-duration)_var(--m3-spring-effects-fast)]",
+          "motion-reduce:transition-none",
+          // 40dp state layer centred on the handle (8 / 10 / 10 %).
+          "before:pointer-events-none before:absolute before:top-1/2 before:left-1/2 before:size-10 before:-translate-1/2 before:rounded-full before:opacity-0",
+          "before:transition-opacity before:duration-(--m3-spring-effects-fast-duration) before:ease-(--m3-spring-effects-fast)",
+          "data-unchecked:before:bg-m3-on-surface data-checked:before:bg-m3-primary",
+          "group-hover/switch:before:opacity-8 group-focus-visible/switch:before:opacity-10 group-active/switch:before:opacity-10",
+          "group-data-disabled/switch:before:opacity-0",
           // Unselected: a small dot in the outline color, inset from the track.
+          // Interacting darkens it to On Surface Variant.
           "data-unchecked:bg-m3-outline",
+          "group-hover/switch:data-unchecked:bg-m3-on-surface-variant group-focus-visible/switch:data-unchecked:bg-m3-on-surface-variant group-active/switch:data-unchecked:bg-m3-on-surface-variant",
           "group-data-[size=default]/switch:data-unchecked:size-4 group-data-[size=default]/switch:data-unchecked:translate-x-1.5",
           "group-data-[size=sm]/switch:data-unchecked:size-3 group-data-[size=sm]/switch:data-unchecked:translate-x-1",
-          // Selected: grows and travels to the far end.
+          // Selected: grows and travels to the far end; interacting tints the
+          // handle to Primary Container.
           "data-checked:bg-m3-on-primary",
+          "group-hover/switch:data-checked:bg-m3-primary-container group-focus-visible/switch:data-checked:bg-m3-primary-container group-active/switch:data-checked:bg-m3-primary-container",
           "group-data-[size=default]/switch:data-checked:size-6 group-data-[size=default]/switch:data-checked:translate-x-6",
           "group-data-[size=sm]/switch:data-checked:size-5 group-data-[size=sm]/switch:data-checked:translate-x-4.5",
           // Pressed: the handle swells under the finger.
           "group-active/switch:group-data-[size=default]/switch:size-7",
           "group-active/switch:group-data-[size=default]/switch:data-checked:translate-x-5.5",
-          "group-active/switch:group-data-[size=default]/switch:data-unchecked:translate-x-1",
+          "group-active/switch:group-data-[size=default]/switch:data-unchecked:translate-x-0.5",
           "group-data-disabled/switch:data-checked:bg-m3-surface",
           "group-data-disabled/switch:data-unchecked:bg-m3-on-surface/38",
         )}

@@ -1,5 +1,6 @@
 import { useId, useState } from "react"
 
+import { cn } from "@/lib/utils"
 import { Button } from "./button"
 import { Calendar, type CalendarProps } from "./calendar"
 import { isDateSelectable } from "./calendar-utils"
@@ -94,11 +95,14 @@ function DatePickerDialog({
       >
         {value ? formatDate(value, locale) : `Choose ${label}`}
       </DialogTrigger>
-      <DialogContent showCloseButton={false} className="w-[360px] max-w-[calc(100%-2rem)] gap-3 p-0">
-        <DialogHeader className="px-6 pt-6">
-          <DialogTitle>{label}</DialogTitle>
-          <DialogDescription>
-            {mode === "input" ? "Enter a date, then confirm." : "Choose a date from the calendar."}
+      {/* Kit: the day picker is 360dp wide, the input picker 328dp. */}
+      <DialogContent showCloseButton={false} className={cn("max-w-[calc(100%-2rem)] gap-3 p-0", mode === "input" ? "w-[328px]" : "w-[360px]")}>
+        {/* Kit modal header: 120dp, label-medium supporting text over a
+            headline-large selected date, closed by a 1dp Outline Variant rule. */}
+        <DialogHeader className="min-h-30 gap-9 border-b border-m3-outline-variant px-6 pt-4 pb-3">
+          <DialogTitle className="text-m3-label-md text-m3-on-surface-variant">{label}</DialogTitle>
+          <DialogDescription className="text-m3-headline-lg text-foreground">
+            {draft ? formatDate(draft, locale) : mode === "input" ? "Enter a date" : "Select a date"}
           </DialogDescription>
         </DialogHeader>
         {mode === "calendar" ? (
@@ -137,7 +141,7 @@ function DatePickerDialog({
             )}
           </Field>
         )}
-        <DialogFooter className="px-6 pb-6">
+        <DialogFooter className="px-3 pt-1 pb-2">
           <DialogClose render={<Button variant="ghost">Cancel</Button>} />
           <DialogClose
             render={<Button />}
@@ -196,9 +200,11 @@ function DateRangePicker({
         {summary}
       </DialogTrigger>
       <DialogContent showCloseButton={false} className="w-[360px] max-w-[calc(100%-2rem)] gap-3 p-0">
-        <DialogHeader className="px-6 pt-6">
-          <DialogTitle>{label}</DialogTitle>
-          <DialogDescription>Choose a start date and an end date.</DialogDescription>
+        <DialogHeader className="min-h-30 gap-9 border-b border-m3-outline-variant px-6 pt-4 pb-3">
+          <DialogTitle className="text-m3-label-md text-m3-on-surface-variant">{label}</DialogTitle>
+          <DialogDescription className="text-m3-headline-lg text-foreground">
+            {draft.start ? `${defaultFormatDate(draft.start, locale)} – ${draft.end ? defaultFormatDate(draft.end, locale) : "…"}` : "Select dates"}
+          </DialogDescription>
         </DialogHeader>
         <Calendar
           className="w-full rounded-none p-3 shadow-none"
@@ -211,9 +217,11 @@ function DateRangePicker({
           isDateUnavailable={isDateUnavailable}
         />
         {error && <FieldError className="px-6">{error}</FieldError>}
-        <DialogFooter className="px-6 pb-6">
+        {/* Kit local actions: Clear leading, Cancel / OK trailing, 4 / 12 / 8 / 12 padding. */}
+        <DialogFooter className="px-3 pt-1 pb-2">
           <Button
             variant="ghost"
+            className="mr-auto"
             onClick={() => {
               onValueChange({ start: null, end: null })
               setOpen(false)

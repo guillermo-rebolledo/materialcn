@@ -35,21 +35,41 @@ the container: **8%** (hover), **10%** (focus / pressed), **16%** (dragged).
 
 ## Button
 
-Height 40, radius full, gap 8, label-large (14/20 Medium).
+From the Expressive `Button` sets on the Buttons page (the 24dp-padded,
+icon-reduced button only survives on the deprecated internal canvas).
 
-| Variant | Container | Content | Padding |
-| ------- | --------- | ------- | ------- |
-| Filled | Primary | On Primary | 24 |
-| Tonal | Secondary Container | On Secondary Container | 24 |
-| Elevated | Surface Container Low + level 1 | Primary | 24 |
-| Outlined | transparent + 1px Outline | Primary | 24 |
-| Text | transparent | Primary | 12 |
+| Variant | Container | Content |
+| ------- | --------- | ------- |
+| Filled | Primary | On Primary |
+| Tonal | Secondary Container | On Secondary Container |
+| Elevated | Surface Container Low + level 1 (no hover lift) | Primary |
+| Outlined | transparent + 1px Outline Variant (all states) | On Surface Variant |
+| Text | transparent | Primary |
 
-With a leading icon the leading padding drops to 16 (Text: 12/16).
+Padding is symmetric whether or not a leading icon is present, and text
+buttons use the same padding as filled ones. Disabled containers are On
+Surface at **10%**, content at 38%.
 
-Expressive size scale (heights): XS 32 · S 40 · M 56 · L 96 · XL 136.
-Type follows: XS/S label-large, M title-medium (16/24), L headline-small
-(24/32), XL headline-large (32/40).
+| Size | Height | Padding | Gap | Type |
+| ---- | ------ | ------- | --- | ---- |
+| XSmall | 32 | 12 | 4 | label-large |
+| Small | 40 | 16 | 8 | label-large |
+| Medium | 56 | 24 | 8 | title-medium (16/24 Medium) |
+| Large | 96 | 48 | 12 | headline-small (24/32 **Regular**) |
+| XLarge | 136 | 64 | 16 | headline-large (32/40 **Regular**) |
+
+Icon buttons keep a 24dp icon at Small (40) and Medium (56); XSmall uses 20.
+
+## Toggle button
+
+Unselected: Surface Container / On Surface Variant. Selected: **Primary / On
+Primary**, and the shape swaps — round toggles settle from a pill to the 12dp
+corner (16 at Medium), square toggles go the other way. The outlined toggle
+inverts to Inverse Surface / Inverse On Surface with the stroke removed.
+
+The segmented button is a different component: 12dp segment padding, a single
+shared Outline stroke, Secondary Container / On Secondary Container when
+selected, and an 18dp leading check.
 
 ## Button group
 
@@ -109,22 +129,31 @@ Track 52×32, radius full.
 
 | | Track | Handle |
 | - | ----- | ------ |
-| Unselected | Surface Container Highest + 2px Outline | 16dp, Outline |
-| Selected | Primary | 24dp, On Primary |
-| Pressed | — | 28dp |
+| Unselected | Surface Container Highest + 2px Outline | 16dp, Outline (On Surface Variant while interacting) |
+| Selected | Primary | 24dp, On Primary (Primary Container while interacting) |
+| Pressed | — | 28dp, inset 2dp when unselected |
+
+The handle carries a 40dp state layer.
 
 ## Checkbox
 
-18dp box, radius 2, 2px Outline unselected / Primary filled when selected.
-48dp touch target.
+18dp box, radius **2** (not the 4dp xs step), 2px On Surface Variant stroke
+that darkens to On Surface while interacting; Primary filled when selected or
+indeterminate. Every selection control carries a 40dp circular state layer
+(8 / 10 / 10 %) and a 3dp Secondary focus ring around it. 48dp touch target.
 
 ## Radio
 
-20dp, 2px Outline ring; selected draws a 10dp Primary dot. 48dp touch target.
+20dp, 2px Outline ring; selected draws a 10dp Primary dot. Same 40dp state
+layer and focus ring as the checkbox. 48dp touch target.
 
 ## Chip
 
-Height 32, radius 8, gap 8, label-large. Padding 16 label-only, 8 with an icon.
+Height 32, radius 8, gap 8, label-large, 18dp icons. Padding 16 label-only, 8
+with an icon. Assist labels are On Surface; filter, suggestion and input
+labels are On Surface Variant. Input chips have no container fill unless
+selected (Secondary Container, no stroke) and a 12dp leading inset without an
+icon. `Style=Elevated` is Surface Container Low at level 1 (level 2 pressed).
 
 ## Card
 
@@ -139,6 +168,18 @@ Radius 12.
 ## Dialog
 
 Radius 28 (extra-large), padding 24, headline 24/32, Surface Container High.
+The content stack (optional 24dp Secondary icon → headline → supporting text)
+is 16dp apart and centred when an icon is present.
+
+## Side sheet
+
+320dp wide, Surface Container Low, 16dp corners on the inner edge, elevation
+1, title-large Regular in On Surface Variant. The scrim is the Scrim role at
+32% with no blur; the bottom sheet's drag handle is 32 × 4dp Outline.
+
+## Avatar
+
+The generic avatar is 40dp with no stroke.
 
 ## Bottom sheet
 
@@ -172,9 +213,19 @@ action and close control; longer actions move into a trailing row.
 
 ## Slider
 
-Total heights: XS 44 · S 44 · M 52 · L 68. Active/inactive track radius 2,
-separated by a 4dp gap around the handle. The Expressive handle is a 4dp-wide
-pill rather than a circle.
+| Size | Track | Handle |
+| ---- | ----- | ------ |
+| XSmall | 16 | 44 |
+| Small | 24 | 44 |
+| Medium | 40 | 52 |
+| Large | 56 | 68 |
+| XLarge | 96 | 108 |
+
+The handle is a 4dp-wide, 2dp-radius bar (2dp wide while dragged) with a real
+**6dp** gap on either side. Active and inactive tracks are separate shapes:
+outer ends fully round, handle-facing ends 2dp. Stop indicators are 4dp
+Primary dots; the value indicator is a 44dp Inverse Surface pill with
+label-large text.
 
 ## Progress
 
@@ -185,6 +236,8 @@ Circular progress uses a round-capped Primary indicator over a Secondary
 Container track. Determinate indicators leave a 4dp gap on both sides of the
 remaining track; indeterminate indicators keep the track visible while the
 active arc grows, contracts, and advances clockwise.
+
+Linear indicator width animates on the effects spring (width is clamped).
 
 | Circular variant | 4dp stroke | 8dp stroke |
 | ---------------- | ---------- | ---------- |
@@ -220,7 +273,13 @@ there is no separate focus ring:
 | Hovered | 1dp On Surface |
 | Focused | 3dp Primary |
 | Error | 1dp Error, 3dp when focused |
-| Disabled | 1dp On Surface at 12% |
+| Disabled | 1dp On Surface at 12%, no container (filled: On Surface at 4%) |
+
+The error outline is 3dp even when unfocused. The label lives inside the
+field and floats — onto the outline as a 12/16 label in a Surface-filled notch
+(outlined), or to the top of the container (filled) — when focused or
+populated. Filled fields express focus and error only through the bottom
+active indicator (1dp → 3dp).
 
 Strokes are `INSIDE`-aligned in the kit, so a CSS border of the same weight
 matches — but growing a border reflows the text, which is why the focused
@@ -264,8 +323,9 @@ The current Expressive menu set is separate from Select and has two themes:
 | Standard | Surface Container Low | Tertiary Container | On Tertiary Container |
 | Vibrant | Tertiary Container | Tertiary | On Tertiary |
 
-The menu is 208dp wide with an 8dp outer radius when it contains multiple
-groups (4dp for the single-group example). Each item occupies a 48dp row: its
+The menu is 208dp wide at **elevation level 3**, with a **16dp** outer radius
+holding 8dp-radius group cards 2dp apart. Section labels are label-large at
+full opacity. Focus is a 2dp Secondary stroke 4dp outside the state layer. Each item occupies a 48dp row: its
 44dp state-layer container is inset 4dp horizontally and 2dp vertically, with
 12dp horizontal content padding, an 8dp gap, 20dp leading/trailing elements,
 and label-large text (14/20 Medium). Selected items use a 12dp radius.
@@ -328,8 +388,8 @@ is removed and Embla is reinitialized with zero movement duration.
 The kit's Search bar is 360 × 56dp with a 28dp container radius, 4dp outer
 inset, body-large input text (16/24 Regular), and `Surface Container High`
 fill. Leading and trailing regions occupy the inset 48dp touch area while their
-icon buttons retain the existing 40dp Material button target. The default
-container uses elevation level 1 and rises to level 2 for hover or focus.
+icon buttons retain the existing 40dp Material button target. The search bar
+carries **no elevation** in any state.
 
 Populated, navigation, voice, avatar, disabled, and error compositions keep the
 same outer geometry. Disabled state removes elevation and uses the disabled
@@ -339,9 +399,9 @@ full-screen result surfaces belong to SearchView.
 
 ## Search view
 
-The kit's docked search view uses a 360dp-wide `Surface Container High`
-container with a 12dp outer radius. Its 56dp search row leaves 194dp for the
-scrolling suggestion or result region in the 250dp final state. The full-screen
+The kit's docked search view is two frames: the 28dp search bar, a 2dp gap,
+then a 360dp-wide `Surface Container High` list with a 12dp radius and a 192dp
+scrolling region. Neither frame is elevated. The full-screen
 presentation fills its caller-provided viewport and removes the outer radius;
 both presentations preserve the SearchBar's 56dp row and List item geometry.
 
@@ -353,9 +413,13 @@ same live content region without replacing the search control.
 ## Date picker
 
 The desktop docked picker is 360dp wide with a 16dp container radius and a
-`Surface Container High` fill. The calendar uses seven 40dp day targets inside
-12dp horizontal padding and keeps its localized month/year controls in a 56dp
-header. Selected, today, outside-month, disabled, and unavailable dates use the
+`Surface Container High` fill. The calendar grid uses **48dp** rows and
+columns with a 40dp visual circle centred in each cell, label-medium weekday
+headers in On Surface, body-large numerals, and pill-shaped label-large
+month/year menu buttons. Range bands span the full 48dp column so they read as
+continuous. The modal header is 120dp: a label-medium supporting label above a
+headline-large selected date, closed by a 1dp Outline Variant rule; local
+actions put Clear leading and Cancel / OK trailing. Selected, today, outside-month, disabled, and unavailable dates use the
 same grid geometry so state changes never reflow the calendar.
 
 Modal day pickers use the kit's 360dp shell and reuse that same grid. Input
@@ -365,68 +429,112 @@ changing day target size; incomplete ranges preserve only the start endpoint.
 
 ## Time picker
 
-Keyboard time entry uses separate 80 × 64dp hour and minute segments with a
-14dp gap region for the separator and an adjacent 56dp period control in
-12-hour mode. The public value is always `{ hour, minute }` in 24-hour terms,
-so keyboard and dial presentations share constraints, formatting, and errors.
-The clock dial uses a 256dp circular surface with 36dp numeral targets. Twelve-
-hour mode uses the outer ring; 24-hour mode adds a 72dp-radius inner ring for
-13–00. Effects transitions are removed under reduced motion.
+Keyboard time entry uses 96 × 72dp hour and minute segments (8dp corners,
+Surface Container Highest, display-medium numerals, Primary Container while
+focused) around a fixed 24dp separator column, with a 52 × 72dp outlined
+period selector (title-medium, Tertiary Container when selected) in 12-hour
+mode. The public value is always `{ hour, minute }` in 24-hour terms, so
+keyboard and dial presentations share constraints, formatting, and errors.
+The dial presentation uses 96 × 80dp display-large segments and a 256dp
+circular surface with 48dp body-large numeral targets on a 104dp ring, a 2dp
+Primary clock hand from the 8dp centre dot, and a 72dp-radius inner ring for
+13–00 in 24-hour mode. Effects transitions are removed under reduced motion.
 
 ## Floating action buttons
 
-FABs follow the kit's 40, 56, and 96dp square scale with 12, 16, and 28dp
-resting corners; round alternatives use half-height radii. Extended FABs are
-56dp high with 16dp horizontal padding and a 12dp icon gap, or 96dp high with
-28dp padding and a 16dp gap. Surface, primary, secondary, and tertiary
-container roles all share elevation level 2, rising to level 3 on hover.
-FAB menus keep 12dp between their 48dp labeled secondary actions and 16dp
-between the action stack and primary FAB. The scrim uses the shared scrim role
-at 32%; entrance uses the fast effects motion and disappears under reduced
+From the kit's `FAB` / `Extended FAB` sets on the Buttons page. The 40dp
+"small" FAB and the `surface` colour only survive on the deprecated internal
+canvas and are not part of the current scale.
+
+| Size | Box | Icon | Corner | Extended padding | Extended gap | Extended type |
+| ---- | --- | ---- | ------ | ---------------- | ------------ | ------------- |
+| Default | 56 | 24 | 16 | 16 | 8 | title-medium (16/24 Medium) |
+| Medium | 80 | 28 | 20 | 26 | 12 | title-large (22/28 Regular) |
+| Large | 96 | 36 | 28 | 28 (30 vertical) | 16 | headline-small (24/32 Regular) |
+
+Six colours: Primary / Secondary / Tertiary (plain role container, `On <role>`
+content) and their `Container` counterparts. All rest at **elevation level 3**
+and rise to **level 4** on hover. The pressed variants keep the resting corner
+radius — the FAB does not morph like the buttons do.
+
+FAB menus stack 56dp pill actions (24dp horizontal padding, 8dp icon gap,
+title-medium label, `<colour> Container` fill) 4dp apart and 8dp from a 56dp
+*round* FAB in the plain colour role. The scrim uses the shared scrim role at
+32%; entrance uses the fast effects motion and disappears under reduced
 motion.
 
 ## App bars
 
-Top app bars are 64dp small, 116dp medium, and 160dp large. Medium titles use
-headline-small at the lower edge; large titles use headline-medium. The caller
-owns scroll observation and supplies `scrolled`, which switches the bar from
-Surface to Surface Container and elevation level 2 without changing geometry.
-Bottom app bars are 80dp high at the 412dp reference width, with a 16dp outer
-radius and Secondary Container fill. Actions keep 48dp targets; the optional
-FAB occupies the trailing region without changing source or focus order.
+Top app bars are 64dp small, **112dp** medium, and **120dp** large, with 4dp
+inline padding and a 4dp gap so the title starts 56dp in. Medium titles use
+headline-small 12dp above the lower edge; large titles use headline-medium.
+The caller owns scroll observation and supplies `scrolled`, which switches the
+fill from Surface to Surface Container — the kit carries no elevation on
+either state. Bottom app bars are 80dp high, **Surface Container**, square
+and unelevated, with a 4dp leading / 16dp trailing inset and 8dp between
+actions. Actions keep 48dp targets; the optional FAB occupies the trailing
+region without changing source or focus order.
 
 ## Navigation bar
 
-The reference navigation bar is 412 × 80dp and accepts three to five equal
-destinations. Each item keeps a 64 × 32dp selected indicator around the 24dp
-icon and a label-small destination name. The vertical presentation reuses the
-same 80dp measure and selection model rather than introducing separate items.
-The compact navigation rail is 80dp wide with 4dp inline padding. Its menu and
-FAB regions precede a flexible vertical destination list; compact destinations
-hide labels visually and expose them through focus/hover tooltips.
-Expanded rails use a 360dp container and convert the same destinations to 56dp
-horizontal rows with persistent labels. Expansion changes only width and
-layout; destination identity, focusable nodes, selection, and badges persist.
+From the kit's `Navigation Bar` sets and `Building Blocks/Navigation bars`
+nav items on the Navigation page. The bar is **64dp** tall (the 80dp bar is the
+deprecated internal-canvas one) with a Surface Container fill and three to six
+equal destinations.
+
+| Item | Box | Indicator | Content | Label |
+| ---- | --- | --------- | ------- | ----- |
+| Vertical (stacked) | 104 × 64, 6dp vertical padding | 56 × 32 pill, 4dp gap to label | 24dp icon | label-medium (12/16 Medium) |
+| Horizontal (inline) | 92 × 64 | 92 × 40 pill, 16 × 8 padding, 4dp gap | 24dp icon + label inside | label-medium |
+| Label hidden | 104 × 64, 4dp vertical padding | 56 × 56 circle | 24dp icon | — |
+
+Selected: Secondary Container indicator, On Secondary Container icon, and a
+**Secondary** caption (On Secondary Container when the caption sits inside the
+indicator). Unselected: On Surface Variant. Hover/focus/press state layers
+(8 / 10 / 10 %) paint on the indicator only. Focus is a 3dp Secondary stroke
+inset 3dp with a 12dp radius. Large badges are 16dp Error circles at the top
+trailing corner of the icon; small badges are 6dp dots.
+
+## Navigation rail
+
+From `Navigation Rail` / `Navigation Rail: Expanded` on the Navigation page.
+
+| | Compact | Expanded (docked) |
+| - | ------- | ----------------- |
+| Width | **96** | **220** |
+| Padding | 44 top, 56 bottom | 44 top, 20 sides and bottom |
+| Menu + FAB | 56dp icon button and 56dp FAB, 4dp apart | same, with a 104 × 56 Extended FAB |
+| Gap to destinations | 40 | 40 |
+| Destination | the navigation bar's vertical nav item, 4dp apart | 56dp pill row, 16dp padding, 8dp gap, label-large, no gap |
+
+Compact destinations show their captions by default; hiding them switches to
+the 56dp circular indicator and a tooltip. The floating expanded rail adds a
+Surface Container fill with 16dp corners. Expansion changes only width and
+layout; destination identity, focusable nodes, selection and badges persist.
 
 ## Toolbar
 
-Standard toolbars use a 64dp minimum height and 16dp container radius;
-expressive toolbars use 96dp and 28dp. Both retain source order across action,
+Every toolbar is 64dp. `Floating` has **32dp** corners, 12 × 8dp padding, a
+4dp gap and elevation level 3; `Docked` is flat, square and full-width with
+12 × 16dp padding and an 8dp gap. `Standard` colour is Surface Container,
+`Vibrant` is Primary Container. Both retain source order across action,
 toggle, connected-control, divider, overflow, and FAB slots. Arrow keys move
 among enabled controls while composed menus continue to own popup focus.
 
 ## Tabs
 
-Primary tabs use a 48dp row and 3dp full-trigger indicator. Secondary tabs
-keep the 48dp row but use body-medium labels and a 2dp indicator inset 16dp
-from the trigger edges. Segmented tabs retain their tonal active pill. All
+Primary tabs use a 48dp row (64dp with a stacked icon: 10 / 8 padding, 2dp
+gap) and a 3dp rounded indicator as wide as the **label**, not the trigger.
+Secondary tabs keep the 48dp row, the same title-small labels, and a square
+2dp indicator spanning the full trigger. Segmented tabs retain their tonal active pill. All
 three presentations share the same Base UI tab/panel semantics and orientation.
 
 ## Tooltips
 
-Plain hints retain their 24dp-high inverse-surface treatment. Rich tooltips use
-a collision-aware Popover foundation, a maximum 320dp width, 12dp corners,
-16dp padding, Surface Container fill, and elevation level 2. They can contain
+Plain hints retain their 24dp-high inverse-surface treatment and carry no
+caret. Rich tooltips use a collision-aware Popover foundation, a 312dp width,
+12dp corners, 12 / 16 / 8dp padding, a title-small On Surface Variant
+subhead 4dp above the body, Surface Container fill, and elevation level 2. They can contain
 title, body, and actions and therefore expose dialog rather than tooltip
 semantics.
 
@@ -434,18 +542,9 @@ semantics.
 
 Material dividers are 1dp Outline Variant rules. Full width uses the entire
 container, inset begins 16dp from the leading edge, and middle-inset leaves
-16dp at both edges. Vertical dividers keep the same 1dp measure. The subhead
-composition uses a title-small heading in a 48dp row followed by a decorative
-rule.
-
-## Slider variants
-
-The Material slider size scale uses 4, 8, and 16dp tracks with 32, 40, and
-44dp handles; every handle retains a minimum 48dp invisible touch target.
-Centered sliders paint the active segment between the midpoint and the single
-value. Standard sliders retain min-to-value and range indicators. Horizontal
-and vertical geometry, ticks, value labels, dragging, and keyboard increments
-share the same Base UI value model.
+16dp at both edges — on either axis. The subhead composition stacks the rule
+above a title-small On Surface Variant heading with 4dp between them and
+16dp side padding.
 
 ## Button shape morph on press
 

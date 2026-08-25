@@ -130,7 +130,8 @@ function ProgressIndicator({
         // painted in the surface color, so a progress bar on a different
         // container should override `shadow-*` to match it.
         "shadow-[4px_0_0_0_var(--m3-surface)]",
-        "transition-all duration-(--m3-spring-spatial-default-duration) ease-(--m3-spring-spatial-default)",
+        // Width is clamped at zero, so the morph rides the effects spring.
+        "transition-[width] duration-(--m3-spring-effects-default-duration) ease-(--m3-spring-effects-default)",
         variant === "flat" && "rounded-m3-full bg-m3-primary",
         // `relative` lifts the wave above the track rule drawn by ::before.
         variant === "wavy" && "m3-wave relative bg-m3-primary",

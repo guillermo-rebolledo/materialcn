@@ -141,7 +141,7 @@ function DatePicker({
             initialFocus={() =>
               calendarRef.current?.querySelector<HTMLButtonElement>('[role="gridcell"][tabindex="0"]') ?? true
             }
-              className="max-w-[calc(100vw-2rem)] origin-(--transform-origin) outline-none transition-[transform,opacity] duration-(--m3-spring-effects-fast-duration) data-starting-style:scale-95 data-starting-style:opacity-0 data-ending-style:scale-95 data-ending-style:opacity-0 motion-reduce:transition-none"
+              className="max-w-[calc(100vw-2rem)] origin-(--transform-origin) outline-none transition-[transform,opacity] duration-(--m3-spring-effects-fast-duration) ease-(--m3-spring-effects-fast) data-starting-style:scale-95 data-starting-style:opacity-0 data-ending-style:scale-95 data-ending-style:opacity-0 motion-reduce:transition-none"
             >
               <Calendar
               selected={value}

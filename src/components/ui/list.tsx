@@ -41,7 +41,7 @@ function ListItem({
           "group/list-item flex w-full items-center gap-4 px-4 py-2 text-m3-on-surface",
           "data-[lines=1]:min-h-14 data-[lines=2]:min-h-18 data-[lines=3]:min-h-22 data-[lines=3]:py-3",
           "in-data-[density=-2]:data-[lines=1]:min-h-12 in-data-[density=-2]:data-[lines=2]:min-h-16 in-data-[density=-2]:data-[lines=3]:min-h-20 in-data-[density=-2]:data-[lines=3]:py-2",
-          "in-data-[density=-4]:data-[lines=1]:min-h-10 in-data-[density=-4]:data-[lines=2]:min-h-14 in-data-[density=-4]:data-[lines=2]:py-1.5 in-data-[density=-4]:data-[lines=3]:min-h-18 in-data-[density=-4]:data-[lines=3]:py-1",
+          "in-data-[density=-4]:py-0 in-data-[density=-4]:data-[lines=1]:min-h-10 in-data-[density=-4]:data-[lines=2]:min-h-14 in-data-[density=-4]:data-[lines=3]:min-h-18 in-data-[density=-4]:data-[lines=3]:py-0",
           "data-interactive:cursor-pointer data-interactive:border-0 data-interactive:text-left data-interactive:outline-none",
           "data-interactive:transition-colors data-interactive:duration-(--m3-spring-effects-fast-duration) data-interactive:ease-(--m3-spring-effects-fast)",
           "data-interactive:hover:bg-m3-on-surface/8 data-interactive:focus-visible:bg-m3-on-surface/10 data-interactive:active:bg-m3-on-surface/10",

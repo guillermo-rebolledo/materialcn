@@ -58,7 +58,7 @@ function DialogContent({
       <DialogPrimitive.Popup
         data-slot="dialog-content"
         className={cn(
-          "fixed top-1/2 left-1/2 z-50 grid w-full max-w-[calc(100%-2rem)] -translate-x-1/2 -translate-y-1/2 gap-4 rounded-m3-xl bg-m3-surface-container-high p-6 text-m3-body-md text-m3-on-surface shadow-m3-3 duration-100 outline-none sm:max-w-sm data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95",
+          "fixed top-1/2 left-1/2 z-50 grid w-full max-w-[calc(100%-2rem)] -translate-x-1/2 -translate-y-1/2 gap-4 rounded-m3-xl bg-m3-surface-container-high p-6 text-m3-body-md text-m3-on-surface shadow-m3-3 duration-100 outline-none min-w-[280px] sm:max-w-sm data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95",
           className
         )}
         {...props}
@@ -89,7 +89,20 @@ function DialogHeader({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="dialog-header"
-      className={cn("flex flex-col gap-2", className)}
+      // Kit content stack: icon → headline → supporting text, 16dp apart; with
+      // an icon the whole stack is centred.
+      className={cn("flex flex-col gap-4 has-data-[slot=dialog-icon]:items-center has-data-[slot=dialog-icon]:text-center", className)}
+      {...props}
+    />
+  )
+}
+
+/** Optional 24dp Secondary icon above the headline (kit `Icon=True`). */
+function DialogIcon({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="dialog-icon"
+      className={cn("flex size-6 items-center justify-center text-m3-secondary [&>svg]:size-6", className)}
       {...props}
     />
   )
@@ -158,6 +171,7 @@ export {
   DialogDescription,
   DialogFooter,
   DialogHeader,
+  DialogIcon,
   DialogOverlay,
   DialogPortal,
   DialogTitle,

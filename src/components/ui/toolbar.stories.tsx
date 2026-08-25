@@ -39,7 +39,7 @@ export const MixedControls: Story = {
         <ToolbarOverflow>
           <DropdownMenu><DropdownMenuTrigger render={<Button aria-label="More tools" size="icon" variant="ghost" />}><MoreVerticalIcon /></DropdownMenuTrigger><DropdownMenuContent><DropdownMenuItem>Export</DropdownMenuItem><DropdownMenuItem>Print</DropdownMenuItem></DropdownMenuContent></DropdownMenu>
         </ToolbarOverflow>
-        <ToolbarFAB><FAB aria-label="Create" size="small"><PlusIcon /></FAB></ToolbarFAB>
+        <ToolbarFAB><FAB aria-label="Create"><PlusIcon /></FAB></ToolbarFAB>
       </Toolbar>
       <Button variant="outline">After toolbar</Button>
     </div>
@@ -65,7 +65,7 @@ export const MixedControls: Story = {
 
 export const PresentationsAndStates: Story = {
   parameters: { sideBySide: true },
-  render: () => <div className="flex flex-col gap-4"><Toolbar><Button>Standard</Button><Button disabled>Disabled</Button></Toolbar><Toolbar presentation="expressive"><Button size="lg">Expressive</Button><ToolbarDivider /><FAB aria-label="Add"><PlusIcon /></FAB></Toolbar></div>,
+  render: () => <div className="flex flex-col gap-4"><Toolbar><Button>Standard</Button><Button disabled>Disabled</Button></Toolbar><Toolbar color="vibrant"><Button size="lg">Vibrant</Button><ToolbarDivider /><FAB aria-label="Add"><PlusIcon /></FAB></Toolbar><Toolbar variant="docked"><Button>Docked</Button><Button variant="outline">Flat</Button></Toolbar></div>,
 }
 
 export const DynamicTabStopFallback: Story = {

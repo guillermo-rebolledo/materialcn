@@ -35,7 +35,9 @@ export const buttonVariants = cva(
     "outline-none select-none",
     "disabled:pointer-events-none disabled:cursor-not-allowed",
     // M3 expresses disabled as opacity on content and container, not a grey fill.
-    "disabled:text-m3-on-surface/38 disabled:border-m3-on-surface/12",
+    // Only `outline` paints a border, and the kit keeps it at outline-variant
+    // when disabled, so no border override is needed here.
+    "disabled:text-m3-on-surface/38",
     // Shape morph: the pressed corner radius is set per size below.
     //
     // This deliberately uses the *effects* spring, not the spatial one. Spatial
@@ -64,18 +66,18 @@ export const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-m3-primary text-m3-on-primary disabled:bg-m3-on-surface/12",
+        default: "bg-m3-primary text-m3-on-primary disabled:bg-m3-on-surface/10",
         tonal:
-          "bg-m3-secondary-container text-m3-on-secondary-container disabled:bg-m3-on-surface/12",
+          "bg-m3-secondary-container text-m3-on-secondary-container disabled:bg-m3-on-surface/10",
         // shadcn's `secondary` is Material's tonal button.
         secondary:
-          "bg-m3-secondary-container text-m3-on-secondary-container disabled:bg-m3-on-surface/12",
+          "bg-m3-secondary-container text-m3-on-secondary-container disabled:bg-m3-on-surface/10",
         elevated:
-          "bg-m3-surface-container-low text-m3-primary shadow-m3-1 hover:not-disabled:shadow-m3-2 disabled:bg-m3-on-surface/12 disabled:shadow-m3-0",
+          "bg-m3-surface-container-low text-m3-primary shadow-m3-1 disabled:bg-m3-on-surface/10 disabled:shadow-m3-0",
         outline:
-          "border-m3-outline-variant text-m3-primary bg-transparent hover:not-disabled:border-m3-outline",
+          "border-m3-outline-variant text-m3-on-surface-variant bg-transparent",
         ghost: "text-m3-primary bg-transparent",
-        destructive: "bg-m3-error text-m3-on-error disabled:bg-m3-on-surface/12",
+        destructive: "bg-m3-error text-m3-on-error disabled:bg-m3-on-surface/10",
         link: "text-m3-primary bg-transparent underline-offset-4 hover:underline after:hidden",
       },
       size: {
@@ -86,38 +88,44 @@ export const buttonVariants = cva(
         // `rounded-m3-full`, because `full` is 9999px and interpolating from
         // there spends the whole transition far outside the range a viewer can
         // perceive — a pill looks identical at any radius past half the height.
+        //
+        // Padding is symmetric whether or not a leading icon is present: the
+        // Expressive kit has no icon-side reduction, so there is no
+        // `has-[>svg]:pl-*` here. Per size the kit gives 12 / 16 / 24 / 48 / 64
+        // horizontal padding and 4 / 8 / 8 / 12 / 16 gap.
         xs: [
-          "h-8 gap-2 rounded-[16px] px-3 text-m3-label-lg active:not-disabled:rounded-m3-sm",
-          "has-[>svg]:pl-2 [&_svg:not([class*='size-'])]:size-5",
+          "h-8 gap-1 rounded-[16px] px-3 text-m3-label-lg active:not-disabled:rounded-m3-sm",
+          "[&_svg:not([class*='size-'])]:size-5",
         ],
         sm: [
-          "h-10 gap-2 rounded-[20px] px-6 text-m3-label-lg active:not-disabled:rounded-m3-sm",
-          "has-[>svg]:pl-4 [&_svg:not([class*='size-'])]:size-5",
+          "h-10 gap-2 rounded-[20px] px-4 text-m3-label-lg active:not-disabled:rounded-m3-sm",
+          "[&_svg:not([class*='size-'])]:size-5",
         ],
         // shadcn's baseline. M3's small button, which is the everyday size.
         default: [
-          "h-10 gap-2 rounded-[20px] px-6 text-m3-label-lg active:not-disabled:rounded-m3-sm",
-          "has-[>svg]:pl-4 [&_svg:not([class*='size-'])]:size-5",
+          "h-10 gap-2 rounded-[20px] px-4 text-m3-label-lg active:not-disabled:rounded-m3-sm",
+          "[&_svg:not([class*='size-'])]:size-5",
         ],
         lg: [
           "h-14 gap-2 rounded-[28px] px-6 text-m3-title-md active:not-disabled:rounded-m3-md",
-          "has-[>svg]:pl-6 [&_svg:not([class*='size-'])]:size-6",
+          "[&_svg:not([class*='size-'])]:size-6",
         ],
+        // The two headline sizes set their label in Regular, not Medium.
         xl: [
-          "h-24 gap-4 rounded-[48px] px-12 text-m3-headline-sm active:not-disabled:rounded-m3-lg",
+          "h-24 gap-3 rounded-[48px] px-12 text-m3-headline-sm font-m3-regular active:not-disabled:rounded-m3-lg",
           "[&_svg:not([class*='size-'])]:size-8",
         ],
         "2xl": [
-          "h-34 gap-4 rounded-[68px] px-16 text-m3-headline-lg active:not-disabled:rounded-m3-lg",
+          "h-34 gap-4 rounded-[68px] px-16 text-m3-headline-lg font-m3-regular active:not-disabled:rounded-m3-lg",
           "[&_svg:not([class*='size-'])]:size-10",
         ],
         icon: "size-10 rounded-[20px] active:not-disabled:rounded-m3-sm [&_svg:not([class*='size-'])]:size-6",
         "icon-xs":
           "size-8 rounded-[16px] active:not-disabled:rounded-m3-sm [&_svg:not([class*='size-'])]:size-5",
         "icon-sm":
-          "size-10 rounded-[20px] active:not-disabled:rounded-m3-sm [&_svg:not([class*='size-'])]:size-5",
+          "size-10 rounded-[20px] active:not-disabled:rounded-m3-sm [&_svg:not([class*='size-'])]:size-6",
         "icon-lg":
-          "size-14 rounded-[28px] active:not-disabled:rounded-m3-md [&_svg:not([class*='size-'])]:size-7",
+          "size-14 rounded-[28px] active:not-disabled:rounded-m3-md [&_svg:not([class*='size-'])]:size-6",
       },
       /** Square buttons keep the size scale but start from a rounded rect. */
       shape: {
@@ -126,16 +134,15 @@ export const buttonVariants = cva(
       },
     },
     compoundVariants: [
-      // Text buttons sit closer to their label: 12dp rather than 24dp, per the
-      // kit. Everything else keeps the contained padding.
-      { variant: "ghost", size: "xs", class: "px-2 has-[>svg]:pl-2" },
-      { variant: "ghost", size: "sm", class: "px-3 has-[>svg]:pl-3" },
-      { variant: "ghost", size: "default", class: "px-3 has-[>svg]:pl-3" },
-      { variant: "ghost", size: "lg", class: "px-4 has-[>svg]:pl-4" },
+      // Text (`ghost`) buttons share the contained padding in the Expressive
+      // kit, so only `link` — an inline affordance, not a kit component —
+      // drops its padding.
       { variant: "link", size: "xs", class: "px-0" },
       { variant: "link", size: "sm", class: "px-0" },
       { variant: "link", size: "default", class: "px-0" },
       { variant: "link", size: "lg", class: "px-0" },
+      { variant: "link", size: "xl", class: "px-0" },
+      { variant: "link", size: "2xl", class: "px-0" },
 
       { shape: "square", size: "xs", class: "rounded-m3-md active:not-disabled:rounded-m3-sm" },
       { shape: "square", size: "sm", class: "rounded-m3-md active:not-disabled:rounded-m3-sm" },
