@@ -282,6 +282,13 @@ export const PointerDragging: Story = {
       name: "Draggable destinations",
     })
     const slides = within(carousel).getAllByRole("group")
+    const track = carousel.querySelector<HTMLElement>(
+      '[data-slot="carousel-content"]',
+    )!
+
+    // Story play functions can begin before Embla's effect has attached its
+    // pointer handlers when the complete browser suite is running in parallel.
+    await waitFor(() => expect(track.style.transform).toContain("translate3d"))
 
     await commands.dragPointer('[data-testid="drag-track"]', -220, 0)
 

@@ -50,7 +50,8 @@ export const Configurations: Story = {
     const overflow = canvas.getAllByRole("button", { name: "More actions" })[0]
     await userEvent.click(overflow)
     const page = within(canvasElement.ownerDocument.body)
-    await userEvent.click(page.getAllByRole("menuitem", { name: "Share" })[0])
+    const share = await page.findAllByRole("menuitem", { name: "Share" })
+    await userEvent.click(share[0])
     await waitFor(() => expect(overflow).toHaveFocus())
   },
 }
