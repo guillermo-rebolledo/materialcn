@@ -8,15 +8,15 @@ than authoring.
 
 **Blocked by:** None — can start immediately.
 
-**Status:** ready-for-agent
+**Status:** done
 
-- [ ] Prop tables are generated from the existing types and appear in the docs
+- [x] Prop tables are generated from the existing types and appear in the docs
       for every exported component.
-- [ ] Prop descriptions come from the source comments rather than being
+- [x] Prop descriptions come from the source comments rather than being
       duplicated in the docs.
-- [ ] The compound components — the list, text field, search view, and toolbar
+- [x] The compound components — the list, text field, search view, and toolbar
       families — document their anatomy: which parts are required, which are
       optional, and how they nest.
-- [ ] Composition examples exist for the components that take slotted content,
+- [x] Composition examples exist for the components that take slotted content,
       showing how to build a more advanced arrangement from the parts.
-- [ ] The docs build passes.
+- [x] The docs build passes.

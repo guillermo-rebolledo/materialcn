@@ -6,16 +6,16 @@ defaults to zero, which makes dense icon rows flicker.
 
 **Blocked by:** None — can start immediately.
 
-**Status:** ready-for-agent
+**Status:** done
 
-- [ ] Hovering a trigger waits a short interval before the tooltip opens; the
+- [x] Hovering a trigger waits a short interval before the tooltip opens; the
       chosen value is documented along with the reasoning, since Material does
       not specify one.
-- [ ] Focusing a trigger from the keyboard opens the tooltip immediately — the
+- [x] Focusing a trigger from the keyboard opens the tooltip immediately — the
       delay exists to filter accidental pointer movement, which focus is not.
-- [ ] Moving between adjacent triggers while a tooltip is already open does not
+- [x] Moving between adjacent triggers while a tooltip is already open does not
       re-incur the full delay.
-- [ ] The delay remains overridable per instance.
-- [ ] A story places several triggers adjacently so the pass-through behaviour
+- [x] The delay remains overridable per instance.
+- [x] A story places several triggers adjacently so the pass-through behaviour
       is demonstrable.
-- [ ] Typecheck, lint, build, and the story test run pass.
+- [x] Typecheck, lint, build, and the story test run pass.

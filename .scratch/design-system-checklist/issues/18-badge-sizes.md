@@ -10,13 +10,13 @@ positioning over an icon. Size is the remaining gap.
 
 **Blocked by:** None — can start immediately.
 
-**Status:** ready-for-agent
+**Status:** done
 
-- [ ] At least a small, default, and large size, with padding, typography, and
+- [x] At least a small, default, and large size, with padding, typography, and
       corner radius scaling coherently rather than the height alone changing.
-- [ ] Icon contents stay recognisable at the smallest size.
-- [ ] The text-free shape stays correct at every size.
-- [ ] The existing default size is unchanged, so current consumers see no
+- [x] Icon contents stay recognisable at the smallest size.
+- [x] The text-free shape stays correct at every size.
+- [x] The existing default size is unchanged, so current consumers see no
       visual difference.
-- [ ] Stories cover every size, including a light/dark side-by-side case.
-- [ ] Typecheck, lint, build, and the story test run pass.
+- [x] Stories cover every size, including a light/dark side-by-side case.
+- [x] Typecheck, lint, build, and the story test run pass.

@@ -8,15 +8,15 @@ author's head and cannot be adjusted in one place.
 
 **Blocked by:** None — can start immediately.
 
-**Status:** ready-for-agent
+**Status:** done
 
-- [ ] A spacing scale is defined in the token layer with the Material density
+- [x] A spacing scale is defined in the token layer with the Material density
       steps it corresponds to.
-- [ ] The README documents the base unit, the scale, and when to reach for each
+- [x] The README documents the base unit, the scale, and when to reach for each
       step, in the same shape as the existing token layer sections.
-- [ ] A foundations story renders the scale so the steps can be compared
+- [x] A foundations story renders the scale so the steps can be compared
       visually.
-- [ ] Existing components are unchanged in appearance — this ticket introduces
+- [x] Existing components are unchanged in appearance — this ticket introduces
       the scale and documents it; migrating components onto it is out of scope
       and should be noted as follow-up.
-- [ ] Typecheck, lint, build, and the story test run pass.
+- [x] Typecheck, lint, build, and the story test run pass.

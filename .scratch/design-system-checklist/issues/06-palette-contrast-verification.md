@@ -8,16 +8,16 @@ kind of thing a future edit can regress silently.
 
 **Blocked by:** None — can start immediately.
 
-**Status:** ready-for-agent
+**Status:** done
 
-- [ ] A check walks every on-role/role pairing in the generated colour layer, in
+- [x] A check walks every on-role/role pairing in the generated colour layer, in
       both light and dark, and reports the measured contrast ratio.
-- [ ] The check fails below the AA threshold for normal text, with the failing
+- [x] The check fails below the AA threshold for normal text, with the failing
       pairs and their ratios named in the output.
-- [ ] Pairings that are legitimately decorative rather than text-bearing are
+- [x] Pairings that are legitimately decorative rather than text-bearing are
       excluded explicitly, with the reason recorded, rather than by lowering the
       threshold.
-- [ ] The check is runnable as a package script and passes against the current
+- [x] The check is runnable as a package script and passes against the current
       palette.
-- [ ] The README notes the guarantee and how to run the check after a palette
+- [x] The README notes the guarantee and how to run the check after a palette
       edit.

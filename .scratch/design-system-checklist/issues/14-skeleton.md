@@ -11,17 +11,17 @@ unchecked item in the component backlog, which flags it as missing stories.
 
 **Blocked by:** None — can start immediately.
 
-**Status:** ready-for-agent
+**Status:** done
 
-- [ ] The pulse stops under the reduced-motion preference, consistent with how
+- [x] The pulse stops under the reduced-motion preference, consistent with how
       the library's other animations collapse.
-- [ ] Skeletons can match the sizes of the components they replace without the
+- [x] Skeletons can match the sizes of the components they replace without the
       consumer measuring by hand.
-- [ ] Skeletons can match the library's shapes, including the circular and
+- [x] Skeletons can match the library's shapes, including the circular and
       pill forms, not just the default corner radius.
-- [ ] Stories demonstrate composing several skeletons into a realistic loading
+- [x] Stories demonstrate composing several skeletons into a realistic loading
       layout, showing that a one-to-one mapping of the interface is not the
       intent.
-- [ ] Stories include a light/dark side-by-side case.
-- [ ] The corresponding line in the component backlog is checked off.
-- [ ] Typecheck, lint, build, and the story test run pass.
+- [x] Stories include a light/dark side-by-side case.
+- [x] The corresponding line in the component backlog is checked off.
+- [x] Typecheck, lint, build, and the story test run pass.

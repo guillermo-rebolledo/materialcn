@@ -8,15 +8,15 @@ by hand.
 **Blocked by:** 01 — Window size class breakpoint tokens. The scale steps at
 window size class boundaries.
 
-**Status:** ready-for-agent
+**Status:** done
 
-- [ ] The display and headline roles step down on the smaller window size
+- [x] The display and headline roles step down on the smaller window size
       classes; body and label roles are reviewed and left fixed unless Material
       specifies otherwise.
-- [ ] Line height and tracking step with the size rather than being left at the
+- [x] Line height and tracking step with the size rather than being left at the
       desktop values.
-- [ ] The typography foundations story shows the same specimen at each window
+- [x] The typography foundations story shows the same specimen at each window
       size class so the steps can be compared.
-- [ ] The README documents which roles are responsive and which are not.
-- [ ] Existing stories are visually unchanged at desktop width.
-- [ ] Typecheck, lint, build, and the story test run pass.
+- [x] The README documents which roles are responsive and which are not.
+- [x] Existing stories are visually unchanged at desktop width.
+- [x] Typecheck, lint, build, and the story test run pass.

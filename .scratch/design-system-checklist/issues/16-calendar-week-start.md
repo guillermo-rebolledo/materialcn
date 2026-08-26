@@ -8,16 +8,16 @@ the columns are rotated out from under them.
 
 **Blocked by:** None — can start immediately.
 
-**Status:** ready-for-agent
+**Status:** done
 
-- [ ] The first day of the week is derived from the locale, with a Sunday
+- [x] The first day of the week is derived from the locale, with a Sunday
       fallback for environments that do not expose week info.
-- [ ] The weekday header row and the day cells stay aligned under every
+- [x] The weekday header row and the day cells stay aligned under every
       supported first-day-of-week.
-- [ ] Keyboard navigation across a row still moves through the days in the
+- [x] Keyboard navigation across a row still moves through the days in the
       displayed order, and moving off the end of a row lands where the user
       would expect.
-- [ ] Range selection highlighting is unbroken across the rotated week.
-- [ ] Stories cover at least a Sunday-first and a Monday-first locale, and the
+- [x] Range selection highlighting is unbroken across the rotated week.
+- [x] Stories cover at least a Sunday-first and a Monday-first locale, and the
       date picker and date picker dialog inherit the behaviour.
-- [ ] Typecheck, lint, build, and the story test run pass.
+- [x] Typecheck, lint, build, and the story test run pass.

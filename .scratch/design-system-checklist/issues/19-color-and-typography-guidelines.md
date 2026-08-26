@@ -8,14 +8,14 @@ piece of text, has nothing to go on.
 
 **Blocked by:** None — can start immediately.
 
-**Status:** ready-for-agent
+**Status:** done
 
-- [ ] Documents when to reach for each colour role, particularly the
+- [x] Documents when to reach for each colour role, particularly the
       distinctions consumers get wrong: secondary vs tertiary, the surface
       container ramp, and outline vs outline variant.
-- [ ] Documents how *not* to use the roles, including the existing rules about
+- [x] Documents how *not* to use the roles, including the existing rules about
       never adding dark-mode colour overrides and preferring the shadcn semantic
       names over the Material ones where an equivalent exists.
-- [ ] Documents when to use each typography role, and the pairings that work.
-- [ ] Lives where a consumer will find it — alongside the existing token
+- [x] Documents when to use each typography role, and the pairings that work.
+- [x] Lives where a consumer will find it — alongside the existing token
       reference, not in a separate document nothing links to.

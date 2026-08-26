@@ -6,15 +6,15 @@ equivalent: the menu opens when its trigger receives focus.
 
 **Blocked by:** None — can start immediately.
 
-**Status:** ready-for-agent
+**Status:** done
 
-- [ ] A dropdown can be configured to open on hover, and remains click-triggered
+- [x] A dropdown can be configured to open on hover, and remains click-triggered
       by default.
-- [ ] When hover-triggered, focusing the trigger from the keyboard produces the
+- [x] When hover-triggered, focusing the trigger from the keyboard produces the
       same open behaviour.
-- [ ] Moving the pointer from the trigger toward the menu does not close it
+- [x] Moving the pointer from the trigger toward the menu does not close it
       part-way.
-- [ ] Closing behaviour is unchanged — escape, an explicit close, and tabbing
+- [x] Closing behaviour is unchanged — escape, an explicit close, and tabbing
       out of the content all still work.
-- [ ] A story demonstrates a hover-triggered navigation menu.
-- [ ] Typecheck, lint, build, and the story test run pass.
+- [x] A story demonstrates a hover-triggered navigation menu.
+- [x] Typecheck, lint, build, and the story test run pass.

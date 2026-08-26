@@ -10,13 +10,13 @@ is where spacing, elevation, and overlay-ordering problems actually surface.
 09 (Alert), and 12 (Image) so the screen can use them, but it does not require
 them.
 
-**Status:** ready-for-agent
+**Status:** done
 
-- [ ] A single screen resembling a real product surface — navigation, a content
+- [x] A single screen resembling a real product surface — navigation, a content
       region, forms, and at least one overlay.
-- [ ] Exercises the responsive behaviour across window size classes rather than
+- [x] Exercises the responsive behaviour across window size classes rather than
       being fixed-width.
-- [ ] Works in both themes, verified side by side.
-- [ ] Stays out of the published package.
-- [ ] Any problems it surfaces are written up as new tickets rather than fixed
+- [x] Works in both themes, verified side by side.
+- [x] Stays out of the published package.
+- [x] Any problems it surfaces are written up as new tickets rather than fixed
       inline, so this ticket stays reviewable.

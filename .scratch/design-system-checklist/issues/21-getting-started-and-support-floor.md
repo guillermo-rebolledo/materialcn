@@ -11,13 +11,13 @@ stating the floor that implies.
 
 **Blocked by:** None — can start immediately.
 
-**Status:** ready-for-agent
+**Status:** done
 
-- [ ] An end-to-end path: install, wire up the stylesheet and theme provider,
+- [x] An end-to-end path: install, wire up the stylesheet and theme provider,
       render a first screen, switch themes.
-- [ ] The path is verified by following it against a clean project, not written
+- [x] The path is verified by following it against a clean project, not written
       from memory.
-- [ ] The supported browser and OS floor is stated explicitly, derived from the
+- [x] The supported browser and OS floor is stated explicitly, derived from the
       CSS features the library actually uses.
-- [ ] Optional pieces are marked optional — notably the self-hosted font, which
+- [x] Optional pieces are marked optional — notably the self-hosted font, which
       is deliberately opt-in for payload reasons.

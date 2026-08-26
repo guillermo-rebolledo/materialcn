@@ -7,18 +7,18 @@ rather than a destination.
 
 **Blocked by:** None — can start immediately.
 
-**Status:** ready-for-agent
+**Status:** done
 
-- [ ] Inherits font family, size, weight, and colour from the surrounding text
+- [x] Inherits font family, size, weight, and colour from the surrounding text
       by default, with colour roles available for the cases that need them.
-- [ ] Wraps across multiple lines inside a paragraph without disturbing the
+- [x] Wraps across multiple lines inside a paragraph without disturbing the
       line box or leaving an orphaned underline segment.
-- [ ] Supports a disabled state that is both visually clear and non-interactive.
-- [ ] Resolves its accessibility role from its props — a destination announces
+- [x] Supports a disabled state that is both visually clear and non-interactive.
+- [x] Resolves its accessibility role from its props — a destination announces
       as a link, an action announces as a button.
-- [ ] Supports an optional icon beside the label; an icon-only link is not a
+- [x] Supports an optional icon beside the label; an icon-only link is not a
       supported shape.
-- [ ] Has a visible focus indicator consistent with the rest of the library.
-- [ ] Exported from the public barrel with stories, including a light/dark
+- [x] Has a visible focus indicator consistent with the rest of the library.
+- [x] Exported from the public barrel with stories, including a light/dark
       side-by-side case and a link set in a real paragraph.
-- [ ] Typecheck, lint, build, and the story test run pass.
+- [x] Typecheck, lint, build, and the story test run pass.

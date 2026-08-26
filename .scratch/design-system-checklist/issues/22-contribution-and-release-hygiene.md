@@ -8,15 +8,15 @@ as engineering gotchas in the repository instructions rather than as principles.
 
 **Blocked by:** None — can start immediately.
 
-**Status:** ready-for-agent
+**Status:** done
 
-- [ ] Contribution guidelines live at the conventional location, built on the
+- [x] Contribution guidelines live at the conventional location, built on the
       existing definition of done rather than a new one written from scratch.
-- [ ] The backlog links to the guidelines instead of carrying its own copy, so
+- [x] The backlog links to the guidelines instead of carrying its own copy, so
       the two cannot drift.
-- [ ] A design principles section states the load-bearing rules as principles:
+- [x] A design principles section states the load-bearing rules as principles:
       that retheming is a token edit and components are never patched for
       colour, that dark mode is a token swap and never a utility override, and
       that spring choice follows from whether the animated property clamps.
-- [ ] A changelog exists and records the current state as a baseline.
-- [ ] The release cadence and what counts as a breaking change are documented.
+- [x] A changelog exists and records the current state as a baseline.
+- [x] The release cadence and what counts as a breaking change are documented.
