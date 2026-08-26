@@ -46,6 +46,7 @@ pnpm dev         # playground app at :5173
 | `pnpm typecheck`       | `tsc -b`                                            |
 | `pnpm lint`            | oxlint                                              |
 | `pnpm tokens`          | Regenerates the generated token files               |
+| `pnpm check:contrast`  | Verifies every role pairing meets WCAG AA           |
 
 ## Layout
 
@@ -105,6 +106,82 @@ that actually ship, including the OKLCH conversion. Roles that are not text —
 the reason recorded in the script, and `outline` is held to WCAG's 3:1 non-text
 threshold. No pairing is exempted by lowering a threshold.
 
+#### Choosing a colour role
+
+The mechanism above says how the roles work. This says which one to reach for.
+
+**Prefer the shadcn semantic name where one exists.** `bg-primary`,
+`text-muted-foreground`, and `border` already resolve to Material roles, and
+using them keeps a component readable to anyone who knows shadcn and portable to
+a different token layer. Reach for `bg-m3-*` only for the parts of Material
+shadcn has no concept of: tertiary, the surface-container ramp, `outline`, and
+the fixed roles.
+
+**Secondary vs tertiary.** Both are accents; the difference is what they are
+accenting.
+
+- **Secondary** is for the supporting controls in a flow the *primary* colour
+  already owns — a filter chip beside a primary action, a selected tab, a
+  toggle's on state. It is the same conversation at a lower volume.
+- **Tertiary** is for something *outside* that conversation that needs to be
+  told apart from it — a promotional badge, a category tag, an unrelated status.
+  Its whole purpose is contrast against primary and secondary, so using it as a
+  third shade of "important" wastes the one role that can say "different kind of
+  thing".
+
+If you are choosing between them because you want variety, you want secondary.
+If you are choosing because the thing genuinely is not part of the primary flow,
+you want tertiary.
+
+**The surface-container ramp.** Five steps from `surface-container-lowest` to
+`surface-container-highest`. They express *how far forward a surface sits*, not
+how important it is, and the rule is that a surface goes one step above whatever
+it sits on:
+
+| Step                       | Typically                                 |
+| -------------------------- | ----------------------------------------- |
+| `surface`                  | The page                                  |
+| `surface-container-lowest` | A card on a dark page                     |
+| `surface-container-low`    | Cards, sheets                             |
+| `surface-container`        | Menus, popovers, search bars              |
+| `surface-container-high`   | Dialogs, and any surface above a menu     |
+| `surface-container-highest` | The topmost thing on screen              |
+
+Two mistakes to avoid: skipping steps (the ramp is closely spaced on purpose —
+a jump reads as a different material, not a raised one), and using a container
+step as an *accent*. A container that needs attention wants a colour role, not a
+lighter grey.
+
+Note that `surface-container-highest` is also what `--muted` resolves to, so a
+muted region and a top-level surface are the same colour. That is deliberate,
+and it is why the ramp expresses depth rather than emphasis.
+
+**Outline vs outline-variant.** The distinction is whether the line is doing a
+job:
+
+- **`outline`** is a boundary the user has to find — a text field's border, a
+  focus ring, an outlined button's edge. It meets the 3:1 non-text contrast
+  threshold, and `pnpm check:contrast` holds it there.
+- **`outline-variant`** is decorative — dividers between list rows, a card's
+  edge, the track behind a progress bar. It sits at about 1.6:1 against surface
+  and is *meant* to. Nothing that identifies a control may use it.
+
+shadcn's `--border` points at `outline-variant` and `--input` at `outline`,
+which is the same split under different names.
+
+**How not to use the roles.**
+
+- **Never add a `dark:` utility for colour.** Dark mode swaps token values, so a
+  `dark:` colour override means the token layer is missing something — fix the
+  token, not the component. (`dark:` for a non-colour property is fine, but rare
+  enough to be worth a second look.)
+- **Never mix a container from one pair with content from another.** `on-primary`
+  on `secondary-container` is not a shade choice, it is a contrast failure that
+  `check:contrast` does not cover, because nobody is supposed to write it.
+- **Do not reach past the semantic layer to hardcode a hex**, even "just for
+  this one". The whole promise is that retheming is a token edit, and one
+  hardcoded value is the exception that makes a consumer test every screen.
+
 ### Typography
 
 Five roles — display, headline, title, body, label — at three sizes each. Roles
@@ -124,6 +201,42 @@ already tightest.
 
 Nothing in a consumer's markup changes: `text-m3-display-lg` is still the class,
 it just resolves smaller on a narrow window — the same mechanism dark mode uses.
+
+#### Choosing a type role
+
+The size is a consequence of the role, not the reason for it. Pick by what the
+text *is*:
+
+| Role         | It is…                                                     |
+| ------------ | ---------------------------------------------------------- |
+| **display**  | The one thing a screen is *about* — a marketing headline, a big number in a dashboard. At most one per screen, often none. |
+| **headline** | The heading of a screen or a major region. Short. |
+| **title**    | The heading of a component or a group — a card's title, a dialog's heading, a list's section header. |
+| **body**     | Anything the reader actually reads in sentences. |
+| **label**    | Text *inside* a control, or a caption attached to one — button labels, chips, tabs, field helper text, timestamps. |
+
+The tell for title vs body: a title names a thing, body says something about it.
+The tell for label vs body: a label is part of a control's anatomy; if you could
+delete the control and keep the text, it is body.
+
+**Pairings that work.** Roles are designed to stack, so keep the steps adjacent:
+
+- `headline-sm` + `body-md` — the default screen section.
+- `title-md` + `body-md` — a card, a dialog, a list row with supporting text.
+- `title-sm` + `body-sm` — a dense row, a table cell with a secondary line.
+- `label-lg` + `body-sm` — a control with helper text beneath it.
+- `display-sm` + `body-lg` — a hero, where the body has to hold its own against
+  the display size.
+
+Two steps apart usually reads as a mistake rather than as hierarchy — `display-lg`
+over `body-sm` leaves a gap nothing bridges. And avoid two roles of the same
+size doing different jobs in one block: `title-sm` and `label-lg` are both 14dp,
+so putting them side by side gives you a distinction the reader cannot see.
+
+**Emphasis.** Reach for the `emphasized` weight before reaching for a larger
+role. Going up a step changes the structure of the page; going up a weight
+changes only the emphasis, which is usually what was meant.
+
 
 ### Spacing
 
