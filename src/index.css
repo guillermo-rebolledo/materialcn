@@ -4,7 +4,7 @@
  * Consumers import this one file (plus, optionally, styles/fonts.css to
  * self-host Roboto Flex). It layers, in order:
  *   1. Tailwind v4 + the shadcn base stylesheet
- *   2. the M3 token set (color, shape, type, elevation, state, motion, layout)
+ *   2. the M3 token set (color, shape, spacing, type, elevation, state, motion, layout)
  *   3. the @theme mapping that turns those tokens into Tailwind utilities
  */
 
@@ -14,6 +14,7 @@
 
 @import "./styles/tokens/color.css";
 @import "./styles/tokens/shape.css";
+@import "./styles/tokens/spacing.css";
 @import "./styles/tokens/typography.css";
 @import "./styles/tokens/elevation.css";
 @import "./styles/tokens/state.css";

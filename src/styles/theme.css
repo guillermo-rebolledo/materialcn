@@ -28,6 +28,19 @@
   --radius-m3-2xl: var(--m3-shape-2xl);
   --radius-m3-full: var(--m3-shape-full);
 
+  /* ------------------------------------------------------------ spacing */
+  /* `p-m3-lg`, `gap-m3-sm`, `m-m3-xl`, and the rest of Tailwind's spacing
+     utilities. See tokens/spacing.css for when to prefer these over `p-4`. */
+  --spacing-m3-none: var(--m3-space-none);
+  --spacing-m3-xs: var(--m3-space-xs);
+  --spacing-m3-sm: var(--m3-space-sm);
+  --spacing-m3-md: var(--m3-space-md);
+  --spacing-m3-lg: var(--m3-space-lg);
+  --spacing-m3-xl: var(--m3-space-xl);
+  --spacing-m3-2xl: var(--m3-space-2xl);
+  --spacing-m3-3xl: var(--m3-space-3xl);
+  --spacing-m3-4xl: var(--m3-space-4xl);
+
   /* ---------------------------------------------------------- elevation */
   --shadow-m3-0: var(--m3-elevation-0);
   --shadow-m3-1: var(--m3-elevation-1);

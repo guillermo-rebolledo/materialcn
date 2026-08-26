@@ -70,6 +70,7 @@ scripts/              token generator
 | ---------- | ------------------------------- | --------------------------------- |
 | Color      | `styles/tokens/color.css` ⚙︎     | `bg-m3-*`, `text-m3-*`            |
 | Shape      | `styles/tokens/shape.css`       | `rounded-m3-*`                    |
+| Spacing    | `styles/tokens/spacing.css`     | `p-m3-*`, `gap-m3-*`, `size-m3-*` |
 | Typography | `styles/tokens/typography.css`  | `text-m3-{role}-{size}`           |
 | Elevation  | `styles/tokens/elevation.css`   | `shadow-m3-0` … `shadow-m3-5`     |
 | Motion     | `styles/tokens/motion.css` ⚙︎    | `ease-m3-*`                       |
@@ -87,6 +88,37 @@ content from another; the pairing is what guarantees contrast.
 
 To retheme, replace the `LIGHT` and `DARK` maps in
 `scripts/generate-tokens.mjs` and run `pnpm tokens`.
+
+### Spacing
+
+Every measurement in the Material kit is a multiple of **4dp**. The scale names
+each multiple the kit actually uses for the job it does there:
+
+| Step       | Value | Used for                                                |
+| ---------- | ----- | ------------------------------------------------------- |
+| `m3-xs`    | 4dp   | Icon-to-label gap in the densest controls               |
+| `m3-sm`    | 8dp   | Gap inside a standard control; chip icon-to-label       |
+| `m3-md`    | 12dp  | Dense inset — segmented segments, sheet internal spacing |
+| `m3-lg`    | 16dp  | The default content inset — cards, sheets, list rows    |
+| `m3-xl`    | 24dp  | Dialog padding; separation between sections of a screen |
+| `m3-2xl`   | 32dp  | Expressive large-control padding                        |
+| `m3-3xl`   | 48dp  | Large button padding; page-level separation             |
+| `m3-4xl`   | 64dp  | Extra-large button padding                              |
+
+Only `--m3-space-unit` is a chosen number; every step is `calc()`'d from it, so
+a denser or looser system is one declaration rather than nine.
+
+**When to use these over `p-4`.** Tailwind's numeric scale is the same 4dp unit
+expressed in rem, so `p-4` and `p-m3-lg` agree at the default root font size.
+They diverge when the reader scales their font: the numeric utilities grow with
+it, these do not. Reach for `p-m3-*` when a measurement has to match the kit's
+geometry exactly — a control's height, an icon's optical alignment — and for the
+numeric utilities everywhere else.
+
+> The shipped components still carry their spacing as numeric utilities. Moving
+> them onto the scale is deliberate follow-up: it is a visual-diff-heavy change
+> across every component, and keeping it out of the ticket that introduces the
+> scale is what makes both reviewable.
 
 ### Layout
 

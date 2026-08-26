@@ -1,0 +1,39 @@
+/*
+ * Material 3 spacing scale.
+ *
+ * Every measurement in the Material kit is a multiple of 4dp. The steps below
+ * are not invented — each is a value the kit actually uses, named for the job
+ * it does (see docs/m3-specs.md for where each one was measured):
+ *
+ *   xs  4dp   gap between an icon and a label in the densest controls
+ *   sm  8dp   gap inside a standard control; chip icon-to-label
+ *   md  12dp  dense inset — segmented button segments, sheet internal spacing
+ *   lg  16dp  the default content inset — cards, sheets, list rows
+ *   xl  24dp  dialog padding, and separation between sections of a screen
+ *   2xl 32dp  Expressive large-control padding
+ *   3xl 48dp  large button padding, page-level separation
+ *   4xl 64dp  extra-large button padding
+ *
+ * Everything derives from `--m3-space-unit`, so a denser or looser system is
+ * one declaration rather than nine.
+ *
+ * Tailwind's own numeric scale is the same 4dp unit expressed in rem, so `p-4`
+ * and `p-m3-lg` agree at the default root font size. The difference is that the
+ * numeric utilities scale with the user's font size and these do not — reach
+ * for `p-m3-*` when a measurement has to match the kit's geometry exactly (a
+ * control's height, an icon's optical alignment) and for `p-4` otherwise.
+ */
+
+:root {
+  --m3-space-unit: 4px;
+
+  --m3-space-none: 0px;
+  --m3-space-xs: calc(var(--m3-space-unit) * 1);
+  --m3-space-sm: calc(var(--m3-space-unit) * 2);
+  --m3-space-md: calc(var(--m3-space-unit) * 3);
+  --m3-space-lg: calc(var(--m3-space-unit) * 4);
+  --m3-space-xl: calc(var(--m3-space-unit) * 6);
+  --m3-space-2xl: calc(var(--m3-space-unit) * 8);
+  --m3-space-3xl: calc(var(--m3-space-unit) * 12);
+  --m3-space-4xl: calc(var(--m3-space-unit) * 16);
+}
