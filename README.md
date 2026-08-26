@@ -71,7 +71,7 @@ scripts/              token generator
 | Color      | `styles/tokens/color.css` ⚙︎     | `bg-m3-*`, `text-m3-*`            |
 | Shape      | `styles/tokens/shape.css`       | `rounded-m3-*`                    |
 | Spacing    | `styles/tokens/spacing.css`     | `p-m3-*`, `gap-m3-*`, `size-m3-*` |
-| Typography | `styles/tokens/typography.css`  | `text-m3-{role}-{size}`           |
+| Typography | `styles/tokens/typography.css` ⚙︎ | `text-m3-{role}-{size}`           |
 | Elevation  | `styles/tokens/elevation.css`   | `shadow-m3-0` … `shadow-m3-5`     |
 | Motion     | `styles/tokens/motion.css` ⚙︎    | `ease-m3-*`                       |
 | State      | `styles/tokens/state.css`       | `m3-state-layer`                  |
@@ -88,6 +88,26 @@ content from another; the pairing is what guarantees contrast.
 
 To retheme, replace the `LIGHT` and `DARK` maps in
 `scripts/generate-tokens.mjs` and run `pnpm tokens`.
+
+### Typography
+
+Five roles — display, headline, title, body, label — at three sizes each. Roles
+carry meaning: pick by what the text *is*, not by how large you want it to look.
+
+**Which roles are responsive.** Below the `expanded` window size class, every
+**display** and **headline** role steps down one rung of the ladder — display-lg
+renders at display-md's size, headline-sm at title-lg's. One rule applied
+uniformly rather than a second hand-tuned scale, since the ladder's own steps
+are already the sizes Material considers adjacent. Line height and tracking come
+down with the size; leaving a 64dp line height under 45dp text is the usual way
+a responsive scale goes wrong.
+
+**Title, body, and label do not move.** They are reading and control text, and
+shrinking them on a phone would tighten the measure on the screen where it is
+already tightest.
+
+Nothing in a consumer's markup changes: `text-m3-display-lg` is still the class,
+it just resolves smaller on a narrow window — the same mechanism dark mode uses.
 
 ### Spacing
 

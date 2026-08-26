@@ -13,11 +13,16 @@ Retheming is a token edit.
 - `src/components/ui/` — shadcn components, added via the CLI. Treat as
   vendored; when upstream changes, use `shadcn add --diff` rather than editing
   blind.
-- `src/styles/tokens/` — the M3 layer. `color.css` and `motion.css` are
-  **generated** by `scripts/generate-tokens.mjs`; edit the script, run
-  `pnpm tokens`. The other four are hand-written.
+- `src/styles/tokens/` — the M3 layer. `color.css`, `motion.css`,
+  `typography.css`, and `layout.css` are **generated** by
+  `scripts/generate-tokens.mjs`; edit the script, run `pnpm tokens`.
+  `shape.css`, `spacing.css`, `elevation.css`, and `state.css` are hand-written.
 - `src/styles/theme.css` — maps `--m3-*` onto Tailwind's `@theme` namespaces.
-  `inline` is required so runtime theme swaps are picked up.
+  `inline` is required so runtime theme swaps are picked up. Two exceptions
+  live in the generated token files instead: colors (emitted beside the roles so
+  the two cannot drift) and breakpoints (which Tailwind substitutes into
+  `@media` parameters, where a `var()` does not resolve, so they cannot be
+  `inline` at all).
 - `src/index.ts` — the public barrel. New components must be exported here.
 
 ## Conventions
