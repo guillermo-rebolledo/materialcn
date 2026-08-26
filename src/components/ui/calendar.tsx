@@ -3,7 +3,13 @@ import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import { Button } from "./button"
-import { dateKey, isDateSelectable, sameDay } from "./calendar-utils"
+import {
+  dateKey,
+  daysSinceWeekStart,
+  firstDayOfWeek,
+  isDateSelectable,
+  sameDay,
+} from "./calendar-utils"
 
 type CalendarProps = Omit<ComponentProps<"div">, "onSelect"> & {
   defaultMonth?: Date
@@ -63,7 +69,11 @@ function Calendar({
     day: "numeric",
   })
   const weekday = new Intl.DateTimeFormat(locale, { weekday: "narrow" })
-  const firstVisible = addDays(month, -month.getDay())
+  // Where the grid starts, and therefore what the header row is labelled with:
+  // both derive from the same value, so the columns cannot rotate out from
+  // under their labels.
+  const weekStart = useMemo(() => firstDayOfWeek(locale), [locale])
+  const firstVisible = addDays(month, -daysSinceWeekStart(month, weekStart))
   const days = Array.from({ length: 42 }, (_, index) => addDays(firstVisible, index))
   const years = Array.from({ length: 21 }, (_, index) => month.getFullYear() - 10 + index)
 
@@ -206,8 +216,11 @@ function Calendar({
                     if (event.key === "ArrowLeft") moveFocus(addDays(date, -1), -1, event)
                     if (event.key === "ArrowDown") moveFocus(addDays(date, 7), 1, event)
                     if (event.key === "ArrowUp") moveFocus(addDays(date, -7), -1, event)
-                    if (event.key === "Home") moveFocus(addDays(date, -date.getDay()), 1, event)
-                    if (event.key === "End") moveFocus(addDays(date, 6 - date.getDay()), -1, event)
+                    // Home and End mean the ends of the *displayed* row, so
+                    // they follow the week start too — on a Monday-first
+                    // calendar, Home is Monday.
+                    if (event.key === "Home") moveFocus(addDays(date, -daysSinceWeekStart(date, weekStart)), 1, event)
+                    if (event.key === "End") moveFocus(addDays(date, 6 - daysSinceWeekStart(date, weekStart)), -1, event)
                     if (event.key === "PageDown") moveFocus(addMonthsPreservingDay(date, 1), 1, event)
                     if (event.key === "PageUp") moveFocus(addMonthsPreservingDay(date, -1), -1, event)
                   }}
