@@ -7,7 +7,7 @@ import {
 } from "lucide-react"
 
 import { cn } from "@/lib/utils"
-import { alertVariants } from "./alert-variants"
+import { alertTextColumn, alertVariants } from "./alert-variants"
 import { Icon } from "./icon"
 import type { AlertSeverity } from "./alert.types"
 
@@ -101,7 +101,8 @@ function AlertTitle({ className, ...props }: React.ComponentProps<"div">) {
     <div
       data-slot="alert-title"
       className={cn(
-        "text-m3-title-md group-has-[>[data-slot=alert-icon]]/alert:col-start-2",
+        "text-m3-title-md",
+        alertTextColumn,
         className
       )}
       {...props}
@@ -117,7 +118,8 @@ function AlertDescription({
     <div
       data-slot="alert-description"
       className={cn(
-        "text-m3-body-md group-has-[>[data-slot=alert-icon]]/alert:col-start-2 [&_p:not(:last-child)]:mb-m3-sm",
+        "text-m3-body-md [&_p:not(:last-child)]:mb-m3-sm",
+        alertTextColumn,
         className
       )}
       {...props}
@@ -137,7 +139,8 @@ function AlertAction({ className, ...props }: React.ComponentProps<"div">) {
     <div
       data-slot="alert-action"
       className={cn(
-        "mt-m3-sm flex flex-wrap items-center gap-m3-sm group-has-[>[data-slot=alert-icon]]/alert:col-start-2",
+        "mt-m3-sm flex flex-wrap items-center gap-m3-sm",
+        alertTextColumn,
         className
       )}
       {...props}

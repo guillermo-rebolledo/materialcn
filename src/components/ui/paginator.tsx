@@ -15,50 +15,45 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./select"
+import { ELIDED, buildRange } from "./paginator-utils"
 import type { PaginatorProps } from "./paginator.types"
 
-const GAP = "gap" as const
-
 /**
- * The slots to draw: page numbers, with `GAP` where a run is elided.
+ * Previous and next differ only in direction, so they are one control rather
+ * than a mirrored pair — the labels are the part that has to stay in step, and
+ * two copies is how they stop being.
  *
- * The length is always `siblingCount * 2 + 5` once the total exceeds it —
- * first, last, current, two siblings either side, two gaps — so a range of 9
- * pages and a range of 9,000 occupy the same width and no control moves under
- * the pointer as the user steps through.
+ * The word is hidden below `medium`: on a phone the chevron alone is the
+ * affordance, and the accessible name carries the rest.
  */
-function buildRange(page: number, totalPages: number, siblingCount: number) {
-  const slots = siblingCount * 2 + 5
-  if (totalPages <= slots)
-    return Array.from({ length: totalPages }, (_, i) => i + 1)
+function Step({
+  direction,
+  enabled,
+  label,
+  onActivate,
+}: {
+  direction: "previous" | "next"
+  enabled: boolean
+  label: string
+  onActivate: () => void
+}) {
+  const previous = direction === "previous"
+  const Chevron = previous ? ChevronLeftIcon : ChevronRightIcon
+  const word = previous ? "Previous" : "Next"
 
-  const left = Math.max(page - siblingCount, 1)
-  const right = Math.min(page + siblingCount, totalPages)
-  const showLeftGap = left > 2
-  const showRightGap = right < totalPages - 1
-
-  // Both gaps present is the steady state; when the window is near an end, the
-  // run that would have been elided is shown instead, which keeps the count of
-  // slots identical rather than letting the row shrink at the extremes.
-  if (!showLeftGap && showRightGap) {
-    const run = slots - 2
-    return [...Array.from({ length: run }, (_, i) => i + 1), GAP, totalPages]
-  }
-  if (showLeftGap && !showRightGap) {
-    const run = slots - 2
-    return [
-      1,
-      GAP,
-      ...Array.from({ length: run }, (_, i) => totalPages - run + 1 + i),
-    ]
-  }
-  return [
-    1,
-    GAP,
-    ...Array.from({ length: right - left + 1 }, (_, i) => left + i),
-    GAP,
-    totalPages,
-  ]
+  return (
+    <Button
+      variant="ghost"
+      size="sm"
+      aria-label={label}
+      disabled={!enabled}
+      onClick={onActivate}
+    >
+      {previous && <Chevron data-icon="inline-start" />}
+      <span className="m3-medium:inline hidden">{word}</span>
+      {!previous && <Chevron data-icon="inline-end" />}
+    </Button>
+  )
 }
 
 /**
@@ -96,22 +91,18 @@ function Paginator({
     >
       <PaginationContent>
         <PaginationItem>
-          <Button
-            variant="ghost"
-            size="sm"
-            aria-label={`Go to previous page${of}`}
-            disabled={!canGoBack}
-            onClick={() => onPageChange(page - 1)}
-          >
-            <ChevronLeftIcon data-icon="inline-start" />
-            <span className="m3-medium:inline hidden">Previous</span>
-          </Button>
+          <Step
+            direction="previous"
+            label={`Go to previous page${of}`}
+            enabled={canGoBack}
+            onActivate={() => onPageChange(page - 1)}
+          />
         </PaginationItem>
 
         {!indeterminate &&
           buildRange(page, totalPages, siblingCount).map((slot, index) =>
-            slot === GAP ? (
-              <PaginationItem key={`gap-${index}`}>
+            slot === ELIDED ? (
+              <PaginationItem key={`elided-${index}`}>
                 <PaginationEllipsis />
               </PaginationItem>
             ) : (
@@ -149,16 +140,12 @@ function Paginator({
         )}
 
         <PaginationItem>
-          <Button
-            variant="ghost"
-            size="sm"
-            aria-label={`Go to next page${of}`}
-            disabled={!canGoForward}
-            onClick={() => onPageChange(page + 1)}
-          >
-            <span className="m3-medium:inline hidden">Next</span>
-            <ChevronRightIcon data-icon="inline-end" />
-          </Button>
+          <Step
+            direction="next"
+            label={`Go to next page${of}`}
+            enabled={canGoForward}
+            onActivate={() => onPageChange(page + 1)}
+          />
         </PaginationItem>
       </PaginationContent>
 
@@ -194,5 +181,5 @@ function Paginator({
   )
 }
 
-export { Paginator, buildRange }
+export { Paginator }
 export type { PaginatorProps }

@@ -38,3 +38,12 @@ export const alertVariants = cva(
     },
   }
 )
+
+/**
+ * Every part that sits in the text column needs to skip the icon's column when
+ * an icon is present. Stated once here rather than repeated on the title, the
+ * description, and the actions — three copies of one grid contract is how the
+ * three end up disagreeing.
+ */
+export const alertTextColumn =
+  "group-has-[>[data-slot=alert-icon]]/alert:col-start-2"

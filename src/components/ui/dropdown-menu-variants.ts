@@ -3,7 +3,7 @@ import { cva } from "class-variance-authority"
 /** Material 3 action-menu surfaces from the current design kit. */
 export const dropdownMenuContentVariants = cva(
   [
-    "z-50 max-h-(--available-height) w-(--anchor-width) min-w-52",
+    "z-(--m3-z-menu) max-h-(--available-height) w-(--anchor-width) min-w-52",
     // Kit: a 16dp-radius container at elevation 3 holding 8dp-radius group
     // cards 2dp apart.
     "flex flex-col gap-0.5 overflow-x-hidden overflow-y-auto rounded-m3-lg",
