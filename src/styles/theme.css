@@ -1,8 +1,11 @@
 /*
  * Exposes the M3 tokens to Tailwind as utilities.
  *
- * Colors are not here — they are emitted into tokens/color.css by the token
- * generator, alongside the roles themselves, so the two cannot drift.
+ * Colors and breakpoints are not here — the token generator emits their
+ * `@theme` blocks into tokens/color.css and tokens/layout.css, alongside the
+ * values themselves, so the two cannot drift. Breakpoints additionally cannot
+ * be `inline`: Tailwind substitutes them into `@media` parameters, which do not
+ * resolve a `var()`.
  *
  * `inline` matters here: it makes Tailwind emit `var(--m3-primary)` rather than
  * copying the value, so a runtime theme swap (adding `.dark`, or overriding a

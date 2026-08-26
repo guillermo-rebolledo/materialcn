@@ -66,14 +66,15 @@ scripts/              token generator
 
 ## Tokens
 
-| Layer      | Source                          | Tailwind utilities            |
-| ---------- | ------------------------------- | ----------------------------- |
-| Color      | `styles/tokens/color.css` ⚙︎     | `bg-m3-*`, `text-m3-*`        |
-| Shape      | `styles/tokens/shape.css`       | `rounded-m3-*`                |
-| Typography | `styles/tokens/typography.css`  | `text-m3-{role}-{size}`       |
-| Elevation  | `styles/tokens/elevation.css`   | `shadow-m3-0` … `shadow-m3-5` |
-| Motion     | `styles/tokens/motion.css` ⚙︎    | `ease-m3-*`                   |
-| State      | `styles/tokens/state.css`       | `m3-state-layer`              |
+| Layer      | Source                          | Tailwind utilities                |
+| ---------- | ------------------------------- | --------------------------------- |
+| Color      | `styles/tokens/color.css` ⚙︎     | `bg-m3-*`, `text-m3-*`            |
+| Shape      | `styles/tokens/shape.css`       | `rounded-m3-*`                    |
+| Typography | `styles/tokens/typography.css`  | `text-m3-{role}-{size}`           |
+| Elevation  | `styles/tokens/elevation.css`   | `shadow-m3-0` … `shadow-m3-5`     |
+| Motion     | `styles/tokens/motion.css` ⚙︎    | `ease-m3-*`                       |
+| State      | `styles/tokens/state.css`       | `m3-state-layer`                  |
+| Layout     | `styles/tokens/layout.css` ⚙︎    | `m3-medium:` … `m3-extra-large:`  |
 
 ⚙︎ Generated. Edit `scripts/generate-tokens.mjs`, then `pnpm tokens`.
 
@@ -86,6 +87,41 @@ content from another; the pairing is what guarantees contrast.
 
 To retheme, replace the `LIGHT` and `DARK` maps in
 `scripts/generate-tokens.mjs` and run `pnpm tokens`.
+
+### Layout
+
+Material picks a layout by **window size class**, not by pixel count. The five
+classes get their own responsive variants, so a component can name the class it
+is responding to:
+
+| Class         | Variant           | Window width  | Typical device                     |
+| ------------- | ----------------- | ------------- | ---------------------------------- |
+| `compact`     | *(unprefixed)*    | 0–599dp       | Phone in portrait                  |
+| `medium`      | `m3-medium:`      | 600–839dp     | Tablet in portrait, unfolded phone |
+| `expanded`    | `m3-expanded:`    | 840–1199dp    | Tablet in landscape, small window  |
+| `large`       | `m3-large:`       | 1200–1599dp   | Desktop                            |
+| `extra-large` | `m3-extra-large:` | 1600dp and up | Ultra-wide desktop, TV             |
+
+Material writes these bounds in dp; on the web a dp is a CSS pixel, so the two
+are the same number.
+
+The variants are mobile-first min-widths, so compact is the unprefixed base and
+each later class overrides it — `p-4 m3-expanded:p-6`. An `m3-compact:` variant
+does exist for symmetry, but being a min-width of 0 it matches at *every* width;
+to style compact and nothing wider, negate the class above it:
+
+```
+max-m3-medium:hidden                  compact only
+m3-medium:max-m3-expanded:grid-cols-2 medium only
+```
+
+Tailwind's stock `sm`/`md`/`lg` are left alone rather than remapped: `md` fires
+at 768px, inside the medium class rather than on either edge, and silently
+moving it would move every breakpoint in a consuming app too.
+
+The same bounds are readable at runtime as `--m3-breakpoint-{class}`. Tailwind
+substitutes the `@theme` values straight into `@media` parameters and never
+emits them as custom properties, so script that needs a boundary reads these.
 
 ### Light and dark
 
