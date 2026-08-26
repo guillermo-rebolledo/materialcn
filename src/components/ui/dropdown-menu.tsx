@@ -31,8 +31,50 @@ function DropdownMenuPortal({ className, ...props }: MenuPrimitive.Portal.Props)
   )
 }
 
-function DropdownMenuTrigger(props: MenuPrimitive.Trigger.Props) {
-  return <MenuPrimitive.Trigger data-slot="dropdown-menu-trigger" {...props} />
+/**
+ * Click-triggered by default. `openOnHover` switches it to the navigation-menu
+ * shape, where requiring a click at every level is tedious.
+ *
+ * Hover alone would leave keyboard users with a menu they cannot reach the same
+ * way, so when `openOnHover` is set, moving focus to the trigger opens it too.
+ * That is done by clicking the trigger rather than by driving the open state
+ * from outside: the click goes through the primitive's own path, so it behaves
+ * identically to a real one and works whether the menu is controlled or not.
+ *
+ * The pointer travelling diagonally from the trigger toward the menu is the
+ * other classic failure — it leaves the trigger before it reaches the popup, so
+ * a naive implementation closes half way. The primitive covers that with a
+ * safe-area polygon; `closeDelay` is the belt to its braces.
+ */
+function DropdownMenuTrigger({
+  closeDelay,
+  onFocus,
+  openOnHover,
+  ...props
+}: MenuPrimitive.Trigger.Props) {
+  return (
+    <MenuPrimitive.Trigger
+      data-slot="dropdown-menu-trigger"
+      openOnHover={openOnHover}
+      closeDelay={openOnHover ? (closeDelay ?? 150) : closeDelay}
+      onFocus={(event) => {
+        onFocus?.(event)
+        if (!openOnHover || event.defaultPrevented) return
+
+        const trigger = event.currentTarget
+        // Only keyboard focus. A click also focuses, and opening from that
+        // would immediately fight the click's own toggle.
+        if (!trigger.matches(":focus-visible")) return
+        // The primitive's trigger toggles, so opening an already-open menu
+        // would close it — which is what happens when focus returns from the
+        // popup.
+        if (trigger.getAttribute("data-popup-open") !== null) return
+
+        trigger.click()
+      }}
+      {...props}
+    />
+  )
 }
 
 function DropdownMenuContent({

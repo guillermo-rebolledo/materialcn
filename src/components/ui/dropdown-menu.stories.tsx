@@ -273,3 +273,121 @@ export const NestedKeyboardInteraction: Story = {
     await waitFor(() => expect(trigger).toHaveFocus())
   },
 }
+
+const NAV = [
+  ["Product", ["Overview", "Features", "Integrations"]],
+  ["Developers", ["Documentation", "API reference", "Changelog"]],
+  ["Company", ["About", "Careers", "Contact"]],
+] as const
+
+/**
+ * The navigation-menu shape, where a click at every level is tedious. Hover a
+ * top-level item to open it, and move sideways to swap between them.
+ *
+ * Keyboard users get the equivalent: tab to a trigger and the menu opens. The
+ * two have to match, or hover becomes a shortcut only some people have.
+ *
+ * Closing is unchanged — Escape, a selection, and tabbing out of the content
+ * all still work, because none of that was reimplemented.
+ */
+export const HoverTriggered: Story = {
+  render: () => (
+    <nav className="flex items-center gap-m3-sm">
+      {NAV.map(([section, links]) => (
+        <DropdownMenu key={section}>
+          <DropdownMenuTrigger
+            openOnHover
+            render={<Button variant="ghost" size="sm" />}
+            data-testid={`nav-${section}`}
+          >
+            {section}
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            {links.map((link) => (
+              <DropdownMenuItem key={link}>{link}</DropdownMenuItem>
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
+      ))}
+    </nav>
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const body = within(canvasElement.ownerDocument.body)
+
+    await userEvent.hover(canvas.getByTestId("nav-Product"))
+    await waitFor(() =>
+      expect(body.getByRole("menuitem", { name: "Overview" })).toBeVisible(),
+    )
+
+    // Escape still closes — the hover path did not replace the close path.
+    await userEvent.keyboard("{Escape}")
+    await waitFor(() =>
+      expect(body.queryByRole("menuitem", { name: "Overview" })).toBeNull(),
+    )
+  },
+}
+
+/** Focus opens it too, or hover would be a shortcut only some people have. */
+export const HoverTriggerOpensOnFocus: Story = {
+  render: () => (
+    <div className="flex items-center gap-m3-sm">
+      <Button variant="ghost" size="sm">
+        Before
+      </Button>
+      <DropdownMenu>
+        <DropdownMenuTrigger
+          openOnHover
+          render={<Button variant="ghost" size="sm" />}
+        >
+          Product
+        </DropdownMenuTrigger>
+        <DropdownMenuContent>
+          <DropdownMenuItem>Overview</DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const body = within(canvasElement.ownerDocument.body)
+    const canvas = within(canvasElement)
+
+    canvas.getByRole("button", { name: "Before" }).focus()
+    await userEvent.tab()
+
+    await waitFor(() =>
+      expect(body.getByRole("menuitem", { name: "Overview" })).toBeVisible(),
+    )
+    await userEvent.keyboard("{Escape}")
+  },
+}
+
+/** Without the prop, nothing changes: hovering does not open it. */
+export const ClickTriggeredByDefault: Story = {
+  render: () => (
+    <DropdownMenu>
+      <DropdownMenuTrigger
+        render={<Button variant="outline" size="sm" />}
+        data-testid="click-trigger"
+      >
+        Actions
+      </DropdownMenuTrigger>
+      <DropdownMenuContent>
+        <DropdownMenuItem>Rename</DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const body = within(canvasElement.ownerDocument.body)
+
+    await userEvent.hover(canvas.getByTestId("click-trigger"))
+    expect(body.queryByRole("menuitem", { name: "Rename" })).toBeNull()
+
+    await userEvent.click(canvas.getByTestId("click-trigger"))
+    await waitFor(() =>
+      expect(body.getByRole("menuitem", { name: "Rename" })).toBeVisible(),
+    )
+    await userEvent.keyboard("{Escape}")
+  },
+}
