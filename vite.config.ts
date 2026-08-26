@@ -18,6 +18,16 @@ export default defineConfig({
   test: {
     projects: [
       {
+        // Node-side unit tests for the build scripts (token and registry
+        // generation). Kept out of the browser project so they do not pay for
+        // a Chromium boot.
+        test: {
+          name: "scripts",
+          environment: "node",
+          include: ["scripts/**/*.test.mjs"],
+        },
+      },
+      {
         extends: true,
         plugins: [
           storybookTest({

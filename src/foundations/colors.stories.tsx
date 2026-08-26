@@ -1,5 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite"
 
+import { PALETTES } from "@/lib/palettes"
+
 const meta = {
   title: "Foundations/Color",
   parameters: { layout: "fullscreen" },
@@ -137,6 +139,65 @@ export const ShadcnBridge: Story = {
           ))}
         </tbody>
       </table>
+    )
+  },
+}
+
+/**
+ * Every palette, side by side.
+ *
+ * `data-palette` is a plain selector, so each column can carry its own palette
+ * without any of them knowing about the others — which is the same mechanism a
+ * runtime theme switcher uses, just applied to a subtree instead of `<html>`.
+ */
+export const Palettes: Story = {
+  parameters: { sideBySide: true },
+  render: () => {
+    const roles = [
+      ["primary", "on-primary"],
+      ["primary-container", "on-primary-container"],
+      ["tertiary-container", "on-tertiary-container"],
+      ["surface-container-highest", "on-surface"],
+      ["error-container", "on-error-container"],
+    ] as const
+
+    const columns = [
+      { id: undefined, label: "Baseline" },
+      ...PALETTES.map((entry) => ({ id: entry.id, label: entry.label })),
+    ]
+
+    return (
+      <div className="flex flex-col gap-4 p-4">
+        <p className="text-m3-body-md text-m3-on-surface-variant max-w-prose">
+          Each column sets <code>data-palette</code> on its wrapper. Nothing
+          inside them is styled differently — the roles resolve against
+          whichever palette they land in. Note the error row: it holds its red
+          across all of them, because error carries meaning rather than brand.
+        </p>
+        <div className="grid grid-cols-5 gap-3">
+          {columns.map((column) => (
+            <div
+              key={column.label}
+              data-palette={column.id}
+              className="flex flex-col gap-2"
+            >
+              <span className="text-m3-label-lg">{column.label}</span>
+              {roles.map(([container, content]) => (
+                <div
+                  key={container}
+                  className="rounded-m3-md flex min-h-14 items-end p-2"
+                  style={{
+                    backgroundColor: `var(--m3-${container})`,
+                    color: `var(--m3-${content})`,
+                  }}
+                >
+                  <span className="text-m3-label-sm">{container}</span>
+                </div>
+              ))}
+            </div>
+          ))}
+        </div>
+      </div>
     )
   },
 }

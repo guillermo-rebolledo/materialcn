@@ -8,6 +8,8 @@
  */
 import { createContext, use } from "react"
 
+import type { Palette } from "@/lib/palettes"
+
 export type Theme = "light" | "dark" | "system"
 
 export type ThemeContextValue = {
@@ -16,6 +18,13 @@ export type ThemeContextValue = {
   /** What is actually on screen right now. Never "system". */
   resolvedTheme: "light" | "dark"
   setTheme: (theme: Theme) => void
+  /**
+   * Which colour palette is applied. Orthogonal to `theme`: a palette carries
+   * both a light and a dark scheme, and switching one does not disturb the
+   * other.
+   */
+  palette: Palette
+  setPalette: (palette: Palette) => void
 }
 
 export const ThemeContext = createContext<ThemeContextValue | null>(null)

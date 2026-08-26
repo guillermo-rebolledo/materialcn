@@ -141,7 +141,7 @@ export function ProductScreen() {
   )
 
   return (
-    <div className="bg-background text-foreground flex min-h-svh flex-col">
+    <div className="bg-background text-foreground flex min-h-full flex-col">
       <div className="flex flex-1 flex-col m3-medium:flex-row">
         {/*
           Compact gets a bottom bar; medium and up get the rail, which expands

@@ -12,6 +12,12 @@ while the version is below 1.0.
 
 ### Added
 
+- **A shadcn registry.** `npx shadcn add @materialcn/button` copies a component
+  and merges the whole M3 token layer into whatever stylesheet your
+  `components.json` points at, so an existing shadcn project can be rethemed
+  without taking any components — `@materialcn/materialcn-theme` on its own
+  does that. `registry.json` is generated from the source tree by
+  `pnpm registry`; only titles and descriptions are written by hand.
 - **Window size class breakpoints.** Material's five classes as Tailwind
   variants — `m3-medium:` through `m3-extra-large:` — plus `--m3-breakpoint-*`
   for reading a bound at runtime. Tailwind's stock `sm`/`md`/`lg` are left

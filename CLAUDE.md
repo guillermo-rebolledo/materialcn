@@ -14,9 +14,16 @@ Retheming is a token edit.
   vendored; when upstream changes, use `shadcn add --diff` rather than editing
   blind.
 - `src/styles/tokens/` — the M3 layer. `color.css`, `motion.css`,
-  `typography.css`, and `layout.css` are **generated** by
+  `typography.css`, `layout.css`, and `palettes.ts` are **generated** by
   `scripts/generate-tokens.mjs`; edit the script, run `pnpm tokens`.
+  Alternate palettes are hue rotations of the kit baseline emitted under
+  `[data-palette="…"]`; the baseline itself is never derived. Adding one is a
+  line in `PALETTES` — then `pnpm check:contrast`, which holds every palette to
+  AA and is what caught the one that needed a lightness nudge.
   `shape.css`, `spacing.css`, `elevation.css`, and `state.css` are hand-written.
+  `palettes.ts` lives in `src/lib/`, not beside the CSS: it is copied into
+  consumer projects by the registry, where a `../styles/tokens/` import has
+  nothing to resolve against.
 - `src/styles/theme.css` — maps `--m3-*` onto Tailwind's `@theme` namespaces.
   `inline` is required so runtime theme swaps are picked up. Two exceptions
   live in the generated token files instead: colors (emitted beside the roles so
@@ -24,6 +31,10 @@ Retheming is a token edit.
   `@media` parameters, where a `var()` does not resolve, so they cannot be
   `inline` at all).
 - `src/index.ts` — the public barrel. New components must be exported here.
+- `registry.json` — **generated** by `scripts/generate-registry.mjs`
+  (`pnpm registry`). `pnpm registry:build` regenerates it and flattens it into
+  `public/r/`, which is gitignored and rebuilt by CI. See "Shipping as a shadcn
+  registry" below.
 
 ## Conventions
 
@@ -100,6 +111,43 @@ Related: write a resting pill radius as half the element's height, not
 `rounded-m3-full`. `full` is 9999px, so interpolating from it spends the whole
 transition far outside the perceptible range — a pill looks identical at any
 radius past half its height.
+
+## Shipping as a shadcn registry
+
+The item graph in `registry.json` — which files go together, what each one
+depends on — is derived from the source tree, so adding a component needs no
+registry edit. The prose is not: a title, description and categories go in
+`scripts/lib/registry-metadata.mjs`, which also holds the registry's own name
+and homepage. The generator fails on a missing entry, so nothing ships with a
+placeholder blurb.
+
+Three constraints the generator encodes, each of which was found the hard way
+by installing into a scratch project:
+
+- **Internal dependencies must be absolute URLs.** A bare `"button"` means
+  *shadcn's* button, and `"./button.json"` is read from the consumer's working
+  directory, not from the URL the item came from. `@materialcn/button` works
+  only after the consumer registers the namespace, which breaks plain
+  `shadcn add <url>`. The host comes from `REGISTRY_URL` in
+  `scripts/generate-registry.mjs`; set it in the environment to build against a
+  local server.
+- **The token layer is inlined, not shipped as files.** An item can ship a
+  `.css` file, but the `@import` for it goes into the consumer's own stylesheet
+  — at a path the registry cannot know — so no relative specifier resolves.
+  `scripts/lib/css-to-registry.mjs` encodes the stylesheet as the CLI's
+  CSS-in-JSON instead.
+- **Declarations cannot sit directly inside an at-rule.** The CLI treats an
+  at-rule's children as selectors and writes a stray declaration out as
+  `.temp{<value>}`, which throws mid-install. `@theme` is the exception, routed
+  through `cssVars.theme`; the converter throws on anything else.
+
+An item cycle means installing one component drags in an unrelated one, so a
+helper imported by more than one item is promoted to an item of its own and
+`findCycle` fails the build if one survives. `pnpm test` validates the result
+against the CLI's own zod schemas.
+
+To verify a change for real, serve `public/r` and install from it into a
+scratch project — `shadcn add` is the only thing that exercises the CSS merge.
 
 ## Verifying
 

@@ -51,6 +51,8 @@ Using it in an app: see [Getting started](#getting-started).
 | `pnpm lint`            | oxlint                                              |
 | `pnpm tokens`          | Regenerates the generated token files               |
 | `pnpm check:contrast`  | Verifies every role pairing meets WCAG AA           |
+| `pnpm registry`        | Regenerates `registry.json` from the source tree    |
+| `pnpm registry:build`  | Flattens the registry into `public/r/` for serving  |
 
 ## Layout
 
@@ -408,9 +410,75 @@ import { ThemeProvider, useTheme } from "materialcn"
 </ThemeProvider>
 ```
 
-`useTheme()` returns `{ theme, resolvedTheme, setTheme }`. On `"system"` it
-deliberately sets no class, letting the CSS media query take over — which is
-what keeps a server-rendered page from flashing the wrong scheme.
+`useTheme()` returns `{ theme, resolvedTheme, setTheme, palette, setPalette }`.
+On `"system"` it deliberately sets no class, letting the CSS media query take
+over — which is what keeps a server-rendered page from flashing the wrong
+scheme.
+
+### Palettes
+
+The stylesheet ships more than one scheme. Setting `data-palette` re-points
+every role beneath it:
+
+```html
+<html data-palette="ocean">
+```
+
+| id         | Key hue | Notes                                   |
+| ---------- | ------- | --------------------------------------- |
+| *(unset)*  | 294°    | The kit's baseline violet — the default |
+| `ocean`    | 250°    | Blue                                    |
+| `forest`   | 150°    | Green                                   |
+| `ember`    | 55°     | Orange                                  |
+| `rose`     | 15°     | Red-pink                                |
+
+`ThemeProvider` sets the attribute for you, and it is orthogonal to light and
+dark: each palette carries both schemes, so switching one never disturbs the
+other.
+
+```tsx
+const { palette, setPalette } = useTheme()
+
+<button onClick={() => setPalette("ocean")}>Ocean</button>
+```
+
+Because the attribute is a plain CSS selector rather than a build flag, it also
+works on a **subtree** — a preview pane, or a swatch in a picker that has to
+draw its own palette:
+
+```tsx
+<span data-palette="forest" className="size-4 rounded-m3-full bg-m3-primary" />
+```
+
+That works because the Tailwind color utilities are declared `@theme inline`,
+so `bg-m3-primary` compiles to `var(--m3-primary)` and resolves wherever it
+lands rather than at build time.
+
+#### How the palettes are derived
+
+The baseline is the Figma kit's, verbatim. The rest are **hue rotations of it**
+in OKLCH: every role keeps its lightness and its chroma, and only the hue
+moves. That is what preserves the things the baseline was verified for — the
+surface ramp keeps its steps, and every container keeps its distance from the
+content role that pairs with it.
+
+Two corrections are applied on top, both in `scripts/generate-tokens.mjs`:
+
+- **Error stays red.** It is the one family whose colour carries meaning rather
+  than brand; a green delete confirmation is a worse interface however well it
+  matches.
+- **Contrast is repaired where a rotation costs it.** WCAG's relative luminance
+  is hue-weighted — green carries far more of it than blue at the same
+  lightness — so a pairing that clears AA in violet can fall under it in green.
+  The generator walks the affected content role's lightness until it clears,
+  and prints every nudge it made.
+
+`pnpm check:contrast` then verifies the emitted CSS rather than trusting any of
+that: 430 pairings across the baseline and all four palettes, light and dark.
+
+Adding a palette is one line in `PALETTES` and `pnpm tokens`. The generator
+emits the CSS *and* `src/lib/palettes.ts`, so the list a theme
+switcher iterates cannot drift from the list the stylesheet actually contains.
 
 ### Motion
 
@@ -679,11 +747,50 @@ Firefox 128 comes from Tailwind v4 rather than from anything here.
 
 ## Consuming the package
 
+There are two ways in. Install the npm package and import components from it,
+or use materialcn as a **shadcn registry** and copy the source into your own
+project, the way you would any other shadcn component.
+
 ```ts
 import { Button, ThemeProvider } from "materialcn"
 import "materialcn/styles.css"
 import "materialcn/fonts.css" // optional: self-hosted Roboto Flex
 ```
+
+### As a shadcn registry
+
+```bash
+npx shadcn registry add @materialcn=https://guillermo-rebolledo.github.io/materialcn/r/{name}.json
+npx shadcn add @materialcn/button
+```
+
+Or, without registering the namespace, by URL:
+
+```bash
+npx shadcn add https://guillermo-rebolledo.github.io/materialcn/r/button.json
+```
+
+Either one copies `button.tsx` and its variants into your `components/ui`,
+installs Base UI, and merges the whole M3 token layer into the stylesheet your
+`components.json` points at — so the button renders as Material immediately,
+and every `bg-primary` you already had renders as Material too.
+
+The token layer arrives as one item, `@materialcn/materialcn-theme`, which
+every component depends on. Add it on its own to retheme an existing shadcn
+project without taking any components:
+
+```bash
+npx shadcn add @materialcn/materialcn-theme
+```
+
+The tokens are merged into your CSS rather than imported from a file, because
+the registry cannot know where your stylesheet lives. One consequence: the
+explanatory comments in `src/styles/tokens/` do not survive the trip. Read them
+here.
+
+Roboto Flex is installed but not loaded — add `import
+"@fontsource-variable/roboto-flex"` to your entry point, or point
+`--m3-font-plain` and `--m3-font-brand` at a font of your own.
 
 ### Without Tailwind
 

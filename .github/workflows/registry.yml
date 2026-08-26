@@ -1,0 +1,48 @@
+# Publishes the built registry to GitHub Pages, so
+#
+#   npx shadcn add @materialcn/button
+#
+# resolves. The item URLs baked into the JSON come from REGISTRY_URL in
+# scripts/generate-registry.mjs; change both together if the host moves.
+#
+# Needs Pages enabled for the repository with "GitHub Actions" as the source.
+name: registry
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm registry:build
+      # The schema validation lives in the test suite, and this is the last
+      # gate before the registry is public.
+      - run: pnpm test
+      # `shadcn build` writes public/r; nothing else in public/ is served.
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: public
+      - id: deploy
+        uses: actions/deploy-pages@v4

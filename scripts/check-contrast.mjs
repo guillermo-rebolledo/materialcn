@@ -22,10 +22,10 @@ const css = readFileSync(path.join(root, "src/styles/tokens/color.css"), "utf8")
 /* --------------------------------------------------------------- parsing */
 
 /**
- * The file declares every role three times — `:root`, `.dark`, and the
- * `prefers-color-scheme` fallback. The first two are the two schemes; the third
- * repeats `.dark` and is skipped, since checking it would only prove the
- * generator emitted the same block twice.
+ * Every scheme is declared more than once — `:root`, `.dark`, and the
+ * `prefers-color-scheme` fallback, then the same three again per palette. The
+ * fallback blocks are skipped: they repeat a block already checked, so testing
+ * them would only prove the generator emitted the same values twice.
  */
 function scheme(selector) {
   const start = css.indexOf(`\n${selector} {`)
@@ -41,7 +41,34 @@ function scheme(selector) {
   return roles
 }
 
-const SCHEMES = { light: scheme(":root"), dark: scheme(".dark") }
+/**
+ * The palettes, discovered from the file rather than listed here — a palette
+ * added to the generator is checked without this script being touched, which
+ * is the only version of the guarantee worth having.
+ */
+const PALETTES = [
+  ...new Set(
+    [...css.matchAll(/^\[data-palette="([a-z-]+)"\] \{$/gm)].map(
+      ([, id]) => id,
+    ),
+  ),
+]
+
+const SCHEMES = {
+  light: scheme(":root"),
+  dark: scheme(".dark"),
+  ...Object.fromEntries(
+    PALETTES.flatMap((id) => [
+      [`${id}`, scheme(`[data-palette="${id}"]`)],
+      [
+        `${id} dark`,
+        scheme(
+          `[data-palette="${id}"].dark,\n[data-palette="${id}"] .dark,\n.dark [data-palette="${id}"]`,
+        ),
+      ],
+    ]),
+  ),
+}
 
 /* -------------------------------------------------------------- pairings */
 
@@ -142,7 +169,7 @@ for (const [name, roles] of Object.entries(SCHEMES)) {
     const ratio = contrastRatio(a, b)
     const ok = ratio >= min
     rows.push(
-      `${ok ? "  " : "✗ "}${name.padEnd(5)} ${content.padEnd(28)} on ${container.padEnd(26)} ${ratio.toFixed(2)}:1 (needs ${min})`,
+      `${ok ? "  " : "✗ "}${name.padEnd(12)} ${content.padEnd(28)} on ${container.padEnd(26)} ${ratio.toFixed(2)}:1 (needs ${min})`,
     )
     if (!ok) {
       failures.push(
@@ -182,5 +209,7 @@ if (failures.length) {
 }
 
 console.log(
-  `All ${rows.length} pairings meet their threshold (AA ${AA_NORMAL_TEXT}:1 for text, 3:1 for strokes).`,
+  `All ${rows.length} pairings across ${Object.keys(SCHEMES).length} schemes ` +
+    `(baseline plus ${PALETTES.length} palettes, light and dark) meet their ` +
+    `threshold (AA ${AA_NORMAL_TEXT}:1 for text, 3:1 for strokes).`,
 )

@@ -9,7 +9,14 @@
 import { writeFileSync } from "node:fs"
 import { fileURLToPath } from "node:url"
 import path from "node:path"
-import { hexToOklch } from "./hex-to-oklch.mjs"
+import {
+  contrastRatio,
+  fitToSrgb,
+  formatOklch,
+  hexToOklchValues,
+  oklchToSrgb,
+} from "./hex-to-oklch.mjs"
+import { allPairings } from "./contrast-pairings.mjs"
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..")
 const out = (name) => path.join(root, "src/styles/tokens", name)
@@ -122,6 +129,129 @@ const DARK = {
   "surface-container-highest": "#36343B",
 }
 
+/*
+ * Alternate palettes, as a hue rotation of the baseline.
+ *
+ * The baseline above is the kit's, verbatim, and stays the default. These are
+ * derived from it rather than seeded independently, and that is the whole
+ * point: rotating hue holds every role's lightness and chroma, so the surface
+ * ramp keeps its steps, every container keeps its distance from its content
+ * role, and the contrast the baseline was verified for survives the change.
+ * `pnpm check:contrast` checks each of them anyway rather than taking that on
+ * trust.
+ *
+ * A palette is one number. Adding one is a line here and `pnpm tokens`.
+ */
+const BASELINE_HUE = hexToOklchValues(LIGHT.primary).H
+
+const PALETTES = [
+  { id: "ocean", label: "Ocean", hue: 250 },
+  { id: "forest", label: "Forest", hue: 150 },
+  { id: "ember", label: "Ember", hue: 55 },
+  { id: "rose", label: "Rose", hue: 15 },
+]
+
+/*
+ * Error keeps the baseline's red under every palette. It is the one family
+ * whose colour carries meaning rather than brand: a green "delete" confirmation
+ * is a worse interface, however well it matches.
+ */
+const isErrorRole = (role) => role === "error" || role.includes("error")
+
+function rotate(scheme, hue) {
+  const delta = hue - BASELINE_HUE
+  return Object.fromEntries(
+    Object.entries(scheme).map(([role, hex]) => {
+      const value = hexToOklchValues(hex)
+      if (isErrorRole(role) || value.C < 0.0005) return [role, value]
+      return [role, fitToSrgb({ ...value, H: (value.H + delta + 360) % 360 })]
+    }),
+  )
+}
+
+const ratioOf = (a, b) =>
+  contrastRatio(oklchToSrgb(a.L, a.C, a.H).linear, oklchToSrgb(b.L, b.C, b.H).linear)
+
+/**
+ * Restores the contrast a rotation cost, by moving lightness and nothing else.
+ *
+ * Rotating hue holds OKLCH lightness, but WCAG's relative luminance is
+ * *hue-weighted* — green carries far more of it than blue at the same L. So a
+ * pairing that clears AA in violet can fall under it in green even though
+ * nothing about its lightness changed. The baseline's tightest pairing, the
+ * snackbar's action label on its own surface, has barely half a point of
+ * headroom, and that is the one that goes.
+ *
+ * The correction walks the *content* role's lightness away from its container
+ * until the pairing clears, one role at a time, re-fitting chroma to sRGB at
+ * each step. Containers are left alone: they are surfaces other things sit on,
+ * and moving one to fix its label would shift everything else that pairs with
+ * it. Repeated to a fixed point because a role can appear in several pairings —
+ * `on-surface` is set against nine.
+ */
+function correctContrast(scheme, label) {
+  const STEP = 0.002
+  const MAX_STEPS = 200
+  const corrected = { ...scheme }
+
+  for (let pass = 0; pass < 8; pass += 1) {
+    let changed = false
+
+    for (const { content, container, min } of allPairings()) {
+      const a = corrected[content]
+      const b = corrected[container]
+      if (!a || !b) throw new Error(`${label}: unknown role ${content}/${container}`)
+      if (ratioOf(a, b) >= min) continue
+
+      // Away from the container: a light label goes lighter, a dark one darker.
+      const direction = a.L >= b.L ? 1 : -1
+      let next = a
+      let steps = 0
+      while (ratioOf(next, corrected[container]) < min && steps < MAX_STEPS) {
+        const L = Math.min(1, Math.max(0, next.L + direction * STEP))
+        if (L === next.L) break
+        next = fitToSrgb({ ...next, L })
+        steps += 1
+      }
+
+      if (ratioOf(next, corrected[container]) < min) {
+        throw new Error(
+          `${label}: cannot reach ${min}:1 for ${content} on ${container}`,
+        )
+      }
+
+      corrections.push(
+        `${label}: ${content} L ${a.L.toFixed(4)} -> ${next.L.toFixed(4)} ` +
+          `for ${min}:1 on ${container}`,
+      )
+      corrected[content] = next
+      changed = true
+    }
+
+    if (!changed) return corrected
+  }
+
+  throw new Error(`${label}: contrast correction did not settle`)
+}
+
+/** Every lightness nudge made, reported at the end of the run. */
+const corrections = []
+
+/*
+ * Memoised: each palette's dark scheme is emitted twice — once for `.dark` and
+ * once for the `prefers-color-scheme` fallback — and correcting it twice would
+ * both repeat the work and report every nudge twice.
+ */
+const paletteCache = new Map()
+
+function palette(hue, scheme, label) {
+  const key = `${hue}:${label}`
+  if (!paletteCache.has(key)) {
+    paletteCache.set(key, correctContrast(rotate(scheme, hue), label))
+  }
+  return paletteCache.get(key)
+}
+
 // shadcn/ui semantic variables, expressed as M3 roles. This is the bridge that
 // makes every stock shadcn component render as Material without patching it.
 const SHADCN_BRIDGE = `  --background: var(--m3-surface);
@@ -160,10 +290,66 @@ const SHADCN_BRIDGE = `  --background: var(--m3-surface);
   --chart-5: var(--m3-tertiary-container);
 `.trimEnd()
 
-const block = (scheme) =>
+const block = (scheme, indent = "  ") =>
   Object.entries(scheme)
-    .map(([name, hex]) => `  --m3-${name}: ${hexToOklch(hex)};`)
+    .map(
+      ([name, value]) =>
+        `${indent}--m3-${name}: ${formatOklch(
+          typeof value === "string" ? hexToOklchValues(value) : value,
+        )};`,
+    )
     .join("\n")
+
+/*
+ * A palette's selectors. `[data-palette]` is an attribute selector, so it has
+ * the same specificity as `:root` and as `.dark` — which is why the dark rules
+ * below are written as a compound rather than relying on source order alone.
+ *
+ * `.dark` is still allowed to be a descendant, so a palette on <html> and a
+ * dark subtree inside it both work.
+ */
+const paletteRoot = (id) => `[data-palette="${id}"]`
+const paletteDark = (id) =>
+  [
+    // The palette element is itself the dark root.
+    `[data-palette="${id}"].dark`,
+    // A dark subtree inside a palette.
+    `[data-palette="${id}"] .dark`,
+    // A palette applied inside a dark subtree — a swatch in a theme picker,
+    // a preview pane. Without this it would draw its light scheme on a dark
+    // page, which is not what "this is the Ocean palette" should look like.
+    `.dark [data-palette="${id}"]`,
+  ].join(",\n")
+
+const paletteBlocks = PALETTES.map(
+  ({ id, hue }) => `
+${paletteRoot(id)} {
+${block(palette(hue, LIGHT, `${id} light`))}
+}
+
+${paletteDark(id)} {
+${block(palette(hue, DARK, `${id} dark`))}
+}`,
+).join("\n")
+
+/*
+ * The bridge is repeated under every selector that redefines an `--m3-*` role
+ * — see the note beside it below. Palettes redefine all of them, so each one
+ * needs its own copy or a palette applied to a subtree would inherit the root
+ * palette's already-substituted values.
+ */
+const bridgeSelectors = [
+  ":root",
+  ".dark",
+  ...PALETTES.flatMap(({ id }) => [paletteRoot(id), paletteDark(id)]),
+].join(",\n")
+
+const paletteFallbacks = PALETTES.map(
+  ({ id, hue }) => `
+  [data-palette="${id}"]:not(.light):not(.dark) {
+${block(palette(hue, DARK, `${id} dark`), "    ")}
+  }`,
+).join("\n")
 
 const colorCss = `/* GENERATED by scripts/generate-tokens.mjs — do not edit by hand. */
 
@@ -176,6 +362,10 @@ const colorCss = `/* GENERATED by scripts/generate-tokens.mjs — do not edit by
  *   :root                     light, the default
  *   .dark                     explicit dark, set by a theme toggle
  *   prefers-color-scheme      follows the OS, unless \`.light\` opts out
+ *
+ * Alternate palettes repeat all three under \`[data-palette="…"]\`. Setting that
+ * attribute — on <html>, or on any subtree — re-points every role, and because
+ * the Tailwind utilities are \`@theme inline\` they follow it at runtime.
  *
  * \`.dark\` is deliberately not root-scoped, so a subtree can carry its own
  * scheme — a dark navbar on a light page, or a light/dark preview pair.
@@ -191,6 +381,7 @@ ${block(LIGHT)}
 .dark {
 ${block(DARK)}
 }
+${paletteBlocks}
 
 /*
  * shadcn/ui semantics, mapped onto the M3 roles.
@@ -201,18 +392,15 @@ ${block(DARK)}
  * \`--background: var(--m3-surface)\` would resolve to the light value once and
  * inherit that fixed color into \`.dark\` subtrees.
  */
-:root,
-.dark {
+${bridgeSelectors} {
 ${SHADCN_BRIDGE}
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not(.light):not(.dark) {
-${block(DARK)
-  .split("\n")
-  .map((line) => `  ${line}`)
-  .join("\n")}
+${block(DARK, "    ")}
   }
+${paletteFallbacks}
 }
 `
 
@@ -381,7 +569,44 @@ ${TOKENS.map(
 
 writeFileSync(out("motion.css"), motionCss)
 
+/*
+ * The palette list, as TypeScript.
+ *
+ * Emitted from the same array that produced the CSS so the two cannot drift:
+ * a palette that exists in one and not the other is the kind of bug that only
+ * shows up as a theme switcher with a dead entry in it.
+ */
+writeFileSync(
+  path.join(root, "src/lib/palettes.ts"),
+  `/* GENERATED by scripts/generate-tokens.mjs — do not edit by hand. */
+
+/**
+ * The palettes shipped in \`styles.css\`, beyond the default.
+ *
+ * Setting \`data-palette\` to one of these ids — on \`<html>\`, or on any element
+ * — re-points every M3 role beneath it. \`ThemeProvider\` does it for you.
+ */
+export const PALETTES = [
+${PALETTES.map(
+  ({ id, label, hue }) =>
+    `  { id: "${id}", label: "${label}", hue: ${hue} },`,
+).join("\n")}
+] as const
+
+/** A palette id, or \`"baseline"\` for the kit's own scheme. */
+export type Palette = "baseline" | (typeof PALETTES)[number]["id"]
+`,
+)
+
 console.log("Wrote src/styles/tokens/color.css and src/styles/tokens/motion.css")
+console.log("Wrote src/lib/palettes.ts")
+
+// Reported rather than silent: a palette that needed a nudge is a fact about
+// that palette, and a long list here means a hue was a poor choice.
+if (corrections.length) {
+  console.log(`  ${corrections.length} lightness correction(s) for contrast:`)
+  for (const note of corrections) console.log(`    ${note}`)
+}
 
 /* ----------------------------------------------------------------- layout */
 

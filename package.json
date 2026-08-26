@@ -12,6 +12,8 @@
     "lint": "oxlint",
     "tokens": "node scripts/generate-tokens.mjs",
     "check:contrast": "node scripts/check-contrast.mjs",
+    "registry": "node scripts/generate-registry.mjs",
+    "registry:build": "pnpm registry && shadcn build",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "test": "vitest run",
@@ -42,6 +44,7 @@
     "@vitest/coverage-v8": "latest",
     "oxlint": "^1.75.0",
     "playwright": "latest",
+    "postcss": "^8.5.26",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "shadcn": "^4.19.0",
@@ -64,7 +67,8 @@
     "components.json",
     "README.md",
     "CHANGELOG.md",
-    "CONTRIBUTING.md"
+    "CONTRIBUTING.md",
+    "registry.json"
   ],
   "main": "./dist/index.js",
   "module": "./dist/index.js",
