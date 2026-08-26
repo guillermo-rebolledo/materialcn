@@ -342,6 +342,62 @@ color over the container, rather than a different background per state. The
 </button>
 ```
 
+## Iconography
+
+Icons are sized and coloured through the `Icon` component, not per call site.
+
+```jsx
+<Icon size="sm"><PlusIcon /></Icon>          decorative — hidden from screen readers
+<Icon label="Delete"><Trash2Icon /></Icon>   named — the icon is the only meaning
+```
+
+**Style.** Outlined, 2dp stroke, 24dp grid, square-ish terminals — Material
+Symbols' defaults, which Lucide matches closely enough to mix without the seam
+showing. Do not mix outlined and filled sets in one product; filled reads as
+selected, so a filled glyph beside an outlined one implies a state that is not
+there.
+
+**Size.** The steps are the kit's optical pairings, not a doubling scale:
+
+| Size | Value | Sits beside                                                |
+| ---- | ----- | ---------------------------------------------------------- |
+| `xs` | 18dp  | Chips and dense controls set in label-large                |
+| `sm` | 20dp  | Buttons at label-large and title-medium                    |
+| `md` | 24dp  | The default — icon buttons, list rows, app bars, navigation |
+| `lg` | 32dp  | Buttons set in headline-large                              |
+| `xl` | 40dp  | Extra-large controls                                       |
+
+**Colour.** Icons take `currentColor`. There is deliberately no `color` prop —
+one would let an icon disagree with the label it sits beside. Set a text colour
+on the icon only when it is *meant* to differ.
+
+**Naming.** Name by purpose, not by picture. The component that deletes
+something imports a "delete" icon; that it happens to be drawn as a bin is an
+implementation detail of the icon set, and naming it `TrashCan` means every
+future search for "delete" misses it. The same rule governs `label`: "Delete",
+never "Trash can".
+
+**Reserved icons.** One glyph per action, so a user who learns a symbol learns
+it once:
+
+| Action           | Icon           | Action          | Icon            |
+| ---------------- | -------------- | --------------- | --------------- |
+| Close, dismiss   | `X`            | Confirm         | `Check`         |
+| Back             | `ArrowLeft`    | Expand          | `ChevronDown`   |
+| More actions     | `MoreVertical` | Opens elsewhere | `ExternalLink`  |
+| Search           | `Search`       | Information     | `Info`          |
+| Add, create      | `Plus`         | Warning         | `TriangleAlert` |
+| Delete           | `Trash2`       | Error           | `CircleAlert`   |
+| Edit             | `Pencil`       | Settings        | `Settings`      |
+
+**Interactivity.** `Icon` renders a `span` and takes no press handling. An icon
+that does something is an icon inside a `Button` or a `Link` — that is where the
+target size, the focus ring, and the accessible role come from, and an icon that
+grew its own would give you two competing versions of each.
+
+> The shipped components still import from the icon set directly. Migrating them
+> onto `Icon` is deliberate follow-up.
+
 ## A note on file layout
 
 Variant objects (`buttonVariants`, …) live in sibling `*-variants.ts` files and
