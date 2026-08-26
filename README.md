@@ -90,6 +90,21 @@ content from another; the pairing is what guarantees contrast.
 To retheme, replace the `LIGHT` and `DARK` maps in
 `scripts/generate-tokens.mjs` and run `pnpm tokens`.
 
+**Verify the palette after a retheme.** The Material roles are contrast-designed
+by construction, but the palette is *generated* — which makes it exactly the
+kind of thing an edit can regress silently. `pnpm check:contrast` measures every
+text-bearing role pairing in both schemes and exits non-zero below WCAG AA:
+
+```
+pnpm tokens && pnpm check:contrast
+```
+
+It reads `tokens/color.css` rather than the hex maps, so it measures the colours
+that actually ship, including the OKLCH conversion. Roles that are not text —
+`shadow`, `scrim`, `surface-tint`, `outline-variant` — are excluded by name with
+the reason recorded in the script, and `outline` is held to WCAG's 3:1 non-text
+threshold. No pairing is exempted by lowering a threshold.
+
 ### Typography
 
 Five roles — display, headline, title, body, label — at three sizes each. Roles
