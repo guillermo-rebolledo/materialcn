@@ -1,0 +1,224 @@
+import { Meta } from "@storybook/addon-docs/blocks"
+
+<Meta title="Components/Compound component anatomy" />
+
+# Compound component anatomy
+
+Most components in the library are a single element with props, and the prop
+table on their page is the whole story. Four are not: `List`, `TextField`,
+`SearchView`, and `Toolbar` are assembled from parts, and which parts you use is
+the API.
+
+This page is the map. Each family lists what is required, what is optional, and
+how the parts nest — the things a prop table cannot say, because they are
+relationships between components rather than properties of one.
+
+Prop tables for every part are on the family's own page; this page does not
+repeat them, so the two cannot disagree.
+
+---
+
+## List
+
+A list of rows, each of which can carry a leading element, up to three lines of
+text, and a trailing element.
+
+```
+List
+└─ ListSection                      optional — groups rows under a heading
+   ├─ ListSubheader                 optional — the heading for the section
+   └─ ListItem                      one per row
+      ├─ ListItemLeading            optional — avatar, icon, checkbox
+      ├─ ListItemContent            required if the row has any text
+      │  ├─ ListItemOverline        optional — the small line *above* the headline
+      │  ├─ ListItemHeadline        the row's own text
+      │  └─ ListItemSupportingText  optional — the second and third lines
+      └─ ListItemTrailing           optional — metadata, a switch, a menu button
+```
+
+**Required:** `List`, and a `ListItem` per row. Everything else is optional.
+
+**The one ordering that matters:** `ListItemOverline` sits *above* the headline
+even though supporting text sits below it, so the content stack reads
+overline → headline → supporting text in source order. Putting the overline
+after the headline renders it in the wrong place, which is easy to do because
+"overline" sounds like a decoration rather than a position.
+
+**Leading and trailing are siblings of the content, not children of it.** A
+leading avatar nested inside `ListItemContent` will scroll with the text instead
+of staying pinned, and will not get the row's leading inset.
+
+**When to reach for `ListSection`:** only when there is a subheader or a
+divider. A list of ungrouped rows does not need one, and adding it changes the
+spacing.
+
+### Composition example
+
+```jsx
+<List>
+  <ListSection>
+    <ListSubheader>Today</ListSubheader>
+    <ListItem>
+      <ListItemLeading>
+        <Avatar>…</Avatar>
+      </ListItemLeading>
+      <ListItemContent>
+        <ListItemOverline>Design system</ListItemOverline>
+        <ListItemHeadline>Breadcrumbs collapse when narrow</ListItemHeadline>
+        <ListItemSupportingText>
+          Measured rather than counted, so it follows the container.
+        </ListItemSupportingText>
+      </ListItemContent>
+      <ListItemTrailing>
+        <Badge size="sm">New</Badge>
+      </ListItemTrailing>
+    </ListItem>
+  </ListSection>
+</List>
+```
+
+---
+
+## TextField
+
+`TextField` is deliberately *not* a compound component, and it is worth saying
+why on a page about compound components.
+
+The Material text field's label, supporting text, error text, and character
+counter all move together — the label floats when the field is filled, the
+supporting text is replaced by the error text, and the counter shares its row.
+Exposing those as parts would mean every consumer reassembling a set of
+relationships that have exactly one correct answer.
+
+So the anatomy is props:
+
+| Prop                  | Controls                                                  |
+| --------------------- | --------------------------------------------------------- |
+| `label`               | The floating label. Required — the field has no unlabelled form |
+| `supportingText`      | The line beneath, when there is no error                   |
+| `error`               | The error message. Replaces the supporting text and sets the error styling |
+| `invalid`             | Error styling without a message                            |
+| `leading` / `trailing` | The slots inside the field, either side of the input      |
+| `prefix` / `suffix`   | Static text against the input itself — a currency, a unit  |
+| `maxLength`           | Adds the character counter, which shares the supporting-text row |
+| `multiline` / `rows`  | Switches to a textarea                                     |
+| `variant`             | `filled` or `outlined`                                     |
+
+Note that `error` is the message, not a boolean: passing a string both shows it
+and switches the styling, so the two cannot disagree. `invalid` is there for the
+case where the message lives somewhere else on the page.
+
+Reach for `Field` and `InputGroup` when you genuinely need to assemble
+something the text field does not cover — a field with two inputs, or a control
+that is not an input at all.
+
+---
+
+## SearchView
+
+The full-screen or docked surface a search bar expands into.
+
+```
+SearchView                    holds the open state
+├─ SearchViewBar              required — the input row
+│  └─ SearchViewClose         optional — the dismiss affordance
+└─ SearchViewContent          required if there is anything to show
+   ├─ SearchViewMessage       optional — empty and error states
+   └─ SearchViewList          optional — wraps the results
+      └─ SearchViewItem       one per result
+```
+
+**Required:** `SearchView` and `SearchViewBar`. A search view with no content is
+a valid intermediate state — it is what the user sees before they type.
+
+**`SearchViewMessage` and `SearchViewList` are alternatives, not siblings to
+stack.** Show the message when there is nothing to list; show the list when
+there is. Rendering both gives you "No results" above three results.
+
+**The presentation is fixed at the root**, not per part: `SearchView` takes the
+docked-versus-full-screen decision because the bar and the content have to agree
+about it.
+
+**`SearchViewContent` carries the `state`** — `recent`, `suggestions`,
+`loading`, `results`, `empty`, or `error` — and `SearchViewMessage` reads it
+through context. An `error` state makes the message announce as an alert
+instead of a status, and colours it accordingly. That is why the message is a
+part rather than a prop: it needs to know something the search view already
+knows, which the caller would otherwise have to restate at each call site.
+
+### Composition example
+
+```jsx
+<SearchView open={open} onOpenChange={setOpen} presentation="docked">
+  <SearchViewBar value={query} onValueChange={setQuery}>
+    <SearchViewClose />
+  </SearchViewBar>
+  <SearchViewContent state={results.length === 0 ? "empty" : "results"}>
+    {results.length === 0 ? (
+      <SearchViewMessage>No results for “{query}”</SearchViewMessage>
+    ) : (
+      <SearchViewList>
+        {results.map((result) => (
+          <SearchViewItem key={result.id} onClick={() => choose(result)}>
+            {result.label}
+          </SearchViewItem>
+        ))}
+      </SearchViewList>
+    )}
+  </SearchViewContent>
+</SearchView>
+```
+
+---
+
+## Toolbar
+
+A row of actions, docked or floating.
+
+```
+Toolbar
+├─ ToolbarGroup      optional — actions that belong together
+├─ ToolbarLabel      optional — a title or a count
+├─ ToolbarDivider    optional — between groups
+├─ ToolbarFAB        optional — the one prominent action
+└─ ToolbarOverflow   optional — what does not fit
+```
+
+**Required:** `Toolbar`. Every part is optional, and a toolbar of bare `Button`s
+is a legitimate toolbar.
+
+**`ToolbarGroup` is what makes `ToolbarDivider` mean something.** A divider
+between two ungrouped buttons separates two things that were never joined; a
+divider between groups separates two sets of related actions, which is the
+distinction the user reads.
+
+**At most one `ToolbarFAB`.** It is the toolbar's single most prominent action,
+and two of them is two most-prominent actions.
+
+**`ToolbarOverflow` goes last**, whatever it contains. It is the place things go
+when they do not fit, so putting it mid-row means the row overflows around a
+control whose whole job is to absorb the overflow.
+
+### Composition example
+
+```jsx
+<Toolbar variant="floating">
+  <ToolbarGroup>
+    <Button variant="ghost" size="sm">
+      <Icon size="sm"><BoldIcon /></Icon>
+    </Button>
+    <Button variant="ghost" size="sm">
+      <Icon size="sm"><ItalicIcon /></Icon>
+    </Button>
+  </ToolbarGroup>
+  <ToolbarDivider />
+  <ToolbarGroup>
+    <Button variant="ghost" size="sm">
+      <Icon size="sm"><LinkIcon /></Icon>
+    </Button>
+  </ToolbarGroup>
+  <ToolbarOverflow>
+    <DropdownMenuItem>Clear formatting</DropdownMenuItem>
+  </ToolbarOverflow>
+</Toolbar>
+```
