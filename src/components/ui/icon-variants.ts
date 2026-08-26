@@ -19,7 +19,8 @@ import { cva } from "class-variance-authority"
  *   lg   32dp  buttons set in headline-large
  *   xl   40dp  extra-large controls
  *
- * Colour is deliberately absent. An icon inherits `currentColor` from whatever
+ * Colour is controlled by inheritance rather than by a variant, which is why
+ * there is no colour entry below. An icon takes `currentColor` from whatever
  * it sits in, so it is correct inside a filled button, a tonal chip, and an
  * error message without any of them passing it a colour. Reach for a text
  * colour utility on the icon only when it is meant to differ from its label.

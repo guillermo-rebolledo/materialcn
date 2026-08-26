@@ -11,8 +11,9 @@ import { cva } from "class-variance-authority"
  * The obvious way to align an optional icon is `inline-flex`, which turns the
  * link into a single unbreakable box: set one mid-paragraph and the whole link
  * jumps to the next line, leaving a ragged hole above it. Staying inline lets
- * the link fragment across lines the way the text around it does — the icon is
- * aligned with `vertical-align` instead, which costs nothing.
+ * the link fragment across lines the way the text around it does, and the rule
+ * below aligns any nested `Icon` with `vertical-align` instead — which costs
+ * nothing and needs no prop, since an icon in a link is just a child.
  *
  * `decoration-from-font` takes the underline position and thickness from the
  * font's own metrics rather than the browser's guess, and `[text-underline-position:from-font]`
@@ -21,6 +22,10 @@ import { cva } from "class-variance-authority"
 export const linkVariants = cva(
   [
     "inline cursor-pointer rounded-m3-xs underline decoration-from-font [text-underline-position:from-font]",
+    // An optional icon beside the label, aligned optically to the text rather
+    // than sitting on the baseline. `vertical-align` and not flex, because the
+    // link has to stay inline to wrap.
+    "[&>[data-slot=icon]]:mx-[0.15em] [&>[data-slot=icon]]:align-[-0.15em]",
     "underline-offset-2 transition-colors duration-(--m3-spring-effects-fast-duration) ease-(--m3-spring-effects-fast)",
     "focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-m3-secondary focus-visible:no-underline",
     // `aria-disabled` rather than `:disabled`, because the anchor case has no

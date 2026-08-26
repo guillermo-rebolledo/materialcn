@@ -101,13 +101,28 @@ export const Disabled: Story = {
   ),
 }
 
-const LOADING_SIZES = ["xs", "sm", "default", "lg", "xl"] as const
+/** Every size and variant the button has, so none can quietly resize. */
+const LOADING_SIZES = [
+  "xs",
+  "sm",
+  "default",
+  "lg",
+  "xl",
+  "2xl",
+  "icon",
+  "icon-xs",
+  "icon-sm",
+  "icon-lg",
+] as const
 const LOADING_VARIANTS = [
   "default",
+  "secondary",
   "tonal",
   "elevated",
   "outline",
   "ghost",
+  "destructive",
+  "link",
 ] as const
 
 /**

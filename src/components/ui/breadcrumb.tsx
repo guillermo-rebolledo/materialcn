@@ -97,6 +97,11 @@ function BreadcrumbSeparator({
   )
 }
 
+/**
+ * Purely visual. The element is `aria-hidden`, so any text inside it —
+ * including a visually-hidden label, which upstream puts here — can never
+ * be read; the accessible name belongs on whatever control wraps it.
+ */
 function BreadcrumbEllipsis({
   className,
   ...props
@@ -114,7 +119,6 @@ function BreadcrumbEllipsis({
     >
       <MoreHorizontalIcon
       />
-      <span className="sr-only">More</span>
     </span>
   )
 }

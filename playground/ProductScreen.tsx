@@ -251,7 +251,9 @@ export function ProductScreen() {
               once it is reached. <Link href="#">Read about quotas</Link>.
             </AlertDescription>
             <AlertAction>
-              <Button size="sm">Manage storage</Button>
+              <Button size="sm" variant="tonal">
+                Manage storage
+              </Button>
             </AlertAction>
           </Alert>
 

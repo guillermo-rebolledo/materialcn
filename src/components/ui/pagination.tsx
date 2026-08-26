@@ -98,6 +98,11 @@ function PaginationNext({
   )
 }
 
+/**
+ * Purely visual. The element is `aria-hidden`, so any text inside it —
+ * including a visually-hidden label, which upstream puts here — can never
+ * be read; the accessible name belongs on whatever control wraps it.
+ */
 function PaginationEllipsis({
   className,
   ...props
@@ -114,7 +119,6 @@ function PaginationEllipsis({
     >
       <MoreHorizontalIcon
       />
-      <span className="sr-only">More pages</span>
     </span>
   )
 }

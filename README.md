@@ -540,8 +540,14 @@ real browser, so a story doubles as a smoke test.
 
 ## Getting started
 
-From nothing to a themed screen. Every step below was run against an empty
-project rather than written from memory; the resulting app is the one quoted.
+From nothing to a themed screen. Every step below was run against an empty Vite
+project rather than written from memory, and the app quoted in step 3 is the one
+that was built.
+
+One caveat on that: the package is not published yet, so the verification run
+installed it from `pnpm pack` output rather than from the registry. Everything
+downstream of the install — the stylesheet wiring, the `@source` line, the
+provider, the build — is exactly what was run.
 
 ### 1. Install
 

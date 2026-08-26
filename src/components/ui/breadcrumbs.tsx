@@ -19,7 +19,16 @@ import {
 import type { BreadcrumbEntry, BreadcrumbsProps } from "./breadcrumbs.types"
 
 /**
- * How many trailing steps fit beside the root before the trail overflows.
+ * The lower bound on how many steps are shown: the root and the current page.
+ *
+ * Collapsing past this would fold the current page into the menu — leaving the
+ * user with a trail whose only visible entries are the root and an ellipsis,
+ * which says where they came from and not where they are.
+ */
+const MINIMUM_VISIBLE = 2
+
+/**
+ * How many steps fit before the trail overflows, never fewer than the two ends.
  *
  * There is no CSS for "collapse the middle when it does not fit", so this
  * measures. It shrinks one step at a time and re-measures, which converges in a
@@ -60,7 +69,7 @@ function useFittedCount(total: number) {
     if (!list) return
     // The +1 absorbs sub-pixel rounding, which otherwise collapses a trail
     // that fits by a fraction of a pixel.
-    if (list.scrollWidth > list.clientWidth + 1 && count > 1) {
+    if (list.scrollWidth > list.clientWidth + 1 && count > MINIMUM_VISIBLE) {
       setCount((current) => current - 1)
     }
   }, [count])
@@ -85,12 +94,14 @@ function Breadcrumbs({
 }: BreadcrumbsProps) {
   const { count, listRef } = useFittedCount(items.length)
 
-  const collapsed = count < items.length && items.length > 2
-  // The root and the current page always survive: they are the two the trail
-  // exists to relate, and a collapse that hid either would leave the user
-  // without either end of the path.
+  const collapsed = count < items.length && items.length > MINIMUM_VISIBLE
+  // `count` counts the root, so the tail is one shorter. Floored at
+  // MINIMUM_VISIBLE above, the tail is never empty — which is what keeps the
+  // current page on screen no matter how narrow the container gets.
   const hidden = collapsed ? items.slice(1, items.length - (count - 1)) : []
-  const tail = collapsed ? items.slice(items.length - (count - 1)) : items.slice(1)
+  const tail = collapsed
+    ? items.slice(items.length - (count - 1))
+    : items.slice(1)
 
   const step = (entry: BreadcrumbEntry, isCurrent: boolean) => (
     <BreadcrumbItem key={`${entry.label}-${entry.href ?? "current"}`}>

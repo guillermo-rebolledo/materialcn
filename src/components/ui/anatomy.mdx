@@ -16,6 +16,16 @@ relationships between components rather than properties of one.
 Prop tables for every part are on the family's own page; this page does not
 repeat them, so the two cannot disagree.
 
+Three exports have no page of their own, deliberately:
+
+- `breadcrumb` and `pagination` are the composable parts that `Breadcrumbs` and
+  `Paginator` are built from. Their prop tables appear on those components'
+  pages, since that is where a consumer meets them.
+- `calendar-utils`, `paginator-utils`, and `time-picker-utils` export functions
+  rather than components. A prop table has nothing to say about them; their
+  behaviour is documented in their own doc comments and pinned by the stories
+  of the components that use them.
+
 ---
 
 ## List

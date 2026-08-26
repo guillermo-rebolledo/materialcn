@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite"
 import { CheckIcon } from "lucide-react"
-import { expect, within } from "storybook/test"
+import { expect } from "storybook/test"
 
 import { Badge } from "./badge"
 
@@ -90,21 +90,26 @@ export const Sizes: Story = {
     </div>
   ),
   play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement)
     const view = canvasElement.ownerDocument.defaultView!
 
     for (const [size, height] of SIZES) {
-      const [badge] = canvas.getAllByText("Badge", {
-        selector: `[data-slot="badge"][data-size="${size}"]`,
-      })
-      expect(view.getComputedStyle(badge).height, size).toBe(`${height}px`)
+      // Scoped by size. Reading `getAllByLabelText(...)[0]` inside the loop
+      // asserted against the first size three times over, which is a test that
+      // passes whatever the other two sizes do.
+      const row = canvasElement.querySelector(
+        `[data-slot="badge"][data-size="${size}"]`,
+      )!
+      expect(view.getComputedStyle(row).height, size).toBe(`${height}px`)
 
       // Text-free badges are square at every size: with no label to pad
       // around, the horizontal padding would leave a lozenge instead of the
       // shape the step was drawn for.
-      const [iconOnly] = canvas.getAllByLabelText("Verified")
+      const iconOnly = canvasElement.querySelector(
+        `[data-slot="badge"][data-size="${size}"][aria-label="Verified"]`,
+      )!
       const box = view.getComputedStyle(iconOnly)
       expect(box.width, `${size} icon-only`).toBe(box.height)
+      expect(box.width, `${size} icon-only`).toBe(`${height}px`)
     }
   },
 }

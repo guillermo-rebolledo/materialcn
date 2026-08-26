@@ -7,11 +7,17 @@ warning above a destructive area.
 
 **Blocked by:** None — can start immediately.
 
-**Status:** done
+**Status:** done (one box deferred to 25)
 
-- [x] Roles are visually distinguished — at minimum informational, success,
+- [ ] Roles are visually distinguished — at minimum informational, success,
       warning, and error — using colour roles that keep the content above the AA
       contrast threshold against the alert's own background.
+      **Partial.** All four pairs clear AA, and each severity carries an icon so
+      the role never rests on colour alone. But the baseline scheme has no
+      success or warning role, so warning borrows `tertiary-container`, which is
+      within 25° of `error-container` at the same lightness — the two are not
+      separable by colour. Tracked as 25; this box stays open until the palette
+      has the roles.
 - [x] Supports an optional title, so a longer message can be scanned.
 - [x] Supports a leading icon, so the role is legible to colourblind users
       without relying on the background colour alone.

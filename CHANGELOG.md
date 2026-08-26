@@ -44,6 +44,8 @@ while the version is below 1.0.
 - **Badge sizes.** `sm`, `default`, `lg`, with padding, type, corner, and icon
   scaling together. The default is unchanged.
 - **Skeleton shapes and `text` sizing**, plus stories, which it had none of.
+- **Stories for `Field`, `Label`, `Toggle`, and `InputGroup`**, which were
+  exported with no documentation page at all.
 - **Dropdown `openOnHover`**, with focus opening it equivalently.
 
 ### Changed
@@ -66,6 +68,9 @@ while the version is below 1.0.
   weekday labels were right and the columns beneath them were rotated by one.
 - **The tooltip has an open delay.** It was forced to 0, so a pointer crossing a
   dense icon row fired every tooltip it passed.
+- **Breadcrumbs no longer drop the current page.** In a container too narrow
+  for both ends, the collapse kept folding until only the root and the ellipsis
+  were left — a trail saying where the user came from and not where they are.
 - **`cn` merges the spacing scale.** `p-m3-lg` was not recognised as conflicting
   with `p-4`, so both survived and CSS source order decided a component's
   padding.

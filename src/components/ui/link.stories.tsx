@@ -168,7 +168,7 @@ export const WithIcon: Story = {
       The specification lives on{" "}
       <Link href="https://m3.material.io">
         m3.material.io
-        <Icon size="xs" className="ml-m3-xs align-[-0.15em]">
+        <Icon size="xs">
           <ExternalLinkIcon />
         </Icon>
       </Link>

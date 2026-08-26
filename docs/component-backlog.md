@@ -199,8 +199,7 @@ primitives.
   drag physics require shadcn `drawer`.
 - [x] Add Storybook coverage for Skeleton, including shapes, token-sized text
   lines, a composed loading layout, and reduced motion.
-- [ ] Add Storybook coverage for Field, Label, and Toggle, which are exported
-  but currently have no dedicated stories.
+- [x] Add Storybook coverage for Field, Label, and Toggle.
 
 ## Already covered — do not duplicate
 

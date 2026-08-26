@@ -122,8 +122,17 @@ export const WithActions: Story = {
           The card ending 4242 was declined. Try another card, or{" "}
           <Link href="#">contact support</Link>.
         </AlertDescription>
+        {/*
+          Tonal rather than filled. A filled primary button sits its own
+          On Primary label on Primary, which is a verified pair — but the
+          button itself then sits on error-container, and primary against
+          error-container is a pairing nothing checks. Tonal keeps the action
+          inside the alert's own colour family.
+        */}
         <AlertAction>
-          <Button size="sm">Update payment</Button>
+          <Button size="sm" variant="tonal">
+            Update payment
+          </Button>
           <Button size="sm" variant="ghost">
             Dismiss
           </Button>

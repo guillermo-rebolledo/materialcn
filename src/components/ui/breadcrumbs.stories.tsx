@@ -133,6 +133,12 @@ export const CollapsesWhenItDoesNotFit: Story = {
         </code>
         <Breadcrumbs {...args} />
       </div>
+      <div className="w-32" data-testid="cramped">
+        <code className="text-m3-label-sm text-muted-foreground">
+          128px — narrower than the two ends
+        </code>
+        <Breadcrumbs {...args} />
+      </div>
     </div>
   ),
   play: async ({ canvasElement }) => {
@@ -160,5 +166,15 @@ export const CollapsesWhenItDoesNotFit: Story = {
       ).toBeInTheDocument(),
     )
     await userEvent.keyboard("{Escape}")
+
+    // Narrower than the two ends can possibly fit, the collapse has to stop
+    // rather than keep folding: dropping the current page would leave a trail
+    // saying where the user came from and not where they are.
+    const cramped = within(canvas.getByTestId("cramped"))
+    expect(cramped.getByRole("link", { name: "Home" })).toBeInTheDocument()
+    expect(cramped.getByText("Breadcrumbs")).toHaveAttribute(
+      "aria-current",
+      "page",
+    )
   },
 }
