@@ -28,11 +28,15 @@ surface-container ramp, the shape scale, spring motion — reach for the
 
 ## Quick start
 
+Working *on* the library:
+
 ```bash
 pnpm install
 pnpm storybook   # component workshop at :6006
 pnpm dev         # playground app at :5173
 ```
+
+Using it in an app: see [Getting started](#getting-started).
 
 ## Scripts
 
@@ -534,6 +538,139 @@ Components land in `src/components/ui`. Export them from `src/index.ts`, and add
 a `*.stories.tsx` beside the component — `pnpm test` renders every story in a
 real browser, so a story doubles as a smoke test.
 
+## Getting started
+
+From nothing to a themed screen. Every step below was run against an empty
+project rather than written from memory; the resulting app is the one quoted.
+
+### 1. Install
+
+```bash
+pnpm add materialcn react react-dom
+pnpm add -D tailwindcss @tailwindcss/vite
+```
+
+Tailwind is not strictly required — `materialcn/styles.css` already contains
+every utility the components use — but you want it as soon as you write any
+markup of your own. See [Without Tailwind](#without-tailwind) below.
+
+### 2. Wire the stylesheet
+
+```css
+/* src/index.css */
+@import "tailwindcss";
+@import "materialcn/styles.css";
+@source "../node_modules/materialcn/dist";
+```
+
+The `@source` line is what lets you write `bg-m3-tertiary-container` or
+`m3-expanded:grid-cols-3` in *your* markup: Tailwind only generates a class it
+has seen, and by default it does not look inside `node_modules`.
+
+Add the Tailwind plugin to your bundler:
+
+```js
+// vite.config.js
+import { defineConfig } from "vite"
+import react from "@vitejs/plugin-react"
+import tailwindcss from "@tailwindcss/vite"
+
+export default defineConfig({ plugins: [react(), tailwindcss()] })
+```
+
+### 3. Render a screen
+
+```jsx
+// src/App.jsx
+import {
+  Button,
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  ThemeProvider,
+  useTheme,
+} from "materialcn"
+
+function ThemeToggle() {
+  const { resolvedTheme, setTheme } = useTheme()
+  return (
+    <Button
+      variant="tonal"
+      onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
+    >
+      Switch to {resolvedTheme === "dark" ? "light" : "dark"}
+    </Button>
+  )
+}
+
+export default function App() {
+  return (
+    <ThemeProvider defaultTheme="system">
+      <main className="bg-background text-foreground min-h-svh p-8">
+        <Card className="max-w-sm">
+          <CardHeader>
+            <CardTitle>Hello, Material</CardTitle>
+          </CardHeader>
+          <CardContent className="flex flex-col gap-4">
+            <p className="text-m3-body-md">A card, a button, and a theme switch.</p>
+            <ThemeToggle />
+          </CardContent>
+        </Card>
+      </main>
+    </ThemeProvider>
+  )
+}
+```
+
+Two things are doing work in that snippet:
+
+- **`ThemeProvider`** puts the scheme class on `<html>` and persists the choice.
+  `defaultTheme="system"` follows the OS until the user picks. It is only needed
+  if you want a *switchable* theme — the tokens already follow
+  `prefers-color-scheme` without it.
+- **`bg-background text-foreground`** are shadcn's semantic names, pointed at
+  Material roles. Nothing in that markup mentions a colour, which is the point:
+  retheming does not touch it.
+
+### 4. Optional: self-hosted Roboto Flex
+
+```jsx
+import "materialcn/fonts.css"
+```
+
+Deliberately opt-in. Bundling six woff2 subsets into the main stylesheet would
+force them on every consumer and defeat `unicode-range` subsetting. Without it,
+the type scale falls back to the system UI font — everything still works, the
+letterforms are just not Roboto Flex.
+
+### Supported browsers
+
+The floor comes from CSS the library actually emits, not from a policy:
+
+| Feature                     | Where it is used                          | Chrome | Safari | Firefox |
+| --------------------------- | ----------------------------------------- | ------ | ------ | ------- |
+| `oklch()`                   | Every colour role                         | 111    | 15.4   | 113     |
+| `color-mix()`               | State layers, disabled content             | 111    | 16.2   | 113     |
+| `linear()` easing           | The spring curves                          | 113    | 17.2   | 112     |
+| `@container`                | Carousel, responsive component geometry    | 105    | 16     | 110     |
+| `:has()`                    | Variant geometry across most components    | 105    | 15.4   | 121     |
+| `@property`                 | Tailwind v4's own output                   | 85     | 16.4   | 128     |
+
+Which gives:
+
+**Chrome / Edge 113+ · Safari 17.2+ · Firefox 128+**
+
+By OS, the Safari row is the binding one: **macOS 14.2+** and **iOS/iPadOS
+17.2+** (December 2023). Chromium on Android follows the Chrome number.
+
+`linear()` is the newest requirement, and it is not cosmetic — it is how the M3
+Expressive spring curves are expressed, since CSS has no `spring()`. On an older
+engine the easings fall back to linear interpolation: everything still animates,
+it just loses the overshoot that makes Expressive expressive.
+
+Firefox 128 comes from Tailwind v4 rather than from anything here.
+
 ## Consuming the package
 
 ```ts
@@ -542,10 +679,13 @@ import "materialcn/styles.css"
 import "materialcn/fonts.css" // optional: self-hosted Roboto Flex
 ```
 
+### Without Tailwind
+
 `dist/styles.css` carries the tokens, the `@theme` mapping, and every utility
 the components use, so consumers without Tailwind still get a working
-stylesheet. Consumers who *do* use Tailwind and want to write `m3-` utilities in
-their own markup should scan the package instead:
+stylesheet — the components render correctly, you just cannot add `m3-`
+utilities of your own. Consumers who *do* use Tailwind should scan the package
+so their own markup can use them:
 
 ```css
 @import "tailwindcss";
