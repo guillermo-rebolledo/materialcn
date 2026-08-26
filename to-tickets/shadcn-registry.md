@@ -149,11 +149,17 @@ by namespace. `shadcn add @materialcn/text-field @materialcn/theme-provider
 @materialcn/split-button` resolved the whole graph to 18 files, and the
 consumer project typechecks clean.
 
-## Still to do
+## Live
 
-- Enable GitHub Pages for the repo with "GitHub Actions" as the source. Until
-  then the URLs baked into the items 404. If the registry is hosted somewhere
-  other than `guillermo-rebolledo.github.io/materialcn`, change `REGISTRY_URL`
-  in `scripts/generate-registry.mjs` and re-run `pnpm registry:build`.
-- Optional, for discoverability in `shadcn search`: PR `apps/v4/registry/
-  directory.json` in `shadcn-ui/ui`, validated with `pnpm validate:registries`.
+<https://guillermo-rebolledo.github.io/materialcn/r/registry.json>, published by
+`.github/workflows/registry.yml` on every push to main. Installing by URL and
+by namespace both work against it.
+
+Moving the registry to another host means changing `REGISTRY_URL` in
+`scripts/generate-registry.mjs` — the item URLs are baked in — and re-running
+`pnpm registry:build`.
+
+Submitted to the registry directory as
+[shadcn-ui/ui#11644](https://github.com/shadcn-ui/ui/pull/11644); their
+`pnpm validate:registries` passes. That only affects discoverability in
+`shadcn search` — the registry works either way.
