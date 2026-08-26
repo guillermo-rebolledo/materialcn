@@ -17,6 +17,7 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "test": "vitest run",
+    "test:registry": "vitest run --project scripts",
     "test:watch": "vitest"
   },
   "dependencies": {

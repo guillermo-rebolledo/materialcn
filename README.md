@@ -53,6 +53,7 @@ Using it in an app: see [Getting started](#getting-started).
 | `pnpm check:contrast`  | Verifies every role pairing meets WCAG AA           |
 | `pnpm registry`        | Regenerates `registry.json` from the source tree    |
 | `pnpm registry:build`  | Flattens the registry into `public/r/` for serving  |
+| `pnpm test:registry`   | Validates the registry against shadcn's own schemas |
 
 ## Layout
 

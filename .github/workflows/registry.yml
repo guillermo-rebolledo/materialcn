@@ -30,16 +30,21 @@ jobs:
       url: ${{ steps.deploy.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
+      # Pinned here rather than in a `packageManager` field, which would also
+      # take over local shells.
       - uses: pnpm/action-setup@v4
+        with:
+          version: 11
       - uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm registry:build
-      # The schema validation lives in the test suite, and this is the last
-      # gate before the registry is public.
-      - run: pnpm test
+      # Validates the built registry against the CLI's own schemas — the last
+      # gate before it is public. The story tests are left to `pnpm test`;
+      # they need a browser and check nothing about the registry.
+      - run: pnpm test:registry
       # `shadcn build` writes public/r; nothing else in public/ is served.
       - uses: actions/upload-pages-artifact@v3
         with:
