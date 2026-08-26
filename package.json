@@ -62,7 +62,9 @@
     "dist",
     "src",
     "components.json",
-    "README.md"
+    "README.md",
+    "CHANGELOG.md",
+    "CONTRIBUTING.md"
   ],
   "main": "./dist/index.js",
   "module": "./dist/index.js",

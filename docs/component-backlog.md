@@ -10,19 +10,9 @@ compositions of existing primitives.
 
 ## Definition of done
 
-Every completed item should:
-
-- Match the geometry, color roles, state layers, and motion in the Material 3
-  design kit.
-- Use an existing shadcn/Base UI primitive when one provides the required
-  behavior.
-- Use semantic tokens or existing `m3-` tokens rather than raw colors.
-- Support keyboard interaction, focus-visible treatment, disabled states, and
-  reduced motion where applicable.
-- Be exported from `src/index.ts`.
-- Include colocated Storybook stories for its important variants, states, and
-  light/dark presentation.
-- Pass `pnpm typecheck`, `pnpm lint`, `pnpm test`, and `pnpm build`.
+See [CONTRIBUTING.md](../CONTRIBUTING.md#definition-of-done). It used to live
+here, where nobody looking to contribute would find it; the copy was moved
+rather than duplicated so the two cannot drift.
 
 ## P0 — Core gaps
 
