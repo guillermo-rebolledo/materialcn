@@ -89,6 +89,24 @@
 }
 
 /*
+ * Material's responsive grid. Column count, gutter, and margin come from
+ * tokens/layout.css and all change together at a window size class boundary,
+ * so this utility carries no media queries of its own — it reads the variables
+ * once and the cascade supplies the right values.
+ *
+ * Place children with Tailwind's `col-span-*`, stepped per class wherever the
+ * span should change: `col-span-4 m3-expanded:col-span-6`.
+ */
+@utility m3-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--m3-grid-columns), minmax(0, 1fr));
+  gap: var(--m3-grid-gutter);
+  padding-inline: var(--m3-grid-margin);
+  max-width: var(--m3-grid-max-width);
+  margin-inline: auto;
+}
+
+/*
  * Material expresses hover/focus/press as a translucent layer of the content
  * color over the container, not as a different background per state. One
  * utility covers every interactive surface in the library.

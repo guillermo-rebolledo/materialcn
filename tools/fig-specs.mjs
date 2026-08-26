@@ -5,6 +5,8 @@
  *   node tools/fig-specs.mjs <decodedDir> --pages          list pages
  *   node tools/fig-specs.mjs <decodedDir> --sets <page>    list component sets on a page
  *   node tools/fig-specs.mjs <decodedDir> --spec <regex>   dump specs for matching components
+ *   node tools/fig-specs.mjs <decodedDir> --set <regex> [variantRegex] [depth]
+ *                                                        dump variants of matching component sets
  */
 import { readFileSync } from "node:fs"
 
@@ -111,7 +113,7 @@ function dump(n, depth = 0, max = 3) {
   for (const c of children.get(key(n.guid)) ?? []) dump(c, depth + 1, max)
 }
 
-const [, , , mode, arg] = process.argv
+const [, , , mode, arg, arg2, arg3] = process.argv
 
 if (mode === "--pages") {
   for (const c of nodes.filter((n) => n.type === "CANVAS")) console.log(c.name)
@@ -135,6 +137,23 @@ if (mode === "--pages") {
     dump(n)
   }
   if (!count) console.log("no match")
+} else if (mode === "--set") {
+  // Variants are named by their property values ("Size=Small, Color=Primary"),
+  // so matching on the *parent* set name is what you want for a component.
+  const re = new RegExp(arg, "i")
+  const variantRe = arg2 ? new RegExp(arg2, "i") : null
+  const depth = arg3 ? Number(arg3) : 3
+  let count = 0
+  for (const n of nodes) {
+    if (n.type !== "SYMBOL") continue
+    const p = parentOf(n)
+    if (!p || !re.test(p.name)) continue
+    if (variantRe && !variantRe.test(n.name)) continue
+    if (count++ > 40) break
+    console.log(`\n=== [${pageOf(n)}] ${p.name} :: ${n.name}`)
+    dump(n, 0, depth)
+  }
+  if (!count) console.log("no match")
 } else {
-  console.log("modes: --pages | --sets <page> | --spec <regex>")
+  console.log("modes: --pages | --sets <page> | --spec <regex> | --set <regex> [variantRegex] [depth]")
 }

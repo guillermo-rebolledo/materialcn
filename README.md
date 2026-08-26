@@ -155,6 +155,42 @@ The same bounds are readable at runtime as `--m3-breakpoint-{class}`. Tailwind
 substitutes the `@theme` values straight into `@media` parameters and never
 emits them as custom properties, so script that needs a boundary reads these.
 
+#### The responsive grid
+
+Material's grid is not a column count — it is a column count, a gutter, and a
+margin that all change together as the window crosses a class boundary:
+
+| Class         | Columns | Gutter | Margin                     |
+| ------------- | ------- | ------ | -------------------------- |
+| `compact`     | 4       | 16dp   | 16dp                       |
+| `medium`      | 8       | 16dp   | 32dp                       |
+| `expanded`    | 12      | 24dp   | 24dp                       |
+| `large`       | 12      | 24dp   | 200dp                      |
+| `extra-large` | 12      | 24dp   | centred, 1128dp of content |
+
+The numbers come from the `Examples/Layout grid` component set's Figma layout
+grids in the official kit, not from the docs site — the two disagree about
+medium. Note that the margin is not monotonic: a tablet in portrait gets more
+room per column than a landscape one. At large the margin jumps to 200dp, and at
+extra-large the grid stops stretching and centres 12 columns of 72dp; both exist
+so a line of body text does not run the full width of a television.
+
+Because the three move together, they are one set of variables redefined per
+class rather than five separate sets — which is what lets `m3-grid` carry no
+media query of its own:
+
+```jsx
+<div className="m3-grid">
+  <main className="col-span-full m3-expanded:col-span-8">…</main>
+  <aside className="col-span-full m3-expanded:col-span-4">…</aside>
+</div>
+```
+
+Children are placed with Tailwind's own `col-span-*`, stepped per class wherever
+the span should change. Spans are not clamped to the column count: `col-span-8`
+on a 4-column compact grid overflows, which is why the span usually needs a step
+of its own.
+
 ### Light and dark
 
 Dark mode re-points the same variable names, so **no component needs a `dark:`
