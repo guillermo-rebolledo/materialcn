@@ -75,6 +75,7 @@ scripts/              token generator
 | Elevation  | `styles/tokens/elevation.css`   | `shadow-m3-0` … `shadow-m3-5`     |
 | Motion     | `styles/tokens/motion.css` ⚙︎    | `ease-m3-*`                       |
 | State      | `styles/tokens/state.css`       | `m3-state-layer`                  |
+| Stacking   | `styles/tokens/z-index.css`     | `z-(--m3-z-*)`                    |
 | Layout     | `styles/tokens/layout.css` ⚙︎    | `m3-medium:` … `m3-extra-large:`  |
 
 ⚙︎ Generated. Edit `scripts/generate-tokens.mjs`, then `pnpm tokens`.
@@ -139,6 +140,39 @@ numeric utilities everywhere else.
 > them onto the scale is deliberate follow-up: it is a visual-diff-heavy change
 > across every component, and keeping it out of the ticket that introduces the
 > scale is what makes both reviewable.
+
+### Stacking
+
+Material describes *elevation* — shadow and surface tint — which says nothing
+about paint order, so the z-index scale is the library's own:
+
+| Token             | Value | Layer                                          |
+| ----------------- | ----- | ---------------------------------------------- |
+| `--m3-z-raised`   | 1     | A surface lifted within the normal flow        |
+| `--m3-z-sticky`   | 100   | Headers and toolbars that outlast a scroll     |
+| `--m3-z-scrim`    | 200   | The dimming layer a modal paints over the page |
+| `--m3-z-modal`    | 300   | Dialogs and sheets                             |
+| `--m3-z-menu`     | 400   | Menus, selects, popovers, date pickers         |
+| `--m3-z-snackbar` | 500   | Transient messages                             |
+| `--m3-z-tooltip`  | 600   | Tooltips                                       |
+
+Apply them with Tailwind's custom-property shorthand: `z-(--m3-z-modal)`.
+
+Two placements are deliberate and easy to get backwards:
+
+- **Menus sit above modals.** A select inside a dialog portals to the body, so
+  it is a *sibling* of the dialog rather than a descendant — give it a lower
+  z-index and it renders behind the dialog that opened it. Nothing is lost,
+  because a page under an open modal is inert and cannot have a menu open on it.
+- **Tooltips sit above everything**, one step further along the same argument:
+  a tooltip can be triggered from inside a dialog, a snackbar action, or a menu.
+
+Steps are 100 apart so a consumer can slot a layer in without renumbering.
+
+Every overlay the library ships uses the scale. The remaining bare `z-10`s —
+the top app bar's rows, the select's scroll buttons, the notification badge over
+an avatar — are stacking *within* a component's own context, not on the overlay
+scale, and are deliberately left alone.
 
 ### Layout
 

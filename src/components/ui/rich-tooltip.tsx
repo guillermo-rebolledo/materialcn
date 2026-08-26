@@ -135,7 +135,7 @@ function RichTooltipContent({
   const context = useRichTooltip()
   return (
     <PopoverPrimitive.Portal>
-      <PopoverPrimitive.Positioner align={align} alignOffset={alignOffset} side={side} sideOffset={sideOffset} className="isolate z-50">
+      <PopoverPrimitive.Positioner align={align} alignOffset={alignOffset} side={side} sideOffset={sideOffset} className="isolate z-(--m3-z-menu)">
         <PopoverPrimitive.Popup
           {...props}
           data-slot="rich-tooltip-content"

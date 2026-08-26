@@ -134,7 +134,7 @@ function DatePicker({
           )}
         </Field>
         <PopoverPrimitive.Portal>
-          <PopoverPrimitive.Positioner align="end" side="bottom" sideOffset={8} className="isolate z-50">
+          <PopoverPrimitive.Positioner align="end" side="bottom" sideOffset={8} className="isolate z-(--m3-z-menu)">
             <PopoverPrimitive.Popup
             aria-label={`${label} calendar`}
             data-slot="date-picker-popover"

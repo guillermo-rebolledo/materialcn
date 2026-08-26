@@ -38,12 +38,18 @@ function ToastViewport({ className, ...props }: ToastPrimitive.Viewport.Props) {
   )
 }
 
+/**
+ * Later toasts sit *below* earlier ones, which is why the z-index counts down
+ * from the snackbar layer rather than up: the frontmost toast is index 0. The
+ * scale leaves 100 between layers, so the stack would have to reach a hundred
+ * simultaneous toasts before it reached the layer beneath.
+ */
 function Toast({ className, ...props }: ToastPrimitive.Root.Props) {
   return (
     <ToastPrimitive.Root
       data-slot="toast"
       className={cn(
-        "group/toast pointer-events-auto absolute right-0 bottom-0 z-[calc(1000-var(--toast-index))] w-full origin-bottom",
+        "group/toast pointer-events-auto absolute right-0 bottom-0 z-[calc(var(--m3-z-snackbar)-var(--toast-index))] w-full origin-bottom",
         "rounded-m3-xs bg-m3-inverse-surface text-m3-inverse-on-surface shadow-m3-3",
         "outline-none select-none will-change-transform",
         "focus-visible:outline-m3-inverse-primary focus-visible:outline-3 focus-visible:outline-offset-2",

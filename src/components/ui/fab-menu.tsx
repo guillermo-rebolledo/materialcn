@@ -62,7 +62,7 @@ function FABMenu({
         data-color={color}
         data-open={open || undefined}
         data-placement={placement}
-        className={cn("relative z-50 inline-flex", className)}
+        className={cn("relative z-(--m3-z-menu) inline-flex", className)}
         onKeyDown={(event) => {
           onKeyDown?.(event)
           if (event.defaultPrevented || !open) return

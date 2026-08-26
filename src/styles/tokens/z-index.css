@@ -1,0 +1,41 @@
+/*
+ * Overlay stacking order.
+ *
+ * Material does not publish a z-index scale — it describes elevation, which is
+ * about shadow and tint, not paint order. So this is the library's own, and the
+ * order is the part worth arguing about:
+ *
+ *   raised    1    a surface lifted within the normal flow — a badge over an
+ *                  avatar, a focused segment in a connected group
+ *   sticky    100  a header or toolbar that stays put while content scrolls
+ *   scrim     200  the dimming layer a modal paints over the page
+ *   modal     300  dialogs and sheets — above their own scrim
+ *   menu      400  menus, selects, popovers, date pickers
+ *   snackbar  500  transient messages
+ *   tooltip   600  tooltips
+ *
+ * Two of those placements are deliberate and easy to get backwards:
+ *
+ * **Menus sit above modals**, not below. A select inside a dialog portals to
+ * the body, so it is a *sibling* of the dialog rather than a descendant — give
+ * it a lower z-index than the modal and it renders behind the dialog that
+ * opened it. Nothing is lost by the ordering, because a page under an open
+ * modal is inert and cannot have a menu open on it.
+ *
+ * **Tooltips sit above everything**, for the same reason one step further: a
+ * tooltip can be triggered from inside a dialog, from a snackbar's action, or
+ * from a menu item.
+ *
+ * The steps are 100 apart so a consumer can slot something in between without
+ * renumbering the scale.
+ */
+
+:root {
+  --m3-z-raised: 1;
+  --m3-z-sticky: 100;
+  --m3-z-scrim: 200;
+  --m3-z-modal: 300;
+  --m3-z-menu: 400;
+  --m3-z-snackbar: 500;
+  --m3-z-tooltip: 600;
+}
