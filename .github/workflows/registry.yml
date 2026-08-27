@@ -1,4 +1,5 @@
-# Publishes the built registry to GitHub Pages, so
+# Publishes the site to GitHub Pages: the playground at the root, and the
+# registry under /r, so
 #
 #   npx shadcn add @materialcn/button
 #
@@ -45,9 +46,13 @@ jobs:
       # gate before it is public. The story tests are left to `pnpm test`;
       # they need a browser and check nothing about the registry.
       - run: pnpm test:registry
-      # `shadcn build` writes public/r; nothing else in public/ is served.
+      # Vite copies public/ into dist/ verbatim, so the registry JSON written
+      # above rides along at /r untouched — no hashing, no transform.
+      - run: pnpm build:playground
+        env:
+          PAGES_BASE: /materialcn/
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: public
+          path: dist
       - id: deploy
         uses: actions/deploy-pages@v4

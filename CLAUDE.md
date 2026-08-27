@@ -149,6 +149,12 @@ against the CLI's own zod schemas.
 To verify a change for real, serve `public/r` and install from it into a
 scratch project — `shadcn add` is the only thing that exercises the CSS merge.
 
+The Pages deploy publishes the playground at the root and the registry under
+`/r`: `vite build` copies `public/` into `dist/` verbatim, so the JSON rides
+along unhashed and untransformed. `PAGES_BASE` sets Vite's base path for that
+build only, leaving local dev on `/`. The playground routes on the hash for the
+same reason — a static host has no rewrite rules.
+
 ## Verifying
 
 - `pnpm test` renders every story in a real Chromium via Vitest. It is the

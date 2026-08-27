@@ -12,6 +12,9 @@ while the version is below 1.0.
 
 ### Added
 
+- **A landing page, published with the registry.** The playground now opens on
+  an index of the template screens rather than the token gallery, and the Pages
+  deploy serves it at the root with the registry under `/r`.
 - **A shadcn registry.** `npx shadcn add @materialcn/button` copies a component
   and merges the whole M3 token layer into whatever stylesheet your
   `components.json` points at, so an existing shadcn project can be rethemed

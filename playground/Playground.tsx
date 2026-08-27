@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 
 import { App } from "./App"
+import { Landing } from "./Landing"
 import { ThemeControls } from "./ThemeControls"
 import { ProductScreen } from "./ProductScreen"
 import { TEMPLATES } from "./templates"
@@ -23,8 +24,10 @@ import { TEMPLATES } from "./templates"
  *
  * The gallery shows each piece; the screens show them competing for the same
  * layout, which is where spacing, elevation, and overlay ordering problems
- * actually surface. The hash is enough of a router for a dev app — `#/` is the
- * gallery, `#/screen` the original product screen, and `#/t/<id>` a template.
+ * actually surface. The hash is enough of a router — and it is what lets this
+ * deploy to a static host without rewrite rules. `#/` is the landing index,
+ * `#/gallery` the token gallery, `#/screen` the original product screen, and
+ * `#/t/<id>` a template.
  *
  * It lives here rather than in `main.tsx` for the same Fast Refresh reason the
  * library keeps `cva()` out of component files: a module is only a hot boundary
@@ -46,7 +49,9 @@ export function Playground() {
     ? template.title
     : hash === "#/screen"
       ? "Product screen"
-      : "Token gallery"
+      : hash === "#/gallery"
+        ? "Token gallery"
+        : "Overview"
 
   return (
     /*
@@ -85,6 +90,13 @@ export function Playground() {
                   window.location.hash = "#/"
                 }}
               >
+                Overview
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => {
+                  window.location.hash = "#/gallery"
+                }}
+              >
                 Token gallery
               </DropdownMenuItem>
               <DropdownMenuItem
@@ -119,8 +131,10 @@ export function Playground() {
           <template.Screen />
         ) : hash === "#/screen" ? (
           <ProductScreen />
-        ) : (
+        ) : hash === "#/gallery" ? (
           <App />
+        ) : (
+          <Landing />
         )}
       </div>
     </div>

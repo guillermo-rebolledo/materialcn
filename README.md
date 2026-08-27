@@ -758,6 +758,9 @@ import "materialcn/styles.css"
 import "materialcn/fonts.css" // optional: self-hosted Roboto Flex
 ```
 
+The registry and a live demo of the screens below are published at
+<https://guillermo-rebolledo.github.io/materialcn/>.
+
 ### As a shadcn registry
 
 ```bash

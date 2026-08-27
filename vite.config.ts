@@ -9,6 +9,9 @@ import { playwright } from "@vitest/browser-playwright"
 // Dev/playground + Storybook config.
 // The distributable library build lives in vite.lib.config.ts (`pnpm build`).
 export default defineConfig({
+  // GitHub Pages serves this from a project subpath. Left at "/" for local
+  // dev, so the URLs you develop against are the ones you deploy.
+  base: process.env.PAGES_BASE ?? "/",
   plugins: [react(), tailwindcss()],
   resolve: {
     alias: {
