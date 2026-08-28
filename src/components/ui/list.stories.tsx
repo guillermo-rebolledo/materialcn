@@ -120,9 +120,9 @@ export const SemanticInteraction: Story = {
     await expect(within(list).getAllByRole("listitem")).toHaveLength(2)
     await expect(link).toHaveAttribute("href", "#documents")
     await userEvent.tab()
-    await expect(link).toHaveFocus()
+    await waitFor(() => expect(link).toHaveFocus())
     await userEvent.tab()
-    await expect(button).toHaveFocus()
+    await waitFor(() => expect(button).toHaveFocus())
     await userEvent.keyboard("{Enter}")
     await expect(canvas.getByText("Project created")).toBeVisible()
   },
@@ -273,12 +273,12 @@ export const InteractionStates: Story = {
       await browserUserEvent.unhover(enabled)
     }
     await userEvent.tab()
-    await expect(link).toHaveFocus()
+    await waitFor(() => expect(link).toHaveFocus())
     if (isBrowserTest) {
       await expect(getComputedStyle(link).outlineWidth).toBe("3px")
     }
     await userEvent.tab()
-    await expect(enabled).toHaveFocus()
+    await waitFor(() => expect(enabled).toHaveFocus())
   },
 }
 

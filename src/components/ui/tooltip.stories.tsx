@@ -107,7 +107,7 @@ export const FocusOpensImmediately: Story = {
     const canvas = within(canvasElement)
 
     await userEvent.tab()
-    expect(canvas.getByRole("button", { name: "Focus me" })).toHaveFocus()
+    await waitFor(() => expect(canvas.getByRole("button", { name: "Focus me" })).toHaveFocus())
     await waitFor(
       () =>
         expect(body.getByRole("tooltip")).toHaveTextContent(

@@ -130,7 +130,7 @@ export const KeyboardLifecycle: Story = {
     await expect(page.queryByRole("menu")).not.toBeInTheDocument()
 
     await userEvent.tab()
-    await expect(trigger).toHaveFocus()
+    await waitFor(() => expect(trigger).toHaveFocus())
     await userEvent.keyboard("{Enter}")
     const menu = await page.findByRole("menu")
     const schedule = within(menu).getByRole("menuitem", { name: "Schedule" })

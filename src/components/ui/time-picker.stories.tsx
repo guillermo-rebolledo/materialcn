@@ -1,6 +1,6 @@
 import { useState } from "react"
 import type { Meta, StoryObj } from "@storybook/react-vite"
-import { expect, userEvent, within } from "storybook/test"
+import { expect, userEvent, waitFor, within } from "storybook/test"
 
 import { TimePicker, type TimeValue } from "./time-picker"
 import { formatTime } from "./time-picker-utils"
@@ -39,7 +39,7 @@ export const KeyboardInteraction: Story = {
     await expect(canvas.getByLabelText("Selected time")).toHaveTextContent("23:30")
     hours.focus()
     await userEvent.keyboard("{ArrowRight}{ArrowUp}")
-    await expect(minutes).toHaveFocus()
+    await waitFor(() => expect(minutes).toHaveFocus())
     await expect(canvas.getByLabelText("Selected time")).toHaveTextContent("23:31")
   },
 }

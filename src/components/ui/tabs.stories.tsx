@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite"
 import { HeartIcon, SearchIcon, StarIcon } from "lucide-react"
-import { expect, userEvent, within } from "storybook/test"
+import { expect, userEvent, waitFor, within } from "storybook/test"
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./tabs"
 
@@ -105,7 +105,7 @@ export const SecondaryVerticalKeyboard: Story = {
     const one = canvas.getByRole("tab", { name: "One" })
     one.focus()
     await userEvent.keyboard("{ArrowDown}")
-    await expect(canvas.getByRole("tab", { name: "Two" })).toHaveFocus()
+    await waitFor(() => expect(canvas.getByRole("tab", { name: "Two" })).toHaveFocus())
     await userEvent.keyboard("{Enter}")
     await expect(canvas.getByRole("tabpanel", { name: "Two" })).toHaveTextContent("Two panel")
     const indicator = getComputedStyle(canvas.getByRole("tab", { name: "Two" }), "::after")

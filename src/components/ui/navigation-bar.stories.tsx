@@ -57,7 +57,7 @@ export const ControlledLinksAndKeyboard: Story = {
     await expect(canvas.getByRole("button", { name: /Favorites/ })).toHaveAttribute("tabindex", "0")
     await expect(canvas.getByLabelText("Current destination")).toHaveTextContent("favorites")
     await userEvent.keyboard("{End}")
-    await expect(canvas.getByRole("button", { name: /Messages/ })).toHaveFocus()
+    await waitFor(() => expect(canvas.getByRole("button", { name: /Messages/ })).toHaveFocus())
   },
 }
 

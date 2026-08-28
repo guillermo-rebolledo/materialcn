@@ -59,7 +59,7 @@ export const MixedControls: Story = {
     await userEvent.click(await page.findByRole("menuitem", { name: "Export" }))
     await waitFor(() => expect(overflow).toHaveFocus())
     await userEvent.tab()
-    await expect(canvas.getByRole("button", { name: "After toolbar" })).toHaveFocus()
+    await waitFor(() => expect(canvas.getByRole("button", { name: "After toolbar" })).toHaveFocus())
   },
 }
 

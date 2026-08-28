@@ -48,7 +48,7 @@ export const DockedInteraction: Story = {
 
     const selected = page.getByRole("gridcell", { name: "Wednesday, August 12, 2026" })
     await expect(selected).toHaveAttribute("aria-selected", "true")
-    await expect(selected).toHaveFocus()
+    await waitFor(() => expect(selected).toHaveFocus())
     await userEvent.click(page.getByRole("gridcell", { name: "Saturday, August 15, 2026" }))
     await expect(canvas.getByLabelText("Selected date")).toHaveTextContent("2026-08-15")
 
@@ -64,13 +64,23 @@ export const DockedInteraction: Story = {
       ).toHaveFocus(),
     )
     await userEvent.keyboard("{ArrowRight}")
-    await expect(page.getByRole("gridcell", { name: "Sunday, August 16, 2026" })).toHaveFocus()
+    // Calendar.moveFocus focuses inside a requestAnimationFrame, so focus
+    // after an arrow key is always a frame late — asserting it directly is a
+    // race that only holds on a fast machine. The calendar and dialog stories
+    // already wait the same way.
+    await waitFor(() =>
+      expect(page.getByRole("gridcell", { name: "Sunday, August 16, 2026" })).toHaveFocus(),
+    )
     await expect(page.getByRole("gridcell", { name: "Tuesday, August 18, 2026" })).toBeDisabled()
     await userEvent.keyboard("{ArrowRight}")
-    await expect(page.getByRole("gridcell", { name: "Monday, August 17, 2026" })).toHaveFocus()
+    await waitFor(() =>
+      expect(page.getByRole("gridcell", { name: "Monday, August 17, 2026" })).toHaveFocus(),
+    )
     // August 18 is unavailable, so the next step skips over it.
     await userEvent.keyboard("{ArrowRight}")
-    await expect(page.getByRole("gridcell", { name: "Wednesday, August 19, 2026" })).toHaveFocus()
+    await waitFor(() =>
+      expect(page.getByRole("gridcell", { name: "Wednesday, August 19, 2026" })).toHaveFocus(),
+    )
     await expect(page.getByRole("button", { name: "Today" })).toBeDisabled()
     await userEvent.keyboard("{Escape}")
     await waitFor(() => expect(canvas.getByRole("button", { name: "Choose date" })).toHaveFocus())

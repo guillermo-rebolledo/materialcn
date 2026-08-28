@@ -46,7 +46,7 @@ export const Configurations: Story = {
     const firstBack = canvas.getAllByRole("button", { name: "Go back" })[0]
     firstBack.focus()
     await userEvent.tab()
-    await expect(canvas.getAllByRole("button", { name: "Search" })[0]).toHaveFocus()
+    await waitFor(() => expect(canvas.getAllByRole("button", { name: "Search" })[0]).toHaveFocus())
     const overflow = canvas.getAllByRole("button", { name: "More actions" })[0]
     await userEvent.click(overflow)
     const page = within(canvasElement.ownerDocument.body)

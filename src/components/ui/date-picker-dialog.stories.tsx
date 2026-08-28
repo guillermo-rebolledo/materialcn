@@ -64,7 +64,7 @@ export const RangeInteraction: Story = {
     await userEvent.click(body.getByRole("button", { name: "Confirm dates" }))
     await expect(canvas.getByLabelText("Selected range")).toHaveTextContent("12–15")
     await new Promise((resolve) => setTimeout(resolve, 150))
-    await expect(trigger).toHaveFocus()
+    await waitFor(() => expect(trigger).toHaveFocus())
   },
 }
 

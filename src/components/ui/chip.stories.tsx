@@ -1,7 +1,7 @@
 import { useState } from "react"
 import type { Meta, StoryObj } from "@storybook/react-vite"
 import { ArrowRight, Plus, UserRound } from "lucide-react"
-import { expect, userEvent, within } from "storybook/test"
+import { expect, userEvent, waitFor, within } from "storybook/test"
 
 import {
   AssistChip,
@@ -129,7 +129,7 @@ export const FilterChips: Story = {
 
     vegetarian.focus()
     await userEvent.keyboard("{ArrowRight}")
-    await expect(dairyFree).toHaveFocus()
+    await waitFor(() => expect(dairyFree).toHaveFocus())
     await userEvent.keyboard(" ")
     await expect(dairyFree).toHaveAttribute("aria-pressed", "true")
     await expect(vegetarian).toHaveAttribute("aria-pressed", "true")

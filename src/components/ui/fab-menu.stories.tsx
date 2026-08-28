@@ -37,9 +37,9 @@ export const Interactions: Story = {
     const canvas = within(canvasElement)
     const trigger = canvas.getByRole("button", { name: "More actions" })
     await userEvent.click(trigger)
-    await expect(canvas.getByRole("menuitem", { name: "Edit" })).toHaveFocus()
+    await waitFor(() => expect(canvas.getByRole("menuitem", { name: "Edit" })).toHaveFocus())
     await userEvent.keyboard("{ArrowDown}")
-    await expect(canvas.getByRole("menuitem", { name: "Share" })).toHaveFocus()
+    await waitFor(() => expect(canvas.getByRole("menuitem", { name: "Share" })).toHaveFocus())
     await userEvent.click(canvas.getByRole("menuitem", { name: "Share" }))
     await expect(canvas.getByLabelText("Selected action")).toHaveTextContent("Share")
     await expect(trigger).toHaveFocus()
@@ -48,7 +48,7 @@ export const Interactions: Story = {
     await waitFor(() => expect(getComputedStyle(closingMenu).opacity).toBe("0"))
     await userEvent.keyboard("{Enter}")
     await userEvent.keyboard("{Escape}")
-    await expect(trigger).toHaveFocus()
+    await waitFor(() => expect(trigger).toHaveFocus())
   },
 }
 

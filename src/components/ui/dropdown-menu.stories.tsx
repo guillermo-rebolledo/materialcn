@@ -115,9 +115,9 @@ export const KeyboardAndStates: Story = {
     await expect(destructive).toHaveAttribute("data-variant", "destructive")
     await expect(checked).toHaveAttribute("aria-checked", "true")
     await userEvent.keyboard("{ArrowDown}")
-    await expect(unavailable).toHaveFocus()
+    await waitFor(() => expect(unavailable).toHaveFocus())
     await userEvent.keyboard("{ArrowDown}")
-    await expect(destructive).toHaveFocus()
+    await waitFor(() => expect(destructive).toHaveFocus())
     await userEvent.keyboard("{Escape}")
     await waitFor(() => expect(trigger).toHaveFocus())
   },

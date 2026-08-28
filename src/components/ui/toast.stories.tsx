@@ -119,7 +119,7 @@ export const ActionAndDismissal: Story = {
     if (!snackbar) throw new Error("Expected a rendered snackbar")
     await expect(snackbar).toHaveStyle({ outlineStyle: "solid" })
     await userEvent.keyboard("{Tab}")
-    await expect(snackbar).toHaveFocus()
+    await waitFor(() => expect(snackbar).toHaveFocus())
     await userEvent.keyboard("{Tab}")
     const dismiss = page.getByRole("button", { name: "Dismiss notification" })
     await expect(dismiss).toHaveFocus()
@@ -201,9 +201,9 @@ export const StackingPauseAndKeyboard: Story = {
 
     trigger.focus()
     await userEvent.keyboard("{F6}")
-    await expect(region).toHaveFocus()
+    await waitFor(() => expect(region).toHaveFocus())
     await userEvent.keyboard("{Shift>}{Tab}{/Shift}")
-    await expect(trigger).toHaveFocus()
+    await waitFor(() => expect(trigger).toHaveFocus())
 
     await userEvent.unhover(frontmostToast)
     await waitFor(

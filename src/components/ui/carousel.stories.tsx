@@ -131,7 +131,7 @@ export const KeyboardNavigation: Story = {
     await expect(slides[0]).toHaveAttribute("aria-current", "true")
 
     next.focus()
-    await expect(next).toHaveFocus()
+    await waitFor(() => expect(next).toHaveFocus())
 
     await userEvent.keyboard("{ArrowRight}")
 
