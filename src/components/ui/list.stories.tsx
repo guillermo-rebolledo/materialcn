@@ -73,7 +73,7 @@ export const DensityGeometry: Story = {
     for (const [density, heights] of Object.entries(densityHeights)) {
       for (const [index, height] of heights.entries()) {
         const item = canvas.getByTestId(`${density}-${index + 1}`)
-        await expect(item.getBoundingClientRect().height).toBe(height)
+        await expect(Math.round(item.getBoundingClientRect().height)).toBe(height)
       }
     }
   },

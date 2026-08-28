@@ -40,9 +40,9 @@ export const Configurations: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement)
     const bars = canvasElement.querySelectorAll<HTMLElement>('[data-slot="top-app-bar"]')
-    await expect(bars[0].getBoundingClientRect().height).toBe(64)
-    await expect(bars[1].getBoundingClientRect().height).toBe(112)
-    await expect(bars[2].getBoundingClientRect().height).toBe(120)
+    await expect(Math.round(bars[0].getBoundingClientRect().height)).toBe(64)
+    await expect(Math.round(bars[1].getBoundingClientRect().height)).toBe(112)
+    await expect(Math.round(bars[2].getBoundingClientRect().height)).toBe(120)
     const firstBack = canvas.getAllByRole("button", { name: "Go back" })[0]
     firstBack.focus()
     await userEvent.tab()

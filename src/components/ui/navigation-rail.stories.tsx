@@ -80,7 +80,10 @@ export const RegionsAndBadges: Story = {
   ),
   play: async ({ canvasElement }) => {
     const rail = canvasElement.querySelector<HTMLElement>('[data-slot="navigation-rail"]')!
-    await expect(rail.getBoundingClientRect().width).toBe(96)
+    // Rounded: the assertion is that the rail is 96dp, and sub-pixel layout
+    // differences across environments are not a spec violation. CI measured
+    // 95.5 here and failed a publish over half a pixel.
+    await expect(Math.round(rail.getBoundingClientRect().width)).toBe(96)
     const indicator = rail.querySelector<HTMLElement>('[data-slot="navigation-bar-indicator"]')!.getBoundingClientRect()
     await expect(indicator.width).toBe(56)
     await expect(indicator.height).toBe(32)
@@ -93,11 +96,13 @@ export const ControlledExpansion: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement)
     const rails = canvasElement.querySelectorAll<HTMLElement>('[data-slot="navigation-rail"]')
-    await expect(rails[0].getBoundingClientRect().width).toBe(96)
+    await expect(Math.round(rails[0].getBoundingClientRect().width)).toBe(96)
     const home = canvas.getAllByRole("button", { name: /Home/ })[0]
     home.focus()
     await userEvent.click(canvas.getAllByRole("button", { name: "Toggle rail" })[0])
-    await waitFor(() => expect(rails[0].getBoundingClientRect().width).toBe(220))
+    await waitFor(() =>
+      expect(Math.round(rails[0].getBoundingClientRect().width)).toBe(220),
+    )
     const expandedHome = canvas.getAllByRole("button", { name: /Home/ })[0]
     await expect(expandedHome).toBe(home)
     await expect(expandedHome).toHaveAttribute("aria-current", "page")

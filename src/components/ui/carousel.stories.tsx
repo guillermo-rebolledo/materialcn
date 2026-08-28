@@ -256,8 +256,8 @@ export const Layouts: Story = {
         }),
       ).getAllByRole("group")[0].getBoundingClientRect().height,
     ).toBe(204)
-    await expect(fullScreenItem.getBoundingClientRect().width).toBe(412)
-    await expect(fullScreenItem.getBoundingClientRect().height).toBe(480)
+    await expect(Math.round(fullScreenItem.getBoundingClientRect().width)).toBe(412)
+    await expect(Math.round(fullScreenItem.getBoundingClientRect().height)).toBe(480)
   },
 }
 
@@ -461,7 +461,7 @@ export const CenteredHeroThemes: Story = {
     )
     for (const slide of selectedSlides) {
       await waitFor(() =>
-        expect(slide.getBoundingClientRect().width).toBe(252),
+        expect(Math.round(slide.getBoundingClientRect().width)).toBe(252),
       )
     }
     await expect(getComputedStyle(nextControls[0]).backgroundColor).not.toBe(

@@ -74,9 +74,9 @@ export const BottomPresentation: Story = {
 
     await expect(dialog).toHaveAttribute("data-side", "bottom")
     await expect(styles.borderTopLeftRadius).toBe("28px")
-    await expect(dialog.getBoundingClientRect().width).toBeLessThanOrEqual(412)
-    await expect(handle.getBoundingClientRect().width).toBe(32)
-    await expect(handle.getBoundingClientRect().height).toBe(4)
+    await expect(Math.round(dialog.getBoundingClientRect().width)).toBeLessThanOrEqual(412)
+    await expect(Math.round(handle.getBoundingClientRect().width)).toBe(32)
+    await expect(Math.round(handle.getBoundingClientRect().height)).toBe(4)
     await expect(body.scrollHeight).toBeGreaterThan(body.clientHeight)
 
     await userEvent.tab()

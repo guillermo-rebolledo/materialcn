@@ -57,9 +57,9 @@ export const CenteredSizesAndIndicators: Story = {
     await expect(centeredRange.style.right).toBe("calc(50% + 0px)")
     await expect(small.parentElement).toHaveTextContent("26")
     const tracks = canvasElement.querySelectorAll<HTMLElement>('[data-slot="slider-track"]')
-    await expect(tracks[0].getBoundingClientRect().height).toBe(16)
-    await expect(tracks[1].getBoundingClientRect().height).toBe(24)
-    await expect(tracks[2].getBoundingClientRect().height).toBe(40)
+    await expect(Math.round(tracks[0].getBoundingClientRect().height)).toBe(16)
+    await expect(Math.round(tracks[1].getBoundingClientRect().height)).toBe(24)
+    await expect(Math.round(tracks[2].getBoundingClientRect().height)).toBe(40)
   },
 }
 

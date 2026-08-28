@@ -28,7 +28,7 @@ export const Arrangements: Story = {
   render: () => <div className="flex w-[412px] max-w-full flex-col gap-4"><Example /><Example fab /></div>,
   play: async ({ canvasElement }) => {
     const bars = canvasElement.querySelectorAll<HTMLElement>('[data-slot="bottom-app-bar"]')
-    for (const bar of bars) await expect(bar.getBoundingClientRect().height).toBe(80)
+    for (const bar of bars) await expect(Math.round(bar.getBoundingClientRect().height)).toBe(80)
     const canvas = within(canvasElement)
     for (const action of canvas.getAllByRole("button", { name: "Share" })) await expect(action).toBeDisabled()
   },

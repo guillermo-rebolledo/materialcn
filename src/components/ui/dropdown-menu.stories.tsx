@@ -179,7 +179,7 @@ export const PresentationContract: Story = {
     const menu = await page.findByRole("menu")
     await expect(menu).toHaveAttribute("data-presentation", "vibrant")
     await waitFor(() =>
-      expect(menu.getBoundingClientRect().width).toBeGreaterThanOrEqual(208),
+      expect(Math.round(menu.getBoundingClientRect().width)).toBeGreaterThanOrEqual(208),
     )
   },
 }

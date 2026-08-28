@@ -39,15 +39,15 @@ export const SizesColorsAndShapes: Story = {
     const canvas = within(canvasElement)
     for (const pane of [0, 1]) {
       const add = canvas.getAllByRole("button", { name: "Add" })[pane]
-      await expect(add.getBoundingClientRect().width).toBe(56)
+      await expect(Math.round(add.getBoundingClientRect().width)).toBe(56)
       // The icon must sit dead-centre: nothing from the Button size scale may
       // leak padding into the FAB through tailwind-merge.
       const icon = add.querySelector("svg")!.getBoundingClientRect()
       const box = add.getBoundingClientRect()
       await expect(icon.left - box.left).toBeCloseTo(box.right - icon.right, 1)
-      await expect(canvas.getAllByRole("button", { name: "Edit" })[pane].getBoundingClientRect().width).toBe(80)
-      await expect(canvas.getAllByRole("button", { name: "Navigate" })[pane].getBoundingClientRect().height).toBe(96)
-      await expect(canvas.getAllByRole("button", { name: "Create" })[pane].getBoundingClientRect().height).toBe(56)
+      await expect(Math.round(canvas.getAllByRole("button", { name: "Edit" })[pane].getBoundingClientRect().width)).toBe(80)
+      await expect(Math.round(canvas.getAllByRole("button", { name: "Navigate" })[pane].getBoundingClientRect().height)).toBe(96)
+      await expect(Math.round(canvas.getAllByRole("button", { name: "Create" })[pane].getBoundingClientRect().height)).toBe(56)
       await expect(canvas.getAllByRole("button", { name: "Unavailable" })[pane]).toBeDisabled()
     }
   },

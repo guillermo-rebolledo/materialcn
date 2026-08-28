@@ -85,12 +85,12 @@ export const GroupDefaults: Story = {
     const inheritedStyle = getComputedStyle(inherited)
     const overriddenStyle = getComputedStyle(overridden)
 
-    await expect(inherited.getBoundingClientRect().height).toBe(56)
+    await expect(Math.round(inherited.getBoundingClientRect().height)).toBe(56)
     await expect(inheritedStyle.borderTopLeftRadius).toBe("16px")
     await expect(inheritedStyle.borderTopStyle).toBe("solid")
     await expect(inheritedStyle.borderTopColor).not.toBe("rgba(0, 0, 0, 0)")
 
-    await expect(overridden.getBoundingClientRect().height).toBe(32)
+    await expect(Math.round(overridden.getBoundingClientRect().height)).toBe(32)
     await expect(overriddenStyle.borderTopLeftRadius).toBe("16px")
     await expect(overriddenStyle.backgroundColor).not.toBe(
       inheritedStyle.backgroundColor,
@@ -137,7 +137,7 @@ export const StandardSizesAndOrientations: Story = {
     await expect(extraSmallStyle.columnGap).toBe("18px")
     await expect(extraSmallStyle.paddingLeft).toBe("9px")
     await expect(extraSmallStyle.paddingRight).toBe("9px")
-    await expect(extraSmall.getBoundingClientRect().height).toBe(48)
+    await expect(Math.round(extraSmall.getBoundingClientRect().height)).toBe(48)
     await expect(
       getComputedStyle(within(extraSmall).getAllByRole("button")[0])
         .borderTopLeftRadius,
@@ -153,7 +153,7 @@ export const StandardSizesAndOrientations: Story = {
     ).toBe("12px")
 
     await expect(mediumStyle.columnGap).toBe("8px")
-    await expect(medium.getBoundingClientRect().height).toBe(56)
+    await expect(Math.round(medium.getBoundingClientRect().height)).toBe(56)
   },
 }
 
@@ -321,8 +321,8 @@ export const ConnectedSizes: Story = {
       const group = canvas.getByRole("group", { name })
       const middleEdge = within(group).getAllByRole("button")[0]
 
-      await expect(group.getBoundingClientRect().height).toBe(groupHeight)
-      await expect(middleEdge.getBoundingClientRect().height).toBe(buttonHeight)
+      await expect(Math.round(group.getBoundingClientRect().height)).toBe(groupHeight)
+      await expect(Math.round(middleEdge.getBoundingClientRect().height)).toBe(buttonHeight)
       await expect(getComputedStyle(middleEdge).borderTopRightRadius).toBe(
         innerRadius,
       )

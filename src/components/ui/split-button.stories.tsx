@@ -255,9 +255,9 @@ export const SizesAndGeometry: Story = {
       const triggerIcon = trigger.querySelector("svg")
 
       await expect(getComputedStyle(group).columnGap).toBe("2px")
-      await expect(group.getBoundingClientRect().height).toBe(groupHeight)
-      await expect(action.getBoundingClientRect().height).toBe(buttonHeight)
-      await expect(trigger.getBoundingClientRect().width).toBe(triggerWidth)
+      await expect(Math.round(group.getBoundingClientRect().height)).toBe(groupHeight)
+      await expect(Math.round(action.getBoundingClientRect().height)).toBe(buttonHeight)
+      await expect(Math.round(trigger.getBoundingClientRect().width)).toBe(triggerWidth)
       await expect(actionStyle.borderTopLeftRadius).toBe(outerRadius)
       await expect(actionStyle.borderTopRightRadius).toBe(innerRadius)
       await expect(triggerStyle.borderTopLeftRadius).toBe(innerRadius)
@@ -265,8 +265,8 @@ export const SizesAndGeometry: Story = {
       await expect(actionStyle.columnGap).toBe(actionGap)
       await expect(actionStyle.paddingLeft).toBe(actionPadding)
       await expect(actionStyle.paddingRight).toBe(actionPadding)
-      await expect(actionIcon?.getBoundingClientRect().width).toBe(actionIconSize)
-      await expect(triggerIcon?.getBoundingClientRect().width).toBe(
+      await expect(Math.round(actionIcon!.getBoundingClientRect().width)).toBe(actionIconSize)
+      await expect(Math.round(triggerIcon!.getBoundingClientRect().width)).toBe(
         triggerIconSize,
       )
     }

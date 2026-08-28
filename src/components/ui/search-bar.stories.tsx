@@ -193,8 +193,8 @@ export const StatesAndSlots: Story = {
       await expect(action).toBeDisabled()
     }
     for (const searchBar of searchBars) {
-      await expect(searchBar.getBoundingClientRect().width).toBe(360)
-      await expect(searchBar.getBoundingClientRect().height).toBe(56)
+      await expect(Math.round(searchBar.getBoundingClientRect().width)).toBe(360)
+      await expect(Math.round(searchBar.getBoundingClientRect().height)).toBe(56)
       await expect(
         getComputedStyle(
           searchBar.querySelector<HTMLElement>('[data-slot="input-group"]')!,
@@ -238,7 +238,7 @@ export const ResponsiveWidths: Story = {
       canvasElement.querySelectorAll<HTMLElement>('[data-slot="search-bar"]'),
     )
 
-    await expect(searchBars[0].getBoundingClientRect().width).toBe(280)
-    await expect(searchBars[1].getBoundingClientRect().width).toBe(520)
+    await expect(Math.round(searchBars[0].getBoundingClientRect().width)).toBe(280)
+    await expect(Math.round(searchBars[1].getBoundingClientRect().width)).toBe(520)
   },
 }

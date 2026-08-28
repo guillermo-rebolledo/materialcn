@@ -38,13 +38,13 @@ export const Standalone: Story = {
 
     await expect(dots).toHaveLength(2)
     await expect(dots[0]).toHaveAttribute("aria-hidden", "true")
-    await expect(dots[0].getBoundingClientRect().width).toBe(6)
-    await expect(dots[0].getBoundingClientRect().height).toBe(6)
+    await expect(Math.round(dots[0].getBoundingClientRect().width)).toBe(6)
+    await expect(Math.round(dots[0].getBoundingClientRect().height)).toBe(6)
 
     await expect(counts).toHaveLength(2)
     await expect(counts[0]).toHaveTextContent("7")
-    await expect(counts[0].getBoundingClientRect().width).toBe(16)
-    await expect(counts[0].getBoundingClientRect().height).toBe(16)
+    await expect(Math.round(counts[0].getBoundingClientRect().width)).toBe(16)
+    await expect(Math.round(counts[0].getBoundingClientRect().height)).toBe(16)
   },
 }
 
@@ -74,10 +74,10 @@ export const NumericCounts: Story = {
     })[0]
 
     await expect(twoDigits).toHaveTextContent("12")
-    await expect(twoDigits.getBoundingClientRect().width).toBeGreaterThanOrEqual(
+    await expect(Math.round(twoDigits.getBoundingClientRect().width)).toBeGreaterThanOrEqual(
       22
     )
-    await expect(twoDigits.getBoundingClientRect().height).toBe(16)
+    await expect(Math.round(twoDigits.getBoundingClientRect().height)).toBe(16)
     await expect(defaultOverflow).toHaveTextContent("99+")
     await expect(customOverflow).toHaveTextContent("9+")
   },

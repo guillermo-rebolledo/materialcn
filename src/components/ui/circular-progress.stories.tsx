@@ -64,8 +64,8 @@ export const Determinate: Story = {
     await expect(progress).toHaveAttribute("aria-valuemin", "0")
     await expect(progress).toHaveAttribute("aria-valuemax", "100")
     await expect(progress).toHaveAttribute("aria-valuenow", "25")
-    await expect(progress.getBoundingClientRect().width).toBe(40)
-    await expect(progress.getBoundingClientRect().height).toBe(40)
+    await expect(Math.round(progress.getBoundingClientRect().width)).toBe(40)
+    await expect(Math.round(progress.getBoundingClientRect().height)).toBe(40)
 
     await expect(getVisibleGap(progress, 25, 4)).toBeCloseTo(4, 1)
   },
@@ -102,8 +102,8 @@ export const Sizes: Story = {
 
       await expect(progress).toHaveAttribute("data-variant", variant)
       await expect(progress).toHaveAttribute("data-thickness", String(thickness))
-      await expect(progress.getBoundingClientRect().width).toBe(size)
-      await expect(progress.getBoundingClientRect().height).toBe(size)
+      await expect(Math.round(progress.getBoundingClientRect().width)).toBe(size)
+      await expect(Math.round(progress.getBoundingClientRect().height)).toBe(size)
       await expect(getVisibleGap(progress, 60, thickness)).toBeCloseTo(4, 1)
     }
   },

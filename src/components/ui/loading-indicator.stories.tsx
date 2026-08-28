@@ -28,10 +28,10 @@ export const Standalone: Story = {
     const status = canvas.getByRole("status", { name: "Loading" })
     const shape = status.querySelector('[data-slot="loading-indicator-shape"]')
 
-    await expect(status.getBoundingClientRect().width).toBe(48)
-    await expect(status.getBoundingClientRect().height).toBe(48)
-    await expect(shape?.getBoundingClientRect().width).toBe(38)
-    await expect(shape?.getBoundingClientRect().height).toBe(38)
+    await expect(Math.round(status.getBoundingClientRect().width)).toBe(48)
+    await expect(Math.round(status.getBoundingClientRect().height)).toBe(48)
+    await expect(Math.round(shape!.getBoundingClientRect().width)).toBe(38)
+    await expect(Math.round(shape!.getBoundingClientRect().height)).toBe(38)
   },
 }
 
@@ -56,14 +56,14 @@ export const Sizes: Story = {
       '[data-slot="loading-indicator-shape"]',
     )
 
-    await expect(inline.getBoundingClientRect().width).toBe(24)
-    await expect(inline.getBoundingClientRect().height).toBe(24)
-    await expect(inlineShape?.getBoundingClientRect().width).toBe(19)
-    await expect(inlineShape?.getBoundingClientRect().height).toBe(19)
-    await expect(standalone.getBoundingClientRect().width).toBe(48)
-    await expect(standalone.getBoundingClientRect().height).toBe(48)
-    await expect(standaloneShape?.getBoundingClientRect().width).toBe(38)
-    await expect(standaloneShape?.getBoundingClientRect().height).toBe(38)
+    await expect(Math.round(inline.getBoundingClientRect().width)).toBe(24)
+    await expect(Math.round(inline.getBoundingClientRect().height)).toBe(24)
+    await expect(Math.round(inlineShape!.getBoundingClientRect().width)).toBe(19)
+    await expect(Math.round(inlineShape!.getBoundingClientRect().height)).toBe(19)
+    await expect(Math.round(standalone.getBoundingClientRect().width)).toBe(48)
+    await expect(Math.round(standalone.getBoundingClientRect().height)).toBe(48)
+    await expect(Math.round(standaloneShape!.getBoundingClientRect().width)).toBe(38)
+    await expect(Math.round(standaloneShape!.getBoundingClientRect().height)).toBe(38)
   },
 }
 

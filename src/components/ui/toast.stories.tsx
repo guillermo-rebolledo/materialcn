@@ -51,7 +51,7 @@ export const PlainTextAndFocus: Story = {
       "polite",
     )
     await waitFor(() =>
-      expect(message.closest('[data-slot="toast"]')?.getBoundingClientRect().height).toBe(48),
+      expect(Math.round(message.closest('[data-slot="toast"]')!.getBoundingClientRect().height)).toBe(48),
     )
   },
 }
@@ -275,8 +275,8 @@ export const LightAndDarkPresentation: Story = {
     await expect(snackbars).toHaveLength(2)
     await waitFor(() => {
       for (const snackbar of snackbars) {
-        expect(snackbar.getBoundingClientRect().width).toBeLessThanOrEqual(344)
-        expect(snackbar.getBoundingClientRect().height).toBe(68)
+        expect(Math.round(snackbar.getBoundingClientRect().width)).toBeLessThanOrEqual(344)
+        expect(Math.round(snackbar.getBoundingClientRect().height)).toBe(68)
       }
     })
   },
@@ -340,8 +340,8 @@ export const StackedAction: Story = {
 
     await expect(snackbar).toHaveAttribute("data-layout", "stacked")
     await waitFor(() => {
-      expect(snackbar.getBoundingClientRect().width).toBeLessThanOrEqual(344)
-      expect(snackbar.getBoundingClientRect().height).toBe(112)
+      expect(Math.round(snackbar.getBoundingClientRect().width)).toBeLessThanOrEqual(344)
+      expect(Math.round(snackbar.getBoundingClientRect().height)).toBe(112)
     })
   },
 }

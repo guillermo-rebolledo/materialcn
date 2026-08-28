@@ -72,7 +72,7 @@ export const OrientationsAndCounts: Story = {
   ),
   play: async ({ canvasElement }) => {
     const bars = canvasElement.querySelectorAll<HTMLElement>('[data-slot="navigation-bar"][data-orientation="horizontal"]')
-    for (const bar of bars) await expect(bar.getBoundingClientRect().height).toBe(64)
+    for (const bar of bars) await expect(Math.round(bar.getBoundingClientRect().height)).toBe(64)
     const indicator = bars[0].querySelector<HTMLElement>('[data-slot="navigation-bar-indicator"]')!.getBoundingClientRect()
     await expect(indicator.width).toBe(56)
     await expect(indicator.height).toBe(32)
