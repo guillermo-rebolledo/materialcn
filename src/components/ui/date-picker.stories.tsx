@@ -53,21 +53,22 @@ export const DockedInteraction: Story = {
     await expect(canvas.getByLabelText("Selected date")).toHaveTextContent("2026-08-15")
 
     await userEvent.click(canvas.getByRole("button", { name: "Choose date" }))
-    // The reopened popup runs its own focus setup asynchronously, so a
-    // keystroke sent before the grid has settled lands on the day this focused
-    // rather than moving off it. The first open above waits the same way.
+    // Navigated with arrow keys the whole way rather than jumping with a bare
+    // `.focus()`. The grid is a roving tabindex, so a programmatic focus does
+    // not make the popup adopt that cell — under load the popup's own focus
+    // setup had not run yet, the keystroke went to a stale cell, and the
+    // assertion saw focus sitting where the test had put it.
     await waitFor(() =>
-      expect(page.getByRole("grid", { name: "August 2026" })).toBeVisible(),
+      expect(
+        page.getByRole("gridcell", { name: "Saturday, August 15, 2026" }),
+      ).toHaveFocus(),
     )
-    const day = page.getByRole("gridcell", { name: "Saturday, August 15, 2026" })
-    day.focus()
-    await waitFor(() => expect(day).toHaveFocus())
     await userEvent.keyboard("{ArrowRight}")
     await expect(page.getByRole("gridcell", { name: "Sunday, August 16, 2026" })).toHaveFocus()
     await expect(page.getByRole("gridcell", { name: "Tuesday, August 18, 2026" })).toBeDisabled()
-    const beforeUnavailable = page.getByRole("gridcell", { name: "Monday, August 17, 2026" })
-    beforeUnavailable.focus()
-    await waitFor(() => expect(beforeUnavailable).toHaveFocus())
+    await userEvent.keyboard("{ArrowRight}")
+    await expect(page.getByRole("gridcell", { name: "Monday, August 17, 2026" })).toHaveFocus()
+    // August 18 is unavailable, so the next step skips over it.
     await userEvent.keyboard("{ArrowRight}")
     await expect(page.getByRole("gridcell", { name: "Wednesday, August 19, 2026" })).toHaveFocus()
     await expect(page.getByRole("button", { name: "Today" })).toBeDisabled()

@@ -1,6 +1,6 @@
 import { useState } from "react"
 import type { Meta, StoryObj } from "@storybook/react-vite"
-import { expect, userEvent, within } from "storybook/test"
+import { expect, userEvent, waitFor, within } from "storybook/test"
 import {
   ArrowLeftIcon,
   ClockIcon,
@@ -134,20 +134,29 @@ export const DockedInteraction: Story = {
 
     await userEvent.click(trigger)
     const input = canvas.getByRole("searchbox", { name: "Search destinations" })
-    await expect(input).toHaveFocus()
+    // Opening and closing the view hands focus across an effect, so every
+    // focus assertion that follows an action has to be allowed to settle —
+    // asserting straight away races the popup and fails intermittently.
+    await waitFor(() => expect(input).toHaveFocus())
     await userEvent.type(input, "oa")
     await expect(canvas.getByRole("listbox", { name: "Suggestions" })).toBeVisible()
 
     await userEvent.keyboard("{ArrowDown}")
-    await expect(canvas.getByRole("option", { name: /Oaxaca/ })).toHaveFocus()
+    await waitFor(() =>
+      expect(canvas.getByRole("option", { name: /Oaxaca/ })).toHaveFocus(),
+    )
     await userEvent.keyboard("{ArrowDown}{Enter}")
     await expect(canvas.getByLabelText("Selected destination")).toHaveTextContent("Mérida")
-    await expect(trigger).toHaveFocus()
+    await waitFor(() => expect(trigger).toHaveFocus())
 
     await userEvent.click(trigger)
-    await expect(canvas.getByRole("searchbox", { name: "Search destinations" })).toHaveFocus()
+    await waitFor(() =>
+      expect(
+        canvas.getByRole("searchbox", { name: "Search destinations" }),
+      ).toHaveFocus(),
+    )
     await userEvent.keyboard("{Escape}")
-    await expect(trigger).toHaveFocus()
+    await waitFor(() => expect(trigger).toHaveFocus())
   },
 }
 
