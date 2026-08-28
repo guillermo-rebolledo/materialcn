@@ -58,16 +58,31 @@ Using it in an app: see [Getting started](#getting-started).
 ## Releasing to npm
 
 Publishing is tag-driven. `.github/workflows/publish.yml` typechecks, lints,
-runs every story in a real Chromium, builds, and then publishes with npm
-provenance — so a broken build cannot reach the registry.
+runs every story in a real Chromium, builds, and then publishes — so a broken
+build cannot reach the registry.
 
 ```bash
 npm version minor        # or patch / major — writes package.json and tags
 git push --follow-tags
 ```
 
-The workflow refuses to publish if the tag does not match `package.json`, and
-needs an npm automation token in the `NPM_TOKEN` repository secret.
+The workflow refuses to publish if the tag does not match `package.json`.
+
+Authentication is npm Trusted Publishing: the registry trusts this repository
+and this workflow filename over OIDC, so there is no token in the repository
+secrets to leak, rotate, or let expire, and the provenance attestation comes
+free. Renaming `publish.yml` breaks it until the trust is re-pointed:
+
+```bash
+npm trust list materialcn
+npm trust github materialcn --file publish.yml \
+  --repo guillermo-rebolledo/materialcn --allow-publish
+```
+
+A trusted publisher can only be configured on a package that already exists —
+neither the npm website nor `npm trust` will do it for a name that has never
+been published. 0.1.0 was therefore published by hand once; every release since
+has gone through the workflow.
 
 Two things the package layout has to get right, both found by installing a
 `npm pack` tarball into a scratch Vite app:

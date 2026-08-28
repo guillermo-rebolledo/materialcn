@@ -5,9 +5,20 @@
 # The tag must match the version in package.json — the job fails loudly rather
 # than publishing something the tag does not name.
 #
-# Needs an npm automation token in the NPM_TOKEN repository secret. `id-token:
-# write` is what lets npm attach a provenance attestation, which is also why
-# `publishConfig.provenance` is set in package.json.
+# Authentication is npm Trusted Publishing (OIDC): the registry trusts this
+# repository and this workflow filename directly, so there is no token in the
+# repository secrets to leak, rotate, or let expire. `id-token: write` is what
+# lets the runner mint the OIDC token npm exchanges for a short-lived
+# credential, and it is also what attaches the provenance attestation.
+#
+# This is configured per package and cannot be set up before the package
+# exists, so 0.1.0 was published by hand once. To reconfigure, or to point it
+# at a renamed workflow file:
+#
+#   npm trust github materialcn --file publish.yml \
+#     --repo guillermo-rebolledo/materialcn --allow-publish
+#
+# `npm trust list materialcn` shows what is currently trusted.
 name: publish
 
 on:
@@ -23,15 +34,18 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: pnpm/action-setup@v4
         with:
           version: 11
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
-          node-version: 22
+          node-version: 24
           cache: pnpm
           registry-url: https://registry.npmjs.org
+      # Trusted publishing needs npm >= 11.5.1; the version bundled with the
+      # runner's Node is not guaranteed to be new enough.
+      - run: npm install -g npm@^11
       - run: pnpm install --frozen-lockfile
 
       - name: Tag must match package.json version
@@ -52,8 +66,6 @@ jobs:
       - run: pnpm test
 
       - run: pnpm build
-      # `pnpm publish` runs its own git-cleanliness check, which the build's
-      # dist/ would trip.
-      - run: pnpm publish --access public --no-git-checks
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      # `npm publish`, not `pnpm publish`: npm is the reference implementation
+      # of the OIDC exchange. No NODE_AUTH_TOKEN — that is the point.
+      - run: npm publish --access public
