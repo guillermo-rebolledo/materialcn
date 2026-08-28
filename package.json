@@ -1,7 +1,7 @@
 {
   "name": "materialcn",
   "private": false,
-  "version": "0.0.0",
+  "version": "0.1.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -18,7 +18,8 @@
     "build-storybook": "storybook build",
     "test": "vitest run",
     "test:registry": "vitest run --project scripts",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "prepublishOnly": "pnpm typecheck && pnpm build"
   },
   "dependencies": {
     "@base-ui/react": "^1.7.0",
@@ -65,11 +66,14 @@
   "files": [
     "dist",
     "src",
+    "!src/**/*.stories.tsx",
+    "!src/**/*.mdx",
     "components.json",
+    "registry.json",
     "README.md",
     "CHANGELOG.md",
     "CONTRIBUTING.md",
-    "registry.json"
+    "LICENSE"
   ],
   "main": "./dist/index.js",
   "module": "./dist/index.js",
@@ -79,13 +83,45 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
     },
-    "./styles.css": "./dist/styles.css",
+    "./styles.css": {
+      "types": "./dist/styles.d.css.ts",
+      "default": "./dist/styles.css"
+    },
     "./tokens/*": "./src/styles/tokens/*",
     "./package.json": "./package.json",
-    "./fonts.css": "./src/styles/fonts.css"
+    "./fonts.css": {
+      "types": "./src/styles/fonts.d.css.ts",
+      "default": "./src/styles/fonts.css"
+    }
   },
   "peerDependencies": {
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
+  },
+  "keywords": [
+    "react",
+    "component-library",
+    "material-design",
+    "material-3",
+    "m3",
+    "shadcn",
+    "shadcn-ui",
+    "tailwind",
+    "tailwindcss",
+    "base-ui",
+    "design-system",
+    "ui-components"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/guillermo-rebolledo/materialcn.git"
+  },
+  "bugs": {
+    "url": "https://github.com/guillermo-rebolledo/materialcn/issues"
+  },
+  "homepage": "https://guillermo-rebolledo.github.io/materialcn/",
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
   }
 }

@@ -55,6 +55,32 @@ Using it in an app: see [Getting started](#getting-started).
 | `pnpm registry:build`  | Flattens the registry into `public/r/` for serving  |
 | `pnpm test:registry`   | Validates the registry against shadcn's own schemas |
 
+## Releasing to npm
+
+Publishing is tag-driven. `.github/workflows/publish.yml` typechecks, lints,
+runs every story in a real Chromium, builds, and then publishes with npm
+provenance — so a broken build cannot reach the registry.
+
+```bash
+npm version minor        # or patch / major — writes package.json and tags
+git push --follow-tags
+```
+
+The workflow refuses to publish if the tag does not match `package.json`, and
+needs an npm automation token in the `NPM_TOKEN` repository secret.
+
+Two things the package layout has to get right, both found by installing a
+`npm pack` tarball into a scratch Vite app:
+
+- **A side-effect CSS import needs a type declaration.** `import
+  "materialcn/styles.css"` is TS2882 in any consumer on `moduleResolution:
+  bundler` unless a `.d.css.ts` sits where the `exports` map's `types`
+  condition points. `styles.d.css.ts` is emitted by the build;
+  `src/styles/fonts.d.css.ts` is committed, because fonts.css ships as source.
+- **`files` excludes stories and MDX.** `src/` is shipped so
+  `materialcn/tokens/*` and `materialcn/fonts.css` resolve, but the 64 story
+  files are dead weight in a consumer's `node_modules`.
+
 ## Layout
 
 ```

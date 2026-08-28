@@ -282,17 +282,26 @@ export const PointerDragging: Story = {
       name: "Draggable destinations",
     })
     const slides = within(carousel).getAllByRole("group")
-    const track = carousel.querySelector<HTMLElement>(
-      '[data-slot="carousel-content"]',
-    )!
-
     // Story play functions can begin before Embla's effect has attached its
     // pointer handlers when the complete browser suite is running in parallel.
-    await waitFor(() => expect(track.style.transform).toContain("translate3d"))
+    // The track's transform is set before those handlers bind, so waiting on it
+    // still races; `aria-current` is written by the same effect that registers
+    // them, and so cannot appear early.
+    await waitFor(() => expect(slides[0]).toHaveAttribute("aria-current", "true"))
 
     await commands.dragPointer('[data-testid="drag-track"]', -220, 0)
 
-    await waitFor(() => expect(slides[1]).toHaveAttribute("aria-current", "true"))
+    // Not an exact index: the drag spans 1.36 item pitches and Embla adds
+    // velocity-based momentum on top, so it legitimately settles on the second
+    // or third item depending on how fast the events dispatched. What the
+    // story documents is that dragging moves the same public selection state
+    // the controls do — so that is what is asserted.
+    await waitFor(() => {
+      const current = slides.findIndex(
+        (slide) => slide.getAttribute("aria-current") === "true",
+      )
+      expect(current).toBeGreaterThan(0)
+    })
   },
 }
 
@@ -318,9 +327,18 @@ export const TouchGestures: Story = {
     })
     const slides = within(carousel).getAllByRole("group")
 
+    // Same readiness race as PointerDragging above.
+    await waitFor(() => expect(slides[0]).toHaveAttribute("aria-current", "true"))
+
     await commands.dragTouch('[data-testid="touch-track"]', -180, 0)
 
-    await waitFor(() => expect(slides[1]).toHaveAttribute("aria-current", "true"))
+    // Same momentum caveat as PointerDragging above.
+    await waitFor(() => {
+      const current = slides.findIndex(
+        (slide) => slide.getAttribute("aria-current") === "true",
+      )
+      expect(current).toBeGreaterThan(0)
+    })
   },
 }
 

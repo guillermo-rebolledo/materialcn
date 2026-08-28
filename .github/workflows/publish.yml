@@ -1,0 +1,59 @@
+# Publishes the package to npm when a `v*` tag is pushed:
+#
+#   npm version minor && git push --follow-tags
+#
+# The tag must match the version in package.json — the job fails loudly rather
+# than publishing something the tag does not name.
+#
+# Needs an npm automation token in the NPM_TOKEN repository secret. `id-token:
+# write` is what lets npm attach a provenance attestation, which is also why
+# `publishConfig.provenance` is set in package.json.
+name: publish
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          registry-url: https://registry.npmjs.org
+      - run: pnpm install --frozen-lockfile
+
+      - name: Tag must match package.json version
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: |
+          tag="${GITHUB_REF_NAME#v}"
+          pkg="$(node -p "require('./package.json').version")"
+          if [ "$tag" != "$pkg" ]; then
+            echo "tag v$tag does not match package.json $pkg" >&2
+            exit 1
+          fi
+
+      - run: pnpm typecheck
+      - run: pnpm lint
+      # Renders every story in a real Chromium. The slowest gate, and the one
+      # that actually proves the components still work.
+      - run: pnpm exec playwright install --with-deps chromium
+      - run: pnpm test
+
+      - run: pnpm build
+      # `pnpm publish` runs its own git-cleanliness check, which the build's
+      # dist/ would trip.
+      - run: pnpm publish --access public --no-git-checks
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
